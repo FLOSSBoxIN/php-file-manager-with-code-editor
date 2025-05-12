@@ -26,7 +26,7 @@ This PHP File Manager is a web-based application that allows users to manage fil
 1. Clone the repository to your web server's document root:
 
    ```bash
-   git clone https://github.com/JosephChuks/php-file-manager.git
+   https://github.com/JosephChuks/php-file-manager-with-code-editor
    ```
 
 2. Set the appropriate permissions for the `root_path` directory to allow file operations.

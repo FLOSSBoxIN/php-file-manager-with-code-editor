@@ -19,65 +19,11 @@
  * - Sorting and filtering
  */
 
-// CWP Usage
-$cwp = false;
-
 // Set timezone
 date_default_timezone_set("Africa/Lagos");
 
-if ($cwp) {
-    $path = parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
-    $segments = explode("/", trim($path, "/"));
-
-    $url_token = null;
-    $url_username = null;
-
-    foreach ($segments as $index => $segment) {
-        if ($segment === "filemanager.php" && $index > 0) {
-            $url_username = $segments[$index - 1];
-            if ($index > 1) {
-                $url_token = $segments[$index - 2];
-            }
-            break;
-        }
-    }
-
-    if (!$url_username || !$url_token) {
-        header("HTTP/1.1 403 Forbidden");
-        echo "Access denied. Invalid URL format.";
-        exit();
-    }
-
-    $token_dir = "/home/$url_username/.tokens/";
-    $token_file = $token_dir . $url_token;
-
-    if (!file_exists($token_file)) {
-        header("HTTP/1.1 403 Forbidden");
-        echo "Access denied. Invalid token.";
-        exit();
-    }
-
-    $token_data = json_decode(file_get_contents($token_file), true);
-
-    if (time() > $token_data["expiry"]) {
-        unlink($token_file);
-        header("HTTP/1.1 403 Forbidden");
-        echo "Access denied. Token expired.";
-        exit();
-    }
-
-    if ($token_data["username"] !== $url_username) {
-        header("HTTP/1.1 403 Forbidden");
-        echo "Access denied. Username mismatch.";
-        exit();
-    }
-
-    $username = $token_data["username"];
-    $root_path = "/home/$username";
-} else {
-    $username = "joe";
-    $root_path = "/var/www/html/001_public";
-}
+$username = ""; // Username for directory listing
+$root_path = ""; // Path to the root directory
 
 // Configuration
 $config = [

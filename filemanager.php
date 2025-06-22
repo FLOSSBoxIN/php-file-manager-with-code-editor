@@ -1,8 +1,9 @@
 <?php
+
 /**
- * PHP File Manager v1.0
+ * The Kinsmen File Manager v2.0
  *
- * A comprehensive, modern file manager with Bootstrap styling and all essential features:
+ * A comprehensive, modern file manager with cPanel styling and all essential features:
  * - File Tree Navigation
  * - Search functionality
  * - Create/Edit/Delete files and folders
@@ -18,19 +19,22 @@
  * - Sorting and filtering
  */
 
+// Set timezone
 date_default_timezone_set("UTC");
 
 $username = ""; // Username for directory listing
 $root_path = ""; // Path to the root directory
 
+// Configuration
 $config = [
     "root_path" => $root_path,
     "max_upload_size" => 1024 * 1024 * 1024,
     "allowed_extensions" => ["*"],
     "date_format" => "Y-m-d H:i:s",
-    "theme" => "dark",
+    "theme" => "dark", // light or dark
 ];
 
+// Security check function
 function securityCheck($path)
 {
     global $config;
@@ -41,6 +45,7 @@ function securityCheck($path)
     return strpos($realPath, $config["root_path"]) === 0;
 }
 
+// Helper function to format file size
 function formatSize($bytes)
 {
     $units = ["b", "kb", "mb", "gb", "tb"];
@@ -52,72 +57,83 @@ function formatSize($bytes)
     return round($bytes, 2) . " " . $units[$i];
 }
 
+// Helper function to get file icon based on extension
 function getFileIcon($file)
 {
     $extension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
 
     $iconMap = [
-        "pdf" => "bi-file-earmark-pdf",
-        "doc" => "bi-file-earmark-word",
-        "docx" => "bi-file-earmark-word",
-        "xls" => "bi-file-earmark-excel",
-        "xlsx" => "bi-file-earmark-excel",
-        "ppt" => "bi-file-earmark-ppt",
-        "pptx" => "bi-file-earmark-ppt",
-        "jpg" => "bi-file-earmark-image",
-        "jpeg" => "bi-file-earmark-image",
-        "png" => "bi-file-earmark-image",
-        "gif" => "bi-file-earmark-image",
-        "txt" => "bi-file-earmark-text",
-        "zip" => "bi-file-earmark-zip",
-        "tar" => "bi-file-earmark-zip",
-        "gz" => "bi-file-earmark-zip",
-        "html" => "bi-file-earmark-code",
-        "htm" => "bi-file-earmark-code",
-        "css" => "bi-file-earmark-code",
-        "js" => "bi-file-earmark-code",
-        "php" => "bi-file-earmark-code",
-        "py" => "bi-file-earmark-code",
-        "java" => "bi-file-earmark-code",
-        "c" => "bi-file-earmark-code",
-        "cpp" => "bi-file-earmark-code",
-        "mp3" => "bi-file-earmark-music",
-        "mp4" => "bi-file-earmark-play",
-        "mov" => "bi-file-earmark-play",
-        "avi" => "bi-file-earmark-play",
+        "pdf" => "fas fa-file-pdf",
+        "doc" => "fas fa-file-word",
+        "docx" => "fas fa-file-word",
+        "xls" => "fas fa-file-excel",
+        "xlsx" => "fas fa-file-excel",
+        "ppt" => "fas fa-file-powerpoint",
+        "pptx" => "fas fa-file-powerpoint",
+        "jpg" => "fas fa-file-image",
+        "jpeg" => "fas fa-file-image",
+        "png" => "fas fa-file-image",
+        "gif" => "fas fa-file-image",
+        "txt" => "fas fa-file-alt",
+        "zip" => "fas fa-file-archive",
+        "tar" => "fas fa-file-archive",
+        "gz" => "fas fa-file-archive",
+        "html" => "fas fa-file-code",
+        "htm" => "fas fa-file-code",
+        "css" => "fas fa-file-code",
+        "js" => "fas fa-file-code",
+        "php" => "fas fa-file-code",
+        "py" => "fas fa-file-code",
+        "java" => "fas fa-file-code",
+        "c" => "fas fa-file-code",
+        "cpp" => "fas fa-file-code",
+        "mp3" => "fas fa-file-audio",
+        "mp4" => "fas fa-file-video",
+        "mov" => "fas fa-file-video",
+        "avi" => "fas fa-file-video",
     ];
 
     if (is_dir($file)) {
-        return "bi-folder";
+        return "fas fa-folder";
     } elseif (isset($iconMap[$extension])) {
         return $iconMap[$extension];
     } else {
-        return "bi-file-earmark";
+        return "fas fa-file";
     }
 }
 
+// Function to get file permissions as string
 function getPermissions($file)
 {
     $perms = fileperms($file);
 
     if (($perms & 0xc000) == 0xc000) {
+        // Socket
         $info = "s";
     } elseif (($perms & 0xa000) == 0xa000) {
+        // Symbolic Link
         $info = "l";
     } elseif (($perms & 0x8000) == 0x8000) {
+        // Regular
         $info = "-";
     } elseif (($perms & 0x6000) == 0x6000) {
+        // Block special
         $info = "b";
     } elseif (($perms & 0x4000) == 0x4000) {
+        // Directory
         $info = "d";
     } elseif (($perms & 0x2000) == 0x2000) {
+        // Character special
         $info = "c";
     } elseif (($perms & 0x1000) == 0x1000) {
+        // FIFO pipe
         $info = "p";
     } else {
+        // Unknown
         $info = "u";
     }
 
+    // Owner
     $info .= $perms & 0x0100 ? "r" : "-";
     $info .= $perms & 0x0080 ? "w" : "-";
     $info .=
@@ -129,6 +145,7 @@ function getPermissions($file)
             ? "S"
             : "-");
 
+    // Group
     $info .= $perms & 0x0020 ? "r" : "-";
     $info .= $perms & 0x0010 ? "w" : "-";
     $info .=
@@ -140,6 +157,7 @@ function getPermissions($file)
             ? "S"
             : "-");
 
+    // World
     $info .= $perms & 0x0004 ? "r" : "-";
     $info .= $perms & 0x0002 ? "w" : "-";
     $info .=
@@ -154,6 +172,7 @@ function getPermissions($file)
     return $info;
 }
 
+// Function to build directory tree
 function buildDirectoryTree($dir, $relativePath = "")
 {
     global $config;
@@ -165,17 +184,19 @@ function buildDirectoryTree($dir, $relativePath = "")
         if (!in_array($value, [".", ".."])) {
             $fullPath = $dir . DIRECTORY_SEPARATOR . $value;
 
+            // Make sure relativePath does not start with a slash
             $relPathPrefix = $relativePath
                 ? ltrim($relativePath, "/") . "/"
                 : "";
             $relPath = $relPathPrefix . $value;
 
             if (is_dir($fullPath)) {
+                // Ensure security check passes
                 if (securityCheck($fullPath)) {
                     $result[] = [
                         "name" => $value,
                         "type" => "dir",
-                        "path" => "/" . ltrim($relPath, "/"),
+                        "path" => "/" . ltrim($relPath, "/"), // Ensure consistent format
                         "children" => buildDirectoryTree($fullPath, $relPath),
                     ];
                 }
@@ -186,6 +207,7 @@ function buildDirectoryTree($dir, $relativePath = "")
     return $result;
 }
 
+// Function to get directory contents
 function getDirectoryContents($dir, $sort = "name", $order = "asc")
 {
     $result = [];
@@ -221,11 +243,14 @@ function getDirectoryContents($dir, $sort = "name", $order = "asc")
         }
     }
 
+    // Sort results
     usort($result, function ($a, $b) use ($sort, $order) {
+        // Directories always come first
         if ($a["type"] != $b["type"]) {
             return $a["type"] == "dir" ? -1 : 1;
         }
 
+        // Then sort by the specified field
         $valA = $a[$sort];
         $valB = $b[$sort];
 
@@ -244,6 +269,7 @@ function getDirectoryContents($dir, $sort = "name", $order = "asc")
     return $result;
 }
 
+// Include all the other functions from filemanager.php
 function createDirectory($path, $name)
 {
     $dirPath = $path . DIRECTORY_SEPARATOR . $name;
@@ -387,6 +413,33 @@ function changePermissions($path, $mode)
 function compressItems($items, $destination, $type = "zip")
 {
     switch ($type) {
+        case "empty_trash":
+            $trashDir = $config["root_path"] . "/.trash";
+            if (!is_dir($trashDir)) {
+                $response = ["status" => "error", "message" => "Trash directory not found"];
+                break;
+            }
+
+            $items = scandir($trashDir);
+            $deleted = 0;
+            foreach ($items as $item) {
+                if ($item !== "." && $item !== "..") {
+                    $path = $trashDir . "/" . $item;
+                    if (is_file($path) || is_link($path)) {
+                        if (@unlink($path)) $deleted++;
+                    } elseif (is_dir($path)) {
+                        $cmd = "rm -rf " . escapeshellarg($path);
+                        @exec($cmd, $out, $code);
+                        if ($code === 0) $deleted++;
+                    }
+                }
+            }
+
+            $response = [
+                "status" => "success",
+                "message" => "Trash emptied ($deleted item(s) deleted)"
+            ];
+            break;
         case "zip":
             $zip = new ZipArchive();
 
@@ -465,7 +518,6 @@ function compressItems($items, $destination, $type = "zip")
             ];
     }
 }
-
 function isEditable($file)
 {
     $editableExtensions = [
@@ -485,7 +537,6 @@ function isEditable($file)
         "yaml",
         "sql",
         "sh",
-        "sql",
         "Dockerfile",
         ".gitignore",
         ".gitkeep",
@@ -507,15 +558,19 @@ function isEditable($file)
     return in_array($extension, $editableExtensions);
 }
 
+// Function to move item to trash
 function moveToTrash($source, $currentPath, $config)
 {
+    // Create trash directory if it doesn't exist
     $trashDir = $config["root_path"] . "/.trash";
     if (!file_exists($trashDir)) {
         mkdir($trashDir, 0755, true);
     }
 
+    // Get the item name from the source path
     $itemName = basename($source);
 
+    // Create a unique name if a file with the same name already exists in trash
     $destinationPath = $trashDir . "/" . $itemName;
     $counter = 1;
 
@@ -539,7 +594,9 @@ function moveToTrash($source, $currentPath, $config)
         $counter++;
     }
 
+    // Move the item to trash
     if (rename($source, $destinationPath)) {
+        // Create metadata file to store original location
         $metaFilename = $destinationPath . ".trashinfo";
         $metadata = [
             "original_path" =>
@@ -561,21 +618,26 @@ function moveToTrash($source, $currentPath, $config)
     return false;
 }
 
+// Function to restore an item from trash
 function restoreFromTrash($source, $config)
 {
+    // Check if metadata file exists
     $metaFilename = $source . ".trashinfo";
     if (!file_exists($metaFilename)) {
         return ["status" => "error", "message" => "Trash metadata not found"];
     }
 
+    // Read metadata
     $metadata = json_decode(file_get_contents($metaFilename), true);
     if (!$metadata || !isset($metadata["original_path"])) {
         return ["status" => "error", "message" => "Invalid trash metadata"];
     }
 
+    // Construct destination path
     $destPath = $config["root_path"] . $metadata["original_path"];
     $destDir = dirname($destPath);
 
+    // Create destination directory if it doesn't exist
     if (!file_exists($destDir)) {
         if (!mkdir($destDir, 0755, true)) {
             return [
@@ -585,7 +647,9 @@ function restoreFromTrash($source, $config)
         }
     }
 
+    // Check if destination already exists
     if (file_exists($destPath)) {
+        // Create a unique name if a file with the same name already exists
         $originalName = pathinfo($destPath, PATHINFO_FILENAME);
         $extension = pathinfo($destPath, PATHINFO_EXTENSION);
         $counter = 1;
@@ -616,7 +680,9 @@ function restoreFromTrash($source, $config)
         $destPath = $newDestPath;
     }
 
+    // Move the item back to original location
     if (rename($source, $destPath)) {
+        // Delete metadata file
         if (file_exists($metaFilename)) {
             unlink($metaFilename);
         }
@@ -629,8 +695,10 @@ function restoreFromTrash($source, $config)
     return ["status" => "error", "message" => "Failed to restore item"];
 }
 
+// Function to extract archives
 function extractArchive($source, $destination, $config)
 {
+    // Make sure destination exists
     if (!file_exists($destination)) {
         if (!mkdir($destination, 0755, true)) {
             return [
@@ -640,8 +708,10 @@ function extractArchive($source, $destination, $config)
         }
     }
 
+    // Get file extension to determine archive type
     $extension = strtolower(pathinfo($source, PATHINFO_EXTENSION));
 
+    // Handle different archive types
     switch ($extension) {
         case "zip":
             return extractZip($source, $destination);
@@ -671,6 +741,7 @@ function extractArchive($source, $destination, $config)
     }
 }
 
+// Extract ZIP archive
 function extractZip($source, $destination)
 {
     $zip = new ZipArchive();
@@ -692,11 +763,12 @@ function extractZip($source, $destination)
     }
 }
 
+// Extract TAR archive
 function extractTar($source, $destination)
 {
     try {
         $phar = new PharData($source);
-        $phar->extractTo($destination, null, true);
+        $phar->extractTo($destination, null, true); // Extract all files, overwrite
         return [
             "status" => "success",
             "message" => "TAR archive extracted successfully",
@@ -709,10 +781,13 @@ function extractTar($source, $destination)
     }
 }
 
+// Extract GZIP archive
 function extractGzip($source, $destination)
 {
+    // GZIP usually contains a single file
     $basename = basename($source, ".gz");
     if (substr($basename, -4) === ".tar") {
+        // Handle .tar.gz files
         try {
             $phar = new PharData($source);
             $phar->extractTo($destination, null, true);
@@ -728,6 +803,7 @@ function extractGzip($source, $destination)
             ];
         }
     } else {
+        // Regular .gz file (single file)
         $destFile = $destination . DIRECTORY_SEPARATOR . $basename;
 
         $sfp = gzopen($source, "rb");
@@ -754,10 +830,13 @@ function extractGzip($source, $destination)
     }
 }
 
+// Extract BZIP2 archive
 function extractBzip2($source, $destination)
 {
+    // BZIP2 usually contains a single file
     $basename = basename($source, ".bz2");
     if (substr($basename, -4) === ".tar") {
+        // Handle .tar.bz2 files
         try {
             $phar = new PharData($source);
             $phar->extractTo($destination, null, true);
@@ -773,6 +852,7 @@ function extractBzip2($source, $destination)
             ];
         }
     } else {
+        // Regular .bz2 file (single file)
         $destFile = $destination . DIRECTORY_SEPARATOR . $basename;
 
         $sfp = bzopen($source, "r");
@@ -799,8 +879,10 @@ function extractBzip2($source, $destination)
     }
 }
 
+// Extract RAR archive (requires rar extension or unrar command)
 function extractRar($source, $destination)
 {
+    // Try using RarArchive class if available
     if (class_exists("RarArchive")) {
         $rar = RarArchive::open($source);
         if ($rar === false) {
@@ -820,7 +902,9 @@ function extractRar($source, $destination)
             "status" => "success",
             "message" => "RAR archive extracted successfully",
         ];
-    } elseif (function_exists("exec")) {
+    }
+    // Try using unrar command
+    elseif (function_exists("exec")) {
         $command =
             "unrar x -o+ " .
             escapeshellarg($source) .
@@ -853,6 +937,7 @@ function extractRar($source, $destination)
     }
 }
 
+// Extract 7Zip archive (requires 7zip command)
 function extract7Zip($source, $destination)
 {
     if (function_exists("exec")) {
@@ -888,11 +973,15 @@ function extract7Zip($source, $destination)
     }
 }
 
+// Handle File Manager Operations
+// Handle File Manager Operations
 if (isset($_POST["action"]) || isset($_GET["action"])) {
     $action = isset($_POST["action"]) ? $_POST["action"] : $_GET["action"];
 
+    // Default response
     $response = ["status" => "error", "message" => "Unknown action"];
 
+    // Current directory
     $currentPath = isset($_POST["path"])
         ? $config["root_path"] . $_POST["path"]
         : $config["root_path"];
@@ -900,6 +989,7 @@ if (isset($_POST["action"]) || isset($_GET["action"])) {
         $currentPath = $config["root_path"] . $_GET["path"];
     }
 
+    // Security check
     if (!securityCheck($currentPath) && $action != "search") {
         $response = ["status" => "error", "message" => "Security violation"];
     } else {
@@ -925,6 +1015,7 @@ if (isset($_POST["action"]) || isset($_GET["action"])) {
                     ),
                 ];
                 break;
+
 
             case "tree":
                 $response = [
@@ -988,7 +1079,9 @@ if (isset($_POST["action"]) || isset($_GET["action"])) {
                 $status = true;
                 $messages = [];
 
+                // If not permanent delete, use trash function instead
                 if (!$permanent && $action === "delete") {
+                    // Redirect to trash action
                     $formData = new FormData();
                     $formData . append("action", "trash");
                     $formData . append("path", $currentPath);
@@ -996,7 +1089,10 @@ if (isset($_POST["action"]) || isset($_GET["action"])) {
                     foreach ($items as $item) {
                         $formData . append("items[]", $item);
                     }
+
+                    // This is handled client-side in the JavaScript
                 } else {
+                    // Permanent deletion (original delete code)
                     foreach ($items as $item) {
                         $itemPath = $currentPath . DIRECTORY_SEPARATOR . $item;
                         $result = deleteItem($itemPath);
@@ -1096,6 +1192,26 @@ if (isset($_POST["action"]) || isset($_GET["action"])) {
                         "message" => "Security violation on destination",
                     ];
                     break;
+
+                    $movedCount = 0;
+                    $messages = [];
+
+                    foreach ($items as $item) {
+                        $sourcePath = $config["root_path"] . $item;
+                        $destPath = rtrim($destination, "/") . "/" . basename($item);
+
+                        if (rename($sourcePath, $destPath)) {
+                            $movedCount++;
+                            $messages[] = "Moved $item successfully";
+                        } else {
+                            $messages[] = "Failed to move $item";
+                        }
+                    }
+
+                    $response = [
+                        "status" => $movedCount > 0 ? "success" : "error",
+                        "message" => implode("\n", $messages),
+                    ];
                 }
 
                 $status = true;
@@ -1293,6 +1409,7 @@ if (isset($_POST["action"]) || isset($_GET["action"])) {
 
                 $filePath = $currentPath . DIRECTORY_SEPARATOR . $file;
 
+                // If no destination specified, create a folder with the same name as the archive
                 if (empty($destination)) {
                     $fileInfo = pathinfo($file);
                     $destination =
@@ -1303,6 +1420,7 @@ if (isset($_POST["action"]) || isset($_GET["action"])) {
                     $destination = $config["root_path"] . $destination;
                 }
 
+                // Make sure the destination directory exists
                 if (!file_exists($destination)) {
                     if (!mkdir($destination, 0755, true)) {
                         $response = [
@@ -1323,6 +1441,7 @@ if (isset($_POST["action"]) || isset($_GET["action"])) {
                 $filePath = $currentPath . DIRECTORY_SEPARATOR . $file;
 
                 if (file_exists($filePath) && is_file($filePath)) {
+                    // Set headers for file download
                     header("Content-Description: File Transfer");
                     header("Content-Type: application/octet-stream");
                     header(
@@ -1346,6 +1465,7 @@ if (isset($_POST["action"]) || isset($_GET["action"])) {
         }
     }
 
+    // Return JSON response for AJAX requests
     if ($action != "download") {
         header("Content-Type: application/json");
         echo json_encode($response);
@@ -1353,6 +1473,7 @@ if (isset($_POST["action"]) || isset($_GET["action"])) {
     }
 }
 
+// Handle file uploads - this replaces the existing file upload handler in your PHP code
 if (isset($_FILES["files"])) {
     header("Content-Type: application/json");
     $currentPath = isset($_POST["path"])
@@ -1376,6 +1497,7 @@ if (isset($_FILES["files"])) {
         $fileName = $files["name"][$i];
         $filePath = $currentPath . DIRECTORY_SEPARATOR . $fileName;
 
+        // Check upload error codes
         if ($files["error"][$i] !== UPLOAD_ERR_OK) {
             $failed++;
             $errorMsg = "";
@@ -1410,12 +1532,14 @@ if (isset($_FILES["files"])) {
             continue;
         }
 
+        // File size check
         if ($files["size"][$i] > $config["max_upload_size"]) {
             $failed++;
             $failedFiles[] = $fileName . " (Exceeds maximum file size limit)";
             continue;
         }
 
+        // Extension check
         if ($config["allowed_extensions"][0] !== "*") {
             $extension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
             if (!in_array($extension, $config["allowed_extensions"])) {
@@ -1456,6 +1580,7 @@ foreach ($lines as $line) {
     }
 }
 
+
 $version = explode(" ", $versionInfo);
 $version = end($version);
 
@@ -1464,121 +1589,227 @@ if ($username == null) {
 }
 ?>
 <?php if ($username != null) { ?>
+    <!DOCTYPE html>
     <html lang="en">
 
     <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-        <title>File Manager - <?= $version ?></title>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+        <title>File Manager</title>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
         <link rel="icon" href="icon.png" type="image/png">
         <style>
             :root {
-                --bs-primary: #202654;
-                --bs-primary-dark: #2980b9;
-                --sidebar-width: 300px;
+                --cpanel-primary: #0c0f25;
+                --cpanel-secondary: #2d335d;
+                --cpanel-bg: #f8f9fa;
+                --cpanel-border: #dee2e6;
             }
-
 
             body {
-                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
                 font-size: 14px;
-                overflow-x: hidden;
+                background-color: var(--cpanel-bg);
             }
 
-
-            h2,
-            h3,
-            h4,
-            h5 {
-                font-size: 16px;
+            .top-header {
+                background-color: var(--cpanel-primary);
+                color: white;
+                padding: 8px 15px;
+                border-bottom: 1px solid var(--cpanel-border);
             }
 
-            #sidebar {
-                width: var(--sidebar-width);
-                height: 100vh;
-                position: fixed;
-                left: 0;
-                top: 0;
-                z-index: 1000;
-                overflow-y: auto;
-                transition: all 0.3s;
-                background: #100237;
-                border-right: 1px solid #dee2e6;
-            }
-
-            #content {
-                margin-left: var(--sidebar-width);
-                padding: 20px;
-                transition: all 0.3s;
-            }
-
-
-
-            .file-tree {
-                padding-left: 15px;
-                list-style-type: none;
-            }
-
-            .file-tree li {
-                margin: 5px 0;
-            }
-
-            .tree-toggle {
-                cursor: pointer;
-            }
-
-            .files-container {
-                min-height: 300px;
-                padding: 15px;
-            }
-
-            .file-item {
-                border: 1px solid transparent;
-                padding: 8px;
-                border-radius: 4px;
-                cursor: pointer;
-                color: #000;
-            }
-
-            .file-item:hover {
-                background-color: #f8f9fa;
-                border-color: #dee2e6;
-            }
-
-            .file-item.selected {
-                background-color: rgba(13, 110, 253, 0.5);
-                border-color: #086bfc;
-            }
-
-            .item-icon {
+            .top-header .brand {
+                font-weight: bold;
                 font-size: 14px;
+            }
+
+            .search-container {
+                max-width: 300px;
+            }
+
+            .main-toolbar {
+                background-color: #e9ecef;
+                padding: 8px 15px;
+                border-bottom: 1px solid var(--cpanel-border);
+                line-height: 30px;
+            }
+
+            .main-toolbar .btn {
+                font-size: 13px;
+                padding: 4px 8px;
                 margin-right: 5px;
             }
 
-            .breadcrumb-item a {
-                text-decoration: none;
-                color: var(--bs-primary);
+            .navigation-bar {
+                background-color: #f1f3f4;
+                padding: 8px 15px;
+                border-bottom: 1px solid var(--cpanel-border);
+            }
+
+            .navigation-bar .btn {
+                font-size: 13px;
+                padding: 4px 8px;
+                margin-right: 5px;
+            }
+
+            .sidebar {
+                background-color: white;
+                border-right: 1px solid var(--cpanel-border);
+                height: calc(100vh - 120px);
+                overflow-y: auto;
+                padding: 10px;
+            }
+
+            .sidebar .folder-tree {
+                font-size: 14px;
+            }
+
+            .sidebar .folder-tree .folder-item {
+                padding: 2px 0;
+                cursor: pointer;
+                white-space: nowrap;
+            }
+
+            .sidebar .folder-tree .folder-item:hover {
+                background-color: #f8f9fa;
+            }
+
+            .sidebar .folder-tree .folder-item.active {
+                background-color: #e3f2fd;
+                color: #1976d2;
+            }
+
+            .sidebar .folder-tree .folder-item i {
+                width: 16px;
+                margin-right: 5px;
+            }
+
+            .main-content {
+                background-color: white;
+                height: calc(100vh - 120px);
+                overflow-y: auto;
+            }
+
+            .file-table {
+                font-size: 14px;
+            }
+
+            .file-table th {
+                background-color: #f8f9fa;
+                border-bottom: 2px solid var(--cpanel-border);
+                padding: 8px;
                 font-weight: 600;
+                color: var(--cpanel-secondary);
             }
 
-            .action-bar {
-                margin-bottom: 0px;
+            .file-table td {
+                padding: 6px 8px;
+                border-bottom: 1px solid #f0f0f0;
+                vertical-align: middle;
             }
 
+            .file-table tr:hover {
+                background-color: #f8f9fa;
+            }
+
+            .file-table tr.selected {
+                background-color: rgba(13, 110, 253, 0.1);
+            }
+
+            .file-icon {
+                width: 16px;
+                margin-right: 8px;
+            }
+
+            .file-name {
+                color: #1976d2;
+                text-decoration: none;
+                font-weight: 500;
+                cursor: pointer;
+            }
+
+            .file-name:hover {
+                text-decoration: underline;
+            }
+
+            .folder-icon {
+                color: #ffa726;
+            }
+
+            .file-size,
+            .file-date {
+                color: var(--cpanel-secondary);
+            }
+
+            .permissions {
+                font-family: monospace;
+                font-size: 11px;
+            }
+
+            .checkbox-col {
+                width: 30px;
+            }
+
+            .icon-col {
+                width: 40px;
+            }
+
+            .collapse-all {
+                font-size: 11px;
+                color: var(--cpanel-secondary);
+                cursor: pointer;
+                padding: 5px 0;
+                border-bottom: 1px solid var(--cpanel-border);
+                margin-bottom: 10px;
+            }
+
+            .btn-sm {
+                font-size: 11px;
+                padding: 2px 6px;
+            }
+
+            .header-btns {
+                text-decoration: none;
+                font-size: 14px;
+                margin-right: 15px;
+                color: #495057;
+                transition: color 0.2s;
+            }
+
+            .header-btns:hover {
+                color: #007bff;
+            }
+
+            .header-btns.disabled {
+                pointer-events: none;
+                color: #adb5bd;
+                cursor: not-allowed;
+            }
+
+            .header-btns.disabled:hover {
+                cursor: not-allowed;
+                color: #adb5bd;
+            }
+
+            /* Progress bar */
             .progress {
                 margin-top: 10px;
+                margin-bottom: 15px;
+                height: 20px;
                 display: none;
             }
 
-            .drag-over {
-                background-color: rgba(13, 110, 253, 0.1);
-                border: 2px dashed #086bfc !important;
-            }
-
-            .modal-header {
-                background-color: #f8f9fa;
+            .progress-bar {
+                transition: width 0.3s ease;
+                text-align: center;
+                line-height: 20px;
+                font-size: 12px;
+                font-weight: bold;
+                color: white;
+                overflow: visible;
+                text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+                white-space: nowrap;
             }
 
             /* Context menu */
@@ -1607,525 +1838,184 @@ if ($username == null) {
                 margin: 0.25rem 0;
             }
 
-            /* Spinner */
-            .spinner-border {
-                width: 1rem;
-                height: 1rem;
-                border-width: 0.15em;
+            /* Drag and drop */
+            .drag-over {
+                background-color: rgba(13, 110, 253, 0.1);
+                border: 2px dashed #086bfc !important;
             }
 
-            /* Add these CSS styles for better progress bar */
-            .progress {
-                margin-top: 10px;
-                margin-bottom: 15px;
-                height: 20px;
+            /* File tree styles */
+            .file-tree {
+                list-style: none;
+                padding-left: 0;
+            }
+
+            .file-tree .folder-item {
+                display: flex;
+                align-items: center;
+                padding: 2px 5px;
+                margin: 1px 0;
+                border-radius: 3px;
+                cursor: pointer;
+            }
+
+            .file-tree .folder-item:hover {
+                background-color: #f8f9fa;
+            }
+
+            .file-tree .folder-item.active {
+                background-color: #e3f2fd;
+                color: #1976d2;
+            }
+
+            .file-tree .caret {
+                margin-right: 5px;
+                transition: transform 0.2s;
+            }
+
+            .file-tree .caret.expanded {
+                transform: rotate(90deg);
+            }
+
+            .file-tree .nested {
                 display: none;
+                padding-left: 20px;
             }
 
-            .progress-bar {
-                transition: width 0.3s ease;
-                text-align: center;
-                line-height: 20px;
+            .file-tree .nested.active {
+                display: block;
+            }
+
+            .code-editor {
+                color: #67a0f5;
+                font-family: "Fira Code", "Courier New", monospace;
                 font-size: 12px;
-                font-weight: bold;
-                color: white;
-                overflow: visible;
-                text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
-                white-space: nowrap;
-            }
-
-            .filename {
-                color: #03051e;
-                font-size: 14px
-            }
-
-
-
-            /* Dark mode adjustments */
-            [data-theme="dark"] .progress-bar {
-                color: #fff;
-                text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
-            }
-
-            /* Dark Mode */
-            [data-theme="dark"] {
-                --bs-body-bg: #03051e;
-                --bs-body-color: #f8f9fa;
-            }
-
-            [data-theme="dark"] #sidebar {
-                background: #100237;
-                border-right-color: #f48513;
-            }
-
-            [data-theme="dark"] .filename {
-                color: #ced4df;
-                font-size: 14px
-            }
-
-            [data-theme="dark"] .file-item:hover {
-                background-color: #f48513;
-                border-color: #f48513;
-            }
-
-            [data-theme="dark"] .file-item.selected {
-                background-color: rgba(244, 133, 19, 0.5);
-                border-color: #f48513;
-            }
-
-            [data-theme="dark"] .modal-content {
-                background-color: #03051e;
-                color: #f8f9fa;
-                border-color: #03051e;
-            }
-
-
-            [data-theme="dark"] .context-menu {
-                background-color: #100237;
-                color: #f8f9fa;
-                border-color: #100237;
-            }
-
-            [data-theme="dark"] .modal-header {
-                background-color: #100237;
-                border-bottom-color: #f48513;
-            }
-
-            [data-theme="dark"] .modal-footer {
-                border-top-color: #100237;
-            }
-
-            [data-theme="dark"] .context-menu-item:hover {
-                background-color: #495057;
-            }
-
-            [data-theme="dark"] .context-menu-divider {
-                border-top-color: #495057;
-            }
-
-            [data-theme="dark"] table,
-            [data-theme="dark"] th,
-            [data-theme="dark"] td {
-                border-color: #495057 !important;
-            }
-
-            [data-theme="dark"] .table {
-                color: #f8f9fa;
-            }
-
-            [data-theme="dark"] .table-striped>tbody>tr:nth-of-type(odd)>* {
-                background-color: rgba(255, 255, 255, 0.05);
-                color: #f8f9fa;
-            }
-
-            [data-theme="dark"] .dropdown-menu {
-                background-color: #100237;
-                border-color: #100237;
-            }
-
-            [data-theme="dark"] .dropdown-item {
-                color: #f8f9fa;
-            }
-
-            [data-theme="dark"] .dropdown-item:hover,
-            [data-theme="dark"] .dropdown-item:focus {
-                background-color: #03051e;
-                color: #f8f9fa;
-            }
-
-            [data-theme="dark"] .navigate-link {
-                color: #f48513;
-            }
-
-            [data-theme="dark"] .breadcrumb-item {
-                color: #a7b1c2;
-                font-weight: 600;
-            }
-
-            a {
-                text-decoration: none;
-            }
-
-            #directory-tree>li>i,
-            .file-tree>li>i {
-                color: #f48513;
-            }
-
-            .dir-link {
-                color: #a7b1c2;
-            }
-
-            .form-control,
-            .form-control:focus,
-            .form-control:active {
-                background-color: #dee2e6;
-                color: #100237;
-            }
-
-            .btn-close {
-                background-color: red;
-            }
-
-            .text-custom {
-                color: #f48513;
-            }
-
-
-            @media (max-width: 768px) {
-                #sidebar {
-                    margin-left: -300px;
-                    /* Match your --sidebar-width */
-                    position: fixed;
-                    top: 0;
-                    left: 0;
-                    height: 100vh;
-                    z-index: 1050;
-                    transition: all 0.3s;
-                    box-shadow: none;
-                }
-
-                #sidebar.active {
-                    margin-left: 0;
-                    box-shadow: 3px 0 10px rgba(0, 0, 0, 0.5);
-                }
-
-                #content {
-                    width: 100%;
-                    margin-left: 0;
-                    transition: all 0.3s;
-                    padding: 10px;
-                }
-
-                /* Add class for overlay when sidebar is active */
-                body.sidebar-active::before {
-                    content: "";
-                    position: fixed;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 100%;
-                    background-color: rgba(0, 0, 0, 0.7);
-                    z-index: 1040;
-                    opacity: 1;
-                    transition: opacity 0.3s;
-                }
-            }
-
-            #sidebarCollapse {
-                z-index: 1031;
-                position: relative;
-                display: inline-block;
-            }
-
-            /* Make action buttons more responsive on mobile */
-            @media (max-width: 576px) {
-                .action-bar {
-                    flex-direction: column;
-                    align-items: stretch;
-                    width: 100%;
-                }
-
-                .action-bar .btn-group {
-                    width: 100%;
-                    margin-right: 0 !important;
-                    margin-bottom: 0.5rem;
-                }
-
-                .action-bar .btn {
-                    flex: 1;
-                }
-
-                /* Hide some text on very small screens */
-                .action-bar .btn i {
-                    margin-right: 0.25rem;
-                }
-
-                /* Make buttons larger for touch targets */
-                .btn-sm {
-                    padding: 0.375rem 0.75rem;
-                    font-size: 0.875rem;
-                    line-height: 1.5;
-                }
-
-                /* Compact file table on mobile */
-                .files-container th:nth-child(5),
-                .files-container th:nth-child(6),
-                .files-container td:nth-child(5),
-                .files-container td:nth-child(6) {
-                    display: none;
-                }
-
-                .files-container th:nth-child(3),
-                .files-container td:nth-child(3) {
-                    display: none;
-                }
-
-                /* Adjust icon size */
-                .item-icon {
-                    font-size: 14px;
-                    margin-right: 5px;
-                }
-
-                /* Fix checkbox size */
-                .form-check-input {
-                    width: 18px;
-                    height: 18px;
-                }
-
-                /* Ensure file names don't overflow */
-                .file-item td:nth-child(2) {
-                    max-width: 200px;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                    white-space: nowrap;
-                }
-            }
-
-            /* Medium screens adjustments */
-            @media (min-width: 577px) and (max-width: 768px) {
-                .action-bar {
-                    flex-wrap: wrap;
-                }
-
-                .action-bar .btn-group {
-                    margin-bottom: 0.5rem;
-                }
-
-                /* Hide less important columns */
-                .files-container th:nth-child(6),
-                .files-container td:nth-child(6) {
-                    display: none;
-                }
-            }
-
-            /* Make sorting dropdown full width on mobile */
-            @media (max-width: 576px) {
-
-                .dropdown,
-                #sortDropdown {
-                    width: 100%;
-                    margin-top: 0.5rem;
-                }
-
-                .dropdown-menu {
-                    width: 100%;
-                }
-            }
-
-            .btn-custom {
-                background-color: #f48513;
-                color: #100237;
+                line-height: 1.5;
+                padding: 10px;
+                resize: vertical;
+                width: 100%;
             }
         </style>
     </head>
 
-    <body data-theme="dark">
-        <div class="wrapper">
-            <!-- Sidebar -->
-            <nav id="sidebar">
-                <div class=" justify-content-between align-items-center d-flex d-lg-none">
-                    <button type="button" class="btn-close mt-2 ms-auto me-2" id="closeSidebar" aria-label="Close"></button>
+    <body>
+        <!-- Top Header -->
+        <div class="top-header d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center">
+                <span class="brand"><img src="logo.png" width="100px" /></span>
+            </div>
+            <div class="d-flex align-items-center">
+                <div class="search-container me-3">
+                    <div class="input-group input-group-sm">
+                        <input type="text" class="form-control form-control-sm" id="search-input" placeholder="Search files">
+                        <button class="btn btn-primary btn-sm" id="search-btn">Go</button>
+                    </div>
                 </div>
+                <!--  <button class="btn btn-sm btn-outline-light">
+                    <i class="fas fa-cog"></i> Settings
+                </button> -->
+            </div>
+        </div>
 
-                <div class="position-sticky pt-3">
-                    <div class="p-3 mb-3 border-bottom d-flex justify-content-center">
-                        <div>
-                            <img src="logo.png" width="200" />
-                            <p class="text-center text-secondary mt-1" style="font-size: 12px;">
-                                <?= $versionInfo ?>
-                            </p>
+        <!-- Main Toolbar -->
+        <div class="main-toolbar">
+            <a href="#" class="header-btns" id="new-file-btn"><i class="fas fa-file"></i> File</a>
+            <a href="#" class="header-btns" id="new-folder-btn"><i class="fas fa-folder"></i> Folder</a>
+            <a href="#" class="header-btns disabled" id="copy-btn"><i class="fas fa-copy"></i> Copy</a>
+            <a href="#" class="header-btns disabled" id="move-btn"><i class="fas fa-arrows-alt"></i> Move</a>
+            <a href="#" class="header-btns" id="upload-btn"><i class="fas fa-upload"></i> Upload</a>
+            <a href="#" class="header-btns disabled" id="download-btn"><i class="fas fa-download"></i> Download</a>
+            <a href="#" class="header-btns disabled" id="delete-btn"><i class="fas fa-trash"></i> Delete</a>
+            <a href="#" class="header-btns disabled" id="restore-btn"><i class="fas fa-undo"></i> Restore</a>
+            <a href="#" class="header-btns disabled" id="rename-btn"><i class="fas fa-tag"></i> Rename</a>
+            <a href="#" class="header-btns disabled" id="edit-btn"><i class="fas fa-edit"></i> Edit</a>
+            <a href="#" class="header-btns disabled" id="permissions-btn"><i class="fas fa-shield-alt"></i> Permissions</a>
+            <a href="#" class="header-btns disabled" id="extract-btn"><i class="fas fa-file-archive"></i> Extract</a>
+            <a href="#" class="header-btns disabled" id="compress-btn"><i class="fas fa-compress"></i> Compress</a>
+            <input type="file" id="file-upload" multiple style="display: none;">
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="progress" id="upload-progress">
+            <div class="progress-bar progress-bar-striped progress-bar-animated bg-success"
+                role="progressbar"
+                style="width: 0%"
+                aria-valuenow="0"
+                aria-valuemin="0"
+                aria-valuemax="100">
+                Preparing upload...
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="container-fluid p-0">
+            <div class="row g-0">
+                <!-- Sidebar -->
+                <div class="col-md-2 sidebar">
+                    <div class="collapse-all" id="collapse-all-btn">Collapse All</div>
+                    <div class="folder-tree" id="directory-tree">
+                        <div class="folder-item active">
+                            <i class="fas fa-home"></i> (/home/<?= $username ?>)
                         </div>
-                    </div>
-
-                    <div class="p-3">
-                        <div class="input-group mb-3">
-                            <input type="text" class="form-control" id="search-input" placeholder="Search files...">
-                            <button class="btn btn-outline-info" type="button" id="search-btn">
-                                <i class="bi bi-search"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="px-1 py-2">
                         <ul class="file-tree">
-                            <li> <a class="nav-link navigate-link text-custom" href="#" data-path="">
-                                    <i class="bi bi-house-door me-2 text-custom"></i> <span style="color: #a7b1c2">/home/<?= $username ?></span>
-                                </a>
-                            </li>
-                            <li>
-                                <ul class="file-tree" id="directory-tree">
-                                    <li class="text-white"><i class="bi bi-arrow-clockwise text-warning"></i> Loading...</li>
-                                </ul>
-                            </li>
-                            <li id="show-trash"></li>
+                            <li><i class="fas fa-spinner fa-spin"></i> Loading...</li>
                         </ul>
                     </div>
                 </div>
-            </nav>
 
-            <!-- Page Content -->
-            <div id="content">
-
-
-                <div class="files-container" id="dropzone">
-
-                    <nav class="navbar navbar-expand-lg border border-secondary mb-3">
-                        <div class="container-fluid">
-                            <button type="button" id="sidebarCollapse" class="btn btn-outline-warning d-lg-none">
-                                <i class="bi bi-list"></i>
-                            </button>
-
-                            <div class="ms-2 me-auto">
-                                <nav aria-label="breadcrumb">
-                                    <ol class="breadcrumb mb-0 p-0" id="breadcrumb">
-                                        <li class="breadcrumb-item"><a href="#" class="navigate-link" data-path=""><i class="bi bi-house-door"></i> </a></li>
-                                    </ol>
-                                </nav>
-                            </div>
-
-                            <div class="d-flex align-items-center">
-                                <i class="bi bi-moon-fill me-2"></i>
-                                <div class="form-check form-switch">
-                                    <label class="form-check-label" for="darkModeSwitch">
-                                        <input class="form-check-input" type="checkbox" checked id="darkModeSwitch">
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                    </nav>
-
-                    <div class="progress mb-3" id="upload-progress">
-                        <div class="progress-bar progress-bar-striped progress-bar-animated bg-success"
-                            role="progressbar"
-                            style="width: 0%"
-                            aria-valuenow="0"
-                            aria-valuemin="0"
-                            aria-valuemax="100">
-                            Preparing upload...
-                        </div>
+                <!-- Main File Area -->
+                <div class="col-md-10 main-content" id="dropzone">
+                    <!-- Navigation Bar -->
+                    <div class="navigation-bar border" style="border: 2px solid #000">
+                        <a href="#" class="header-btns" id="home-btn"><i class="fas fa-home"></i> Home</a>
+                        <a href="#" class="header-btns" id="up-btn"><i class="fas fa-level-up-alt"></i> Up One Level</a>
+                        <a href="#" class="header-btns" id="reload-btn"><i class="fas fa-sync"></i> Reload</a>
+                        <a href="#" class="header-btns" id="select-all-btn"><i class="fas fa-check-square"></i> Select All</a>
+                        <a href="#" class="header-btns disabled" id="unselect-all-btn"><i class="fas fa-square"></i> Unselect All</a>
+                        <a href="#" class="header-btns" id="view-trash-btn"><i class="fas fa-trash-alt"></i> View Trash</a>
+                        <a href="#" class="header-btns" id="sort-btn"><i class="fa-solid fa-arrow-up-wide-short"></i> Sort</a>
                     </div>
 
-
-                    <div class="d-flex justify-content-between align-items-center mb-3 border border-secondary p-1">
-
-                        <div class="action-bar d-flex flex-wrap gap-2 action-buttons-mobile">
-
-
-                            <button type="button" class="btn btn-sm btn-outline-info" id="new-folder-btn">
-                                <i class="bi bi-folder-plus"></i> New Folder
-                            </button>
-                            <button type="button" class="btn btn-sm btn-outline-info" id="new-file-btn">
-                                <i class="bi bi-file-earmark-plus"></i> New File
-                            </button>
-
-
-
-
-                            <button type="button" class="btn btn-sm btn-outline-info" id="upload-btn">
-                                <i class="bi bi-upload"></i> Upload
-                                <input type="file" id="file-upload" multiple style="display: none;">
-                            </button>
-                            <button type="button" class="btn btn-sm btn-outline-secondary first-btns" id="download-btn" disabled>
-                                <i class="bi bi-download"></i> Download
-                            </button>
-
-
-
-                            <button type="button" class="btn btn-sm btn-outline-secondary first-btns" id="copy-btn" disabled>
-                                <i class="bi bi-files"></i> Copy
-                            </button>
-                            <button type="button" class="btn btn-sm btn-outline-secondary first-btns" id="cut-btn" disabled>
-                                <i class="bi bi-scissors"></i> Move
-                            </button>
-
-
-
-                            <div class="btn-group" id="restore-btn-group" style="display: none;">
-                                <button type="button" class="btn btn-sm btn-outline-secondary" id="restore-btn" disabled>
-                                    <i class="bi bi-arrow-counterclockwise"></i> Restore
-                                </button>
-                            </div>
-
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-sm btn-outline-secondary first-btns" id="compress-btn" disabled>
-                                    <i class="bi bi-file-zip"></i> Compress
-                                </button>
-                            </div>
-
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-sm btn-outline-secondary first-btns" id="permissions-btn" disabled>
-                                    <i class="bi bi-shield"></i> Permissions
-                                </button>
-                            </div>
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-sm btn-outline-secondary first-btns" id="delete-btn" disabled>
-                                    <i class="bi bi-trash"></i> Delete
-                                </button>
-                            </div>
-
-                        </div>
-                        <div class="btn-group">
-                            <button class="btn btn-sm btn-outline-info" id="refresh-btn">
-                                <i class="bi bi-arrow-clockwise"></i> <span class="d-none d-md-inline">Reload</span>
-                            </button>
-                            <div class="dropdown ms-1">
-                                <button class="btn btn-sm btn-outline-info dropdown-toggle" type="button" id="sortDropdown" data-bs-toggle="dropdown">
-                                    <i class="bi bi-sort-alpha-down"></i> Sort
-                                </button>
-                                <ul class="dropdown-menu" aria-labelledby="sortDropdown">
-                                    <li><a class="dropdown-item sort-item active" href="#" data-sort="name" data-order="asc">Name (A-Z)</a></li>
-                                    <li><a class="dropdown-item sort-item" href="#" data-sort="name" data-order="desc">Name (Z-A)</a></li>
-                                    <li><a class="dropdown-item sort-item" href="#" data-sort="size" data-order="asc">Size (Smallest first)</a></li>
-                                    <li><a class="dropdown-item sort-item" href="#" data-sort="size" data-order="desc">Size (Largest first)</a></li>
-                                    <li><a class="dropdown-item sort-item" href="#" data-sort="last_modified" data-order="desc">Date (Newest first)</a></li>
-                                    <li><a class="dropdown-item sort-item" href="#" data-sort="last_modified" data-order="asc">Date (Oldest first)</a></li>
-                                </ul>
-                            </div>
-                        </div>
-
-
-                    </div>
-
-                    <div id="files-view" class="table-responsive border border-secondary">
-                        <table class="table table-hover" style="width: 100%;">
-                            <thead>
-                                <tr class="table-active">
-                                    <th class="text-info" style="font-size:14px" width="3%"><input type="checkbox" class="form-check-input" id="select-all-checkbox"></th>
-                                    <th class="text-info" style="font-size:14px" width="50%">Name</th>
-                                    <th class="text-info" style="font-size:14px" width="10%">Size</th>
-                                    <th class="text-info" style="font-size:14px" width="15%">Type</th>
-                                    <th class="text-info" style="font-size:14px" width="15%">Last Modified</th>
-                                    <th class="text-info" style="font-size:14px" width="17%">Permissions</th>
-                                </tr>
-                            </thead>
-                            <tbody id="files-list">
-                                <tr>
-                                    <td colspan="6" class="text-center p-2">Loading files...</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                    <table class="table table-sm file-table mb-4">
+                        <thead>
+                            <tr>
+                                <th class="checkbox-col"><input type="checkbox" class="form-check-input" id="select-all-checkbox"></th>
+                                <th class="icon-col"></th>
+                                <th>Name</th>
+                                <th>Size</th>
+                                <th>Last Modified</th>
+                                <th>Type</th>
+                                <th>Permissions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="files-list">
+                            <tr>
+                                <td colspan="7" class="text-center p-2">Loading files...</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
-
-
+            <div class="text-center py-2">
+                &copy; <?= date('Y') ?> <a href="https://thekinsmen.net" class="text-decoration-none" target="_blank">The Kinsmen</a> | <?= $versionInfo ?> | <a href="https://github.com/JosephChuks/php-file-manager-with-code-editor" class="text-decoration-none" target="_blank"><i class="fa-brands fa-github"></i> github</a>
+            </div>
         </div>
 
 
         <!-- Context Menu -->
         <div class="context-menu" id="context-menu">
-            <div class="context-menu-item" id="ctx-open"><i class="bi bi-folder2-open me-2"></i> Open</div>
-            <div class="context-menu-item" id="ctx-download"><i class="bi bi-download me-2"></i> Download</div>
-            <div class="context-menu-item" id="ctx-edit"><i class="bi bi-pencil-square me-2"></i> Edit</div>
+            <div class="context-menu-item" id="ctx-open"><i class="fas fa-folder-open me-2"></i> Open</div>
+            <div class="context-menu-item" id="ctx-download"><i class="fas fa-download me-2"></i> Download</div>
+            <div class="context-menu-item" id="ctx-edit"><i class="fas fa-edit me-2"></i> Edit</div>
             <div class="context-menu-divider"></div>
-            <div class="context-menu-item" id="ctx-copy"><i class="bi bi-files me-2"></i> Copy</div>
-            <div class="context-menu-item" id="ctx-cut"><i class="bi bi-scissors me-2"></i> Move</div>
+            <div class="context-menu-item" id="ctx-copy"><i class="fas fa-copy me-2"></i> Copy</div>
+            <div class="context-menu-item" id="ctx-cut"><i class="fas fa-cut me-2"></i> Move</div>
             <div class="context-menu-divider"></div>
-            <div class="context-menu-item" id="ctx-rename"><i class="bi bi-input-cursor-text me-2"></i> Rename</div>
-            <div class="context-menu-item" id="ctx-permissions"><i class="bi bi-shield me-2"></i> Permissions</div>
-            <div class="context-menu-item" id="ctx-compress"><i class="bi bi-file-zip me-2"></i> Compress</div>
+            <div class="context-menu-item" id="ctx-rename"><i class="fas fa-tag me-2"></i> Rename</div>
+            <div class="context-menu-item" id="ctx-permissions"><i class="fas fa-shield-alt me-2"></i> Permissions</div>
+            <div class="context-menu-item" id="ctx-compress"><i class="fas fa-compress me-2"></i> Compress</div>
             <div class="context-menu-divider"></div>
-            <div class="context-menu-item text-danger" id="ctx-delete"><i class="bi bi-trash me-2"></i> Delete</div>
+            <div class="context-menu-item text-danger" id="ctx-delete"><i class="fas fa-trash me-2"></i> Delete</div>
         </div>
 
         <!-- Modals -->
@@ -2134,7 +2024,7 @@ if ($username == null) {
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Extract Archive</h5>
+                        <h5 class="modal-title fw-bold fs-6">Extract Archive</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -2164,7 +2054,7 @@ if ($username == null) {
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Create New Folder</h5>
+                        <h5 class="modal-title fw-bold fs-6">Create New Folder</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -2186,7 +2076,7 @@ if ($username == null) {
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Create New File</h5>
+                        <h5 class="modal-title fw-bold fs-6">Create New File</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -2196,7 +2086,7 @@ if ($username == null) {
                         </div>
                         <div class="mb-3">
                             <label for="fileContent" class="form-label">Content</label>
-                            <textarea class="form-control" id="fileContent" rows="10"></textarea>
+                            <textarea class="code-editor" id="fileContent" rows="10"></textarea>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -2212,7 +2102,7 @@ if ($username == null) {
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Rename Item</h5>
+                        <h5 class="modal-title fw-bold fs-6">Rename Item</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -2235,7 +2125,7 @@ if ($username == null) {
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Change Permissions</h5>
+                        <h5 class="modal-title fw-bold fs-6">Change Permissions</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -2310,7 +2200,7 @@ if ($username == null) {
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Compress Items</h5>
+                        <h5 class="modal-title fw-bold fs-6">Compress Items</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -2354,7 +2244,7 @@ if ($username == null) {
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Confirm Delete</h5>
+                        <h5 class="modal-title fw-bold fs-6">Confirm Delete</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -2411,7 +2301,7 @@ if ($username == null) {
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Search Results</h5>
+                        <h5 class="modal-title fw-bold fs-6">Search Results</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -2475,7 +2365,7 @@ if ($username == null) {
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Restore Items</h5>
+                        <h5 class="modal-title fw-bold fs-6">Restore Items</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -2497,8 +2387,7 @@ if ($username == null) {
         </div>
 
         <!-- Scripts -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.14.0/Sortable.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
         <script>
             // Pass PHP variables to JavaScript
             var SERVER_ROOT_PATH = "<?php echo $config["root_path"]; ?>";
@@ -2513,13 +2402,12 @@ if ($username == null) {
                 let clipboardAction = '';
                 let currentSort = 'name';
                 let currentOrder = 'asc';
-                let viewMode = 'list'; // grid or list
                 let contextTarget = null;
 
                 // Load file list
                 function loadFileList() {
                     const filesList = document.getElementById('files-list');
-                    filesList.innerHTML = '<tr><td colspan="6" class="text-center"><div class="spinner-border spinner-border-sm" role="status"></div> Loading files...</td></tr>';
+                    filesList.innerHTML = '<tr><td colspan="7" class="text-center"><div class="spinner-border spinner-border-sm" role="status"></div> Loading files...</td></tr>';
 
                     // Reset selected items
                     selectedItems = [];
@@ -2541,8 +2429,6 @@ if ($username == null) {
                             if (data.status === 'success') {
                                 fileList = data.data;
 
-                                // Update breadcrumb
-                                updateBreadcrumb(data.current_path);
 
                                 // Show files in the table
                                 showFiles(fileList);
@@ -2551,9 +2437,6 @@ if ($username == null) {
                                 if (data.current_path !== undefined) {
                                     currentPath = data.current_path;
                                 }
-
-                                // Check for .trash path and update restore button visibility
-                                updateRestoreButtonVisibility();
                             } else {
                                 showAlert('Error', data.message);
                             }
@@ -2563,33 +2446,13 @@ if ($username == null) {
                         });
                 }
 
-                // Update breadcrumb
-                function updateBreadcrumb(path) {
-                    const breadcrumb = document.getElementById('breadcrumb');
-                    breadcrumb.innerHTML = '<li class="breadcrumb-item"><a href="#" class="navigate-link" data-path=""><i class="bi bi-house-door"></i></a></li>';
-
-                    if (path) {
-                        const parts = path.split('/').filter(part => part !== '');
-                        let currentPath = '';
-
-                        parts.forEach((part, index) => {
-                            currentPath += '/' + part;
-
-                            if (index === parts.length - 1) {
-                                breadcrumb.innerHTML += `<li class="breadcrumb-item active">${part}</li>`;
-                            } else {
-                                breadcrumb.innerHTML += `<li class="breadcrumb-item"><a href="#" class="navigate-link" data-path="${currentPath}">${part}</a></li>`;
-                            }
-                        });
-                    }
-                }
 
                 // Show files in table
                 function showFiles(files) {
                     const filesList = document.getElementById('files-list');
 
                     if (files.length === 0) {
-                        filesList.innerHTML = '<tr><td colspan="6" class="text-center p-3 text-danger">No files found</td></tr>';
+                        filesList.innerHTML = '<tr><td colspan="7" class="text-center p-3 text-danger">No files found</td></tr>';
                         return;
                     }
 
@@ -2599,13 +2462,12 @@ if ($username == null) {
                         html += `
                     <tr class="file-item" data-name="${file.name}" data-type="${file.type}">
                         <td><input type="checkbox" class="form-check-input item-check"></td>
-                        <td class="filename">
-                        <i class="bi ${file.name === "public_html" ? "bi-globe2 text-info" : file.type === 'dir' ? file.icon + " text-custom" : file.icon + " text-primary"} item-icon"></i> ${file.name}
-                        </td>
-                        <td class="text-secondary" style="font-size:14px">${file.size}</td>
-                        <td class="text-secondary" style="font-size:14px">${file.type === 'dir' ? 'Folder' : (file.extension ? file.extension.toLowerCase() : 'File')}</td>
-                        <td class="text-secondary" style="font-size:14px">${file.last_modified}</td>
-                        <td class="text-secondary" style="font-size:14px">${file.permissions}</td>
+                        <td><i class="${file.name === "public_html" ? "fas fa-globe text-primary" : file.icon} folder-icon"></i>   </td>
+                        <td><a href="#" class="file-name">${file.name}</a></td>
+                        <td class="file-size">${file.size}</td>
+                        <td class="file-date">${file.last_modified}</td>
+                        <td>${file.type === 'dir' ? 'httpdunix-directory' : 'file'}</td>
+                        <td class="permissions">${file.permissions}</td>
                     </tr>`;
                     });
 
@@ -2625,7 +2487,7 @@ if ($username == null) {
                                     openFileEditor(name);
                                 } else {
                                     // Download the file
-                                    window.location.href = `${window.location.href}?action=download&path=${encodeURIComponent(currentPath)}&file=${encodeURIComponent(name)}`;
+                                    window.location.href = `${window.location.pathname}?action=download&path=${encodeURIComponent(currentPath)}&file=${encodeURIComponent(name)}`;
                                 }
                             }
                         });
@@ -2734,23 +2596,6 @@ if ($username == null) {
                     document.getElementById('ctx-edit').style.display = type === 'file' ? 'block' : 'none';
                     document.getElementById('ctx-open').style.display = type === 'dir' ? 'block' : 'none';
 
-                    // Show/hide extract option based on file type
-                    const extractItem = document.getElementById('ctx-extract');
-                    if (extractItem) {
-                        if (type === 'file' && contextTarget) {
-                            const fileItem = fileList.find(item => item.name === contextTarget.name);
-                            if (fileItem) {
-                                const extension = fileItem.extension ? fileItem.extension.toLowerCase() : '';
-                                const isArchive = ['zip', 'tar', 'gz', 'gzip', 'bz2', 'bzip2', 'rar', '7z'].includes(extension);
-                                extractItem.style.display = isArchive ? 'block' : 'none';
-                            } else {
-                                extractItem.style.display = 'none';
-                            }
-                        } else {
-                            extractItem.style.display = 'none';
-                        }
-                    }
-
                     // Add event listener to close menu when clicking elsewhere
                     document.addEventListener('click', function closeMenu(e) {
                         if (!contextMenu.contains(e.target)) {
@@ -2760,357 +2605,47 @@ if ($username == null) {
                     });
                 }
 
-
-
-                // Add the extract button to context menu
-                const contextMenu = document.getElementById("context-menu");
-                const compressItem = document.getElementById("ctx-compress");
-
-                if (contextMenu && compressItem) {
-                    // Create extract menu item after compress
-                    const extractItem = document.createElement("div");
-                    extractItem.className = "context-menu-item";
-                    extractItem.id = "ctx-extract";
-                    extractItem.innerHTML =
-                        '<i class="bi bi-file-earmark-zip me-2"></i> Extract Here';
-
-                    // Insert after compress item
-                    compressItem.parentNode.insertBefore(extractItem, compressItem.nextSibling);
-
-                    // Add event listener
-                    extractItem.addEventListener("click", function() {
-                        if (contextTarget && contextTarget.type === "file") {
-                            extractArchive(contextTarget.name);
-                        }
-                    });
-                }
-
-                // Button to add "Extract" functionality to file items
-                const addExtractButton = function() {
-                    // Check if we already added the button
-                    if (document.getElementById("extract-btn")) return;
-
-                    // Create extract button
-                    const actionBar = document.querySelector(".action-bar");
-                    if (actionBar) {
-                        const extractBtn = document.createElement("div");
-                        extractBtn.className = "btn-group";
-                        extractBtn.innerHTML = `
-                <button type="button" class="btn btn-sm btn-outline-secondary" id="extract-btn" disabled>
-                    <i class="bi bi-file-earmark-zip"></i> Extract
-                </button>
-            `;
-
-                        // Add after compress button
-                        const compressBtn = document.getElementById("compress-btn");
-                        if (compressBtn) {
-                            const compressBtnGroup = compressBtn.closest(".btn-group");
-                            if (compressBtnGroup) {
-                                compressBtnGroup.parentNode.insertBefore(
-                                    extractBtn,
-                                    compressBtnGroup.nextSibling
-                                );
-                            } else {
-                                actionBar.appendChild(extractBtn);
-                            }
-                        } else {
-                            actionBar.appendChild(extractBtn);
-                        }
-
-                        // Add event listener
-                        document
-                            .getElementById("extract-btn")
-                            .addEventListener("click", function() {
-                                if (selectedItems.length === 1) {
-                                    // Get the item and check if it's an extractable archive
-                                    const fileItem = fileList.find(
-                                        (item) => item.name === selectedItems[0]
-                                    );
-                                    if (fileItem && fileItem.type === "file") {
-                                        extractArchive(fileItem.name);
-                                    } else {
-                                        showAlert("Error", "Please select a file to extract");
-                                    }
-                                } else {
-                                    showAlert("Error", "Please select exactly one file to extract");
-                                }
-                            });
-                    }
-                };
-
-                // Add extract button to action bar
-                addExtractButton();
-
-                // Add event listener for extract confirmation
-                const extractConfirmBtn = document.getElementById("extractConfirmBtn");
-                if (extractConfirmBtn) {
-                    extractConfirmBtn.addEventListener("click", confirmExtraction);
-                }
-
-                // Add event listener for path input to handle Enter key
-                const extractPath = document.getElementById("extractPath");
-                if (extractPath) {
-                    extractPath.addEventListener("keypress", function(e) {
-                        if (e.key === "Enter") {
-                            confirmExtraction();
-                        }
-                    });
-                }
-
-                // Update extract button state when selection changes
-                const originalUpdateButtonStates = updateButtonStates;
-                updateButtonStates = function() {
-                    // Call the original function
-                    originalUpdateButtonStates();
-
-                    // Update extract button state
-                    const extractBtn = document.getElementById("extract-btn");
-                    if (extractBtn) {
-                        // Enable button only when a single file is selected
-                        const hasSelection = selectedItems.length === 1;
-
-                        if (hasSelection) {
-                            // Check if the selected file is an archive
-                            const fileItem = fileList.find(
-                                (item) => item.name === selectedItems[0]
-                            );
-                            if (fileItem && fileItem.type === "file") {
-                                const extension = fileItem.extension ?
-                                    fileItem.extension.toLowerCase() :
-                                    "";
-                                const isArchive = [
-                                    "zip",
-                                    "tar",
-                                    "gz",
-                                    "gzip",
-                                    "bz2",
-                                    "bzip2",
-                                    "rar",
-                                    "7z",
-                                ].includes(extension);
-                                extractBtn.disabled = !isArchive;
-                            } else {
-                                extractBtn.disabled = true;
-                            }
-                        } else {
-                            extractBtn.disabled = true;
-                        }
-
-                        if (extractBtn.disabled) {
-                            extractBtn.classList.remove('btn-outline-info');
-                            extractBtn.classList.add('btn-outline-secondary');
-                        } else {
-                            extractBtn.classList.remove('btn-outline-secondary');
-                            extractBtn.classList.add('btn-outline-info');
-                        }
-                    }
-                };
-
-
-
-                // Add event listener for restore button
-                const restoreBtn = document.getElementById('restore-btn');
-                if (restoreBtn) {
-                    restoreBtn.addEventListener('click', restoreFromTrash);
-                }
-
-                // Add event listener for confirm restore button
-                const confirmRestoreBtn = document.getElementById('confirmRestoreBtn');
-                if (confirmRestoreBtn) {
-                    confirmRestoreBtn.addEventListener('click', confirmRestore);
-                }
-
-                // Initial update of restore button visibility
-                updateRestoreButtonVisibility();
-
-
-                // Make sure the restore functions are properly defined
-                function restoreFromTrash() {
-                    if (selectedItems.length === 0) return;
-
-                    // Make sure we're in the trash directory
-                    if (!currentPath.includes('/.trash')) {
-                        showAlert('Error', 'Restore function is only available inside the trash folder');
-                        return;
-                    }
-
-                    const restoreList = document.getElementById('restoreItems');
-                    restoreList.innerHTML = '';
-
-                    selectedItems.forEach(item => {
-                        const li = document.createElement('li');
-                        li.textContent = item;
-                        restoreList.appendChild(li);
-                    });
-
-                    const restoreModal = new bootstrap.Modal(document.getElementById('restoreModal'));
-                    restoreModal.show();
-                }
-
-                function confirmRestore() {
-                    const formData = new FormData();
-                    formData.append('action', 'restore');
-                    formData.append('path', currentPath);
-
-                    selectedItems.forEach(item => {
-                        formData.append('items[]', item);
-                    });
-
-                    fetch(window.location.pathname, {
-                            method: 'POST',
-                            body: formData
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            bootstrap.Modal.getInstance(document.getElementById('restoreModal')).hide();
-
-                            if (data.status === 'success') {
-                                loadFileList();
-                                loadDirectoryTree();
-                                showAlert('Success', data.message || 'Items restored successfully');
-                            } else {
-                                showAlert('Error', data.message || 'Failed to restore items');
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Restore error:', error);
-                            showAlert('Error', 'Failed to restore items');
-                        });
-                }
-
-                // Function to update restore button visibility
-                function updateRestoreButtonVisibility() {
-                    const restoreBtnGroup = document.getElementById('restore-btn-group');
-                    if (restoreBtnGroup) {
-                        // Show restore button only in trash directory
-                        if (currentPath.includes('/.trash')) {
-                            restoreBtnGroup.style.display = 'inline-flex';
-
-                            // Also update the button state based on selection
-                            const restoreBtn = document.getElementById('restore-btn');
-                            if (restoreBtn) {
-                                restoreBtn.disabled = selectedItems.length === 0;
-                            }
-                        } else {
-                            restoreBtnGroup.style.display = 'none';
-                        }
-                    }
-                }
-
-                // Extract archive function
-                function extractArchive(fileName) {
-                    if (!fileName) return;
-
-                    // Show modal to get extraction path
-                    document.getElementById('extractFileName').textContent = fileName;
-
-                    // Set default extraction folder name (remove extension)
-                    const fileNameWithoutExt = fileName.replace(/\.[^/.]+$/, "");
-                    document.getElementById('extractPath').value = currentPath + '/' + fileNameWithoutExt;
-
-                    const extractModal = new bootstrap.Modal(document.getElementById('extractModal'));
-                    extractModal.show();
-                }
-
-                // Confirm extraction
-                function confirmExtraction() {
-                    const fileName = document.getElementById('extractFileName').textContent;
-                    const destination = document.getElementById('extractPath').value.trim();
-
-                    if (!destination) {
-                        showAlert('Error', 'Please enter a destination path');
-                        return;
-                    }
-
-                    // Show loading indicator
-                    document.getElementById('extractConfirmBtn').disabled = true;
-                    document.getElementById('extractConfirmBtn').innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Extracting...';
-
-                    const formData = new FormData();
-                    formData.append('action', 'extract');
-                    formData.append('path', currentPath);
-                    formData.append('file', fileName);
-                    formData.append('destination', destination);
-
-                    fetch(window.location.pathname, {
-                            method: 'POST',
-                            body: formData
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            // Reset button state
-                            document.getElementById('extractConfirmBtn').disabled = false;
-                            document.getElementById('extractConfirmBtn').innerHTML = 'Extract';
-
-                            // Close modal
-                            bootstrap.Modal.getInstance(document.getElementById('extractModal')).hide();
-
-                            if (data.status === 'success') {
-                                loadFileList();
-                                loadDirectoryTree();
-                                showAlert('Success', data.message || 'Archive extracted successfully');
-                            } else {
-                                showAlert('Error', data.message || 'Failed to extract archive');
-                            }
-                        })
-                        .catch(error => {
-                            // Reset button state
-                            document.getElementById('extractConfirmBtn').disabled = false;
-                            document.getElementById('extractConfirmBtn').innerHTML = 'Extract';
-
-                            console.error('Extract error:', error);
-                            showAlert('Error', 'Failed to extract archive: ' + error.message);
-                        });
-                }
-
-
-
                 // Update button states based on selection
                 function updateButtonStates() {
                     const hasSelection = selectedItems.length > 0;
                     const hasSingleSelection = selectedItems.length === 1;
 
-                    if (hasSelection) {
-                        document.querySelectorAll('.first-btns').forEach(btn => {
-                            btn.classList.remove('btn-outline-secondary');
-                            btn.classList.add('btn-outline-info');
+                    // Get all buttons that need to be enabled/disabled
+                    const actionButtons = [
+                        'copy-btn', 'move-btn', 'download-btn', 'delete-btn',
+                        'rename-btn', 'edit-btn', 'permissions-btn', 'extract-btn', 'restore-btn', 'compress-btn'
+                    ];
 
-                        });
-                    } else {
-                        document.querySelectorAll('.first-btns').forEach(btn => {
-                            btn.classList.add('btn-outline-secondary');
-                            btn.classList.remove('btn-outline-info');
+                    actionButtons.forEach(btnId => {
+                        const btn = document.getElementById(btnId);
+                        if (btn) {
+                            if ((btnId === 'rename-btn' || btnId === 'edit-btn' || btnId === 'permissions-btn') && !hasSingleSelection) {
+                                btn.classList.add('disabled');
+                            } else if (hasSelection && btnId === 'restore-btn' && currentPath === '/.trash') {
+                                btn.classList.remove('disabled');
+                            } else if (hasSelection) {
+                                btn.classList.remove('disabled');
+                            } else {
+                                btn.classList.add('disabled');
+                            }
+                        }
+                    });
 
-                        });
-                    }
-
-                    // Update regular button states
-                    document.getElementById('delete-btn').disabled = !hasSelection;
-                    document.getElementById('copy-btn').disabled = !hasSelection;
-                    document.getElementById('cut-btn').disabled = !hasSelection;
-                    document.getElementById('download-btn').disabled = !hasSelection;
-                    document.getElementById('compress-btn').disabled = !hasSelection;
-                    document.getElementById('permissions-btn').disabled = !hasSingleSelection;
-
-                    // Update restore button state if we're in the trash folder
-                    const restoreBtn = document.getElementById('restore-btn');
-                    if (restoreBtn && currentPath.includes('/.trash')) {
-                        restoreBtn.disabled = !hasSelection;
-
+                    // Update select all button
+                    const unselectBtn = document.getElementById('unselect-all-btn');
+                    if (unselectBtn) {
                         if (hasSelection) {
-                            restoreBtn.classList.remove('btn-outline-secondary');
-                            restoreBtn.classList.add('btn-outline-info');
+                            unselectBtn.classList.remove('disabled');
                         } else {
-                            restoreBtn.classList.add('btn-outline-secondary');
-                            restoreBtn.classList.remove('btn-outline-info');
+                            unselectBtn.classList.add('disabled');
                         }
                     }
                 }
 
-                // Fix for directory tree navigation
+                // Load directory tree
                 function loadDirectoryTree() {
-                    const directoryTree = document.getElementById('directory-tree');
-                    directoryTree.innerHTML = '<li><i class="bi bi-arrow-clockwise spin"></i> Loading...</li>';
+                    const directoryTree = document.querySelector('#directory-tree .file-tree');
+                    directoryTree.innerHTML = '<li><i class="fas fa-spinner fa-spin"></i> Loading...</li>';
 
                     // Make AJAX request to get directory tree
                     const formData = new FormData();
@@ -3125,22 +2660,8 @@ if ($username == null) {
                             if (data.status === 'success') {
                                 directoryTree.innerHTML = buildTreeHTML(data.data);
 
-                                // Add event listeners
-                                document.querySelectorAll('.tree-toggle').forEach(toggle => {
-                                    toggle.addEventListener('click', function() {
-                                        this.classList.toggle('bi-caret-right');
-                                        this.classList.toggle('bi-caret-down');
-                                        this.parentElement.querySelector('.file-tree').classList.toggle('d-none');
-                                    });
-                                });
-
-                                document.querySelectorAll('.dir-link').forEach(link => {
-                                    link.addEventListener('click', function(e) {
-                                        e.preventDefault();
-                                        const path = this.getAttribute('data-path');
-                                        navigateTo(path);
-                                    });
-                                });
+                                // Add event listeners for tree navigation
+                                addTreeEventListeners();
                             } else {
                                 directoryTree.innerHTML = '<li>Failed to load directory tree</li>';
                             }
@@ -3150,60 +2671,89 @@ if ($username == null) {
                         });
                 }
 
-                // Add navigation path change detection
-                function navigateTo(path) {
-                    // Ensure path is properly formatted (no leading double slashes)
-                    if (path.startsWith('//')) {
-                        path = path.substring(1);
-                    }
-
-                    // Make sure path is properly normalized
-                    path = path.replace(/\/+/g, '/');
-
-                    currentPath = path;
-
-                    // Update URL hash (optional, but helps with browser navigation)
-                    window.location.hash = path;
-
-                    // Store in localStorage for persistence across page reloads
-                    localStorage.setItem('currentPath', path);
-
-                    loadFileList();
-
-                    // Update restore button visibility when path changes
-                    updateRestoreButtonVisibility();
-                }
-
-                // Fix for buildTreeHTML function to properly format the path attributes
+                // Build tree HTML with caret icons
                 function buildTreeHTML(tree) {
                     let html = '';
 
                     tree.forEach(item => {
                         if (item.type === 'dir') {
-                            // Ensure the path is properly formatted
                             let itemPath = item.path;
                             if (itemPath.startsWith('//')) {
                                 itemPath = itemPath.substring(1);
                             }
 
                             html += `
-                            <li>
-                                <i class="bi bi-caret-right tree-toggle"></i>
-                                ${item.name === "public_html" ? `<i class="bi bi-globe2 text-info item-icon"></i>` : `<i class="bi bi-folder item-icon"></i>`}
-                                <a href="#" class="dir-link" style="font-size:14px" data-path="${itemPath}">${item.name}</a>
-                                <ul class="file-tree d-none">`;
+                        <li>
+                            <span class="folder-item" data-path="${itemPath}">
+                                <i class="fas fa-caret-right caret" data-expanded="false"></i>
+                                <i class="fas fa-folder folder-icon"></i>
+                                ${item.name}
+                            </span>`;
 
                             if (item.children && item.children.length > 0) {
+                                html += `<ul class="file-tree nested">`;
                                 html += buildTreeHTML(item.children);
+                                html += `</ul>`;
                             }
 
-                            html += `
-                                </ul>
-                            </li>`;
+                            html += `</li>`;
                         }
                     });
 
                     return html;
+                }
+
+                // Add event listeners to tree items
+                function addTreeEventListeners() {
+                    // Caret click events
+                    document.querySelectorAll('.caret').forEach(caret => {
+                        caret.addEventListener('click', function(e) {
+                            e.stopPropagation();
+
+                            const nested = this.parentElement.parentElement.querySelector('.nested');
+                            const isExpanded = this.getAttribute('data-expanded') === 'true';
+
+                            if (nested) {
+                                if (isExpanded) {
+                                    nested.classList.remove('active');
+                                    this.classList.remove('expanded');
+                                    this.setAttribute('data-expanded', 'false');
+                                } else {
+                                    nested.classList.add('active');
+                                    this.classList.add('expanded');
+                                    this.setAttribute('data-expanded', 'true');
+                                }
+                            }
+                        });
+                    });
+
+                    // Folder navigation click events
+                    document.querySelectorAll('.folder-item').forEach(item => {
+                        item.addEventListener('click', function(e) {
+                            // Don't navigate if clicking on caret
+                            if (e.target.classList.contains('caret')) {
+                                return;
+                            }
+
+                            const path = this.getAttribute('data-path');
+                            if (path !== null) {
+                                navigateTo(path);
+                            }
+                        });
+                    });
+                }
+
+                // Navigate to path
+                function navigateTo(path) {
+                    // Ensure path is properly formatted
+                    if (path.startsWith('//')) {
+                        path = path.substring(1);
+                    }
+
+                    path = path.replace(/\/+/g, '/');
+                    currentPath = path;
+
+                    loadFileList();
                 }
 
                 // Show alert modal
@@ -3229,7 +2779,7 @@ if ($username == null) {
                     formData.append('path', currentPath);
                     formData.append('name', folderName);
 
-                    fetch(window.location.href, {
+                    fetch(window.location.pathname, {
                             method: 'POST',
                             body: formData
                         })
@@ -3245,7 +2795,6 @@ if ($username == null) {
                             }
                         })
                         .catch(error => {
-
                             showAlert('Error', 'Failed to create folder');
                         });
                 }
@@ -3266,7 +2815,7 @@ if ($username == null) {
                     formData.append('name', fileName);
                     formData.append('content', fileContent);
 
-                    fetch(window.location.href, {
+                    fetch(window.location.pathname, {
                             method: 'POST',
                             body: formData
                         })
@@ -3282,7 +2831,6 @@ if ($username == null) {
                             }
                         })
                         .catch(error => {
-
                             showAlert('Error', 'Failed to create file');
                         });
                 }
@@ -3303,7 +2851,7 @@ if ($username == null) {
                     formData.append('old_name', oldName);
                     formData.append('new_name', newName);
 
-                    fetch(window.location.href, {
+                    fetch(window.location.pathname, {
                             method: 'POST',
                             body: formData
                         })
@@ -3318,7 +2866,6 @@ if ($username == null) {
                             }
                         })
                         .catch(error => {
-
                             showAlert('Error', 'Failed to rename item');
                         });
                 }
@@ -3425,336 +2972,24 @@ if ($username == null) {
                 // This code will run after the page is fully loaded
                 document.getElementById('permanentDeleteCheck').addEventListener('change', updateDeleteModalState);
 
-                // Add Trash folder to sidebar (if not already there)
-                const sidebarNav = document.getElementById('show-trash');
-                if (sidebarNav) {
-                    // Check if trash link already exists
-                    if (!document.querySelector('.nav-link[data-path="/.trash"]')) {
-                        sidebarNav.innerHTML = `
-                                                <a class="nav-link navigate-link text-danger mt-2" href="#" data-path="/.trash">
-                                                    <i class="bi bi-trash me-2"></i> Trash
-                                                </a>
-                                            `;
-                    }
-                }
-
-
-                // Change permissions
-                function changePermissions() {
-                    const item = document.getElementById('permItem').textContent;
-                    const permValue = document.getElementById('permValue').value.trim();
-
-                    if (!permValue.match(/^0[0-7]{3}$/)) {
-                        showAlert('Error', 'Please enter a valid octal permission value (e.g. 0755)');
-                        return;
-                    }
-
-                    const formData = new FormData();
-                    formData.append('action', 'permissions');
-                    formData.append('path', currentPath);
-                    formData.append('item', item);
-                    formData.append('mode', permValue);
-
-                    fetch(window.location.href, {
-                            method: 'POST',
-                            body: formData
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.status === 'success') {
-                                bootstrap.Modal.getInstance(document.getElementById('permissionsModal')).hide();
-                                loadFileList();
-                            } else {
-                                showAlert('Error', data.message);
-                            }
-                        })
-                        .catch(error => {
-
-                            showAlert('Error', 'Failed to change permissions');
-                        });
-                }
-
-                // Compress items
-                function compressItems() {
-                    const name = document.getElementById('compressName').value.trim();
-                    const type = document.querySelector('input[name="compressType"]:checked').value;
-
-                    if (!name) {
-                        showAlert('Error', 'Please enter an archive name');
-                        return;
-                    }
-
-                    if (type === 'gzip' && selectedItems.length > 1) {
-                        showAlert('Error', 'GZip can only compress one file at a time');
-                        return;
-                    }
-
-                    const formData = new FormData();
-                    formData.append('action', 'compress');
-                    formData.append('path', currentPath);
-                    formData.append('name', name);
-                    formData.append('type', type);
-
-                    selectedItems.forEach(item => {
-                        formData.append('items[]', item);
-                    });
-
-                    fetch(window.location.href, {
-                            method: 'POST',
-                            body: formData
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.status === 'success') {
-                                bootstrap.Modal.getInstance(document.getElementById('compressModal')).hide();
-                                loadFileList();
-                                document.getElementById('compressName').value = '';
-                            } else {
-                                showAlert('Error', data.message);
-                            }
-                        })
-                        .catch(error => {
-
-                            showAlert('Error', 'Failed to compress items');
-                        });
-                }
-
-
-                // Upload files with fixed progress bar
-                function uploadFiles(files) {
-                    if (files.length === 0) return;
-
-                    const formData = new FormData();
-                    formData.append('path', currentPath);
-
-                    for (let i = 0; i < files.length; i++) {
-                        formData.append('files[]', files[i]);
-                    }
-
-                    // Show progress bar
-                    const progressBar = document.getElementById('upload-progress');
-                    const progressBarInner = progressBar.querySelector('.progress-bar');
-
-                    // Reset and show progress bar
-                    progressBar.style.display = 'block';
-                    progressBarInner.style.width = '0%';
-                    progressBarInner.setAttribute('aria-valuenow', 0);
-                    progressBarInner.textContent = 'Preparing upload...';
-
-                    const xhr = new XMLHttpRequest();
-                    xhr.open('POST', window.location.pathname, true);
-
-                    // Set up progress event handler
-                    xhr.upload.addEventListener('progress', function(e) {
-                        if (e.lengthComputable) {
-                            const percentComplete = Math.round((e.loaded / e.total) * 100);
-
-                            // Update progress bar visually
-                            progressBarInner.style.width = percentComplete + '%';
-                            progressBarInner.setAttribute('aria-valuenow', percentComplete);
-
-                            // Update text inside progress bar
-                            progressBarInner.textContent = percentComplete + '% uploaded';
-
-                            // Optional: Add a class to change color when complete
-                            if (percentComplete >= 100) {
-                                progressBarInner.classList.remove('progress-bar-animated');
-                                progressBarInner.textContent = 'Processing...';
-                            }
-                        }
-                    });
-
-                    xhr.addEventListener('load', function() {
-                        // Hide progress bar with a slight delay to ensure user sees the completion
-                        setTimeout(() => {
-                            progressBar.style.display = 'none';
-                            // Reset classes for next upload
-                            progressBarInner.classList.add('progress-bar-animated');
-                        }, 500);
-
-                        if (xhr.status === 200) {
-                            try {
-                                // Log the response for debugging
-                                console.log("Server response:", xhr.responseText);
-
-                                // Try to parse the JSON response
-                                const response = JSON.parse(xhr.responseText);
-
-                                if (response.status === 'success' || response.status === 'partial') {
-                                    loadFileList();
-                                    showAlert('Upload Complete', response.message);
-                                } else {
-                                    showAlert('Error', response.message || 'Unknown error occurred during upload');
-                                }
-                            } catch (error) {
-                                console.error("Error parsing response:", error);
-
-                                // Check if the response is HTML instead of JSON (common server error)
-                                if (xhr.responseText.includes("<!DOCTYPE html>") ||
-                                    xhr.responseText.includes("<html>")) {
-                                    showAlert('Error', 'Server returned HTML instead of JSON. This could be due to upload size limits or server configuration issues.');
-                                } else {
-                                    showAlert('Error', 'Failed to parse server response: ' + error.message);
-                                }
-                            }
-                        } else {
-                            showAlert('Error', 'HTTP Error: ' + xhr.status);
-                        }
-                    });
-
-                    xhr.addEventListener('error', function(e) {
-                        console.error("Upload error:", e);
-                        progressBar.style.display = 'none';
-                        showAlert('Error', 'Network error occurred while uploading files');
-                    });
-
-                    xhr.addEventListener('abort', function() {
-                        progressBar.style.display = 'none';
-                        showAlert('Upload Aborted', 'File upload was cancelled');
-                    });
-
-                    xhr.send(formData);
-                }
-
-                // Open file editor
-                function openFileEditor(fileName) {
-
-                    // Construct the full server path to the file
-                    const fullPath = SERVER_ROOT_PATH + (currentPath.startsWith('/') ? currentPath : '/' + currentPath);
-                    const completePath = fullPath + (fullPath.endsWith('/') ? '' : '/') + fileName;
-
-                    // Open the codeEditor.php in a new tab with the full file path as parameter
-                    window.open('codeEditor.php?filename=' + encodeURIComponent(completePath), '_blank');
-                }
-
-
-                // Save file changes
-                function saveFileChanges() {
-                    const fileName = document.getElementById('editFileName').textContent;
-                    const content = document.getElementById('editContent').value;
-
-                    const formData = new FormData();
-                    formData.append('action', 'save_file');
-                    formData.append('path', currentPath);
-                    formData.append('item', fileName);
-                    formData.append('content', content);
-
-                    fetch(window.location.href, {
-                            method: 'POST',
-                            body: formData
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.status === 'success') {
-                                bootstrap.Modal.getInstance(document.getElementById('editFileModal')).hide();
-                                loadFileList();
-                            } else {
-                                showAlert('Error', data.message);
-                            }
-                        })
-                        .catch(error => {
-
-                            showAlert('Error', 'Failed to save file');
-                        });
-                }
-
-                // Search for files
-                function searchFiles() {
-                    const query = document.getElementById('search-input').value.trim();
-
-                    if (!query) {
-                        showAlert('Error', 'Please enter a search query');
-                        return;
-                    }
-
-                    const searchResults = document.getElementById('search-results');
-                    searchResults.innerHTML = '<tr><td colspan="5" class="text-center"><div class="spinner-border spinner-border-sm" role="status"></div> Searching...</td></tr>';
-
-                    const formData = new FormData();
-                    formData.append('action', 'search');
-                    formData.append('path', currentPath);
-                    formData.append('query', query);
-
-                    fetch(window.location.href, {
-                            method: 'POST',
-                            body: formData
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.status === 'success') {
-                                const results = data.data;
-
-                                if (results.length === 0) {
-                                    searchResults.innerHTML = '<tr><td colspan="5" class="text-center">No results found</td></tr>';
-                                } else {
-                                    let html = '';
-
-                                    results.forEach(result => {
-                                        html += `
-                                <tr class="search-result-item" data-path="${result.path}">
-                                    <td><i class="bi ${result.icon} item-icon"></i> ${result.name}</td>
-                                    <td>${result.path}</td>
-                                    <td>${result.type === 'dir' ? 'Folder' : 'File'}</td>
-                                    <td>${result.size || ''}</td>
-                                    <td>${result.last_modified}</td>
-                                </tr>`;
-                                    });
-
-                                    searchResults.innerHTML = html;
-
-                                    // Add event listeners to search results
-                                    document.querySelectorAll('.search-result-item').forEach(item => {
-                                        item.addEventListener('dblclick', function() {
-                                            const path = this.getAttribute('data-path');
-
-                                            if (path.endsWith(this.cells[0].textContent.trim())) {
-                                                // It's a file, navigate to its directory
-                                                const dirPath = path.substring(0, path.lastIndexOf('/'));
-                                                navigateTo(dirPath);
-                                            } else {
-                                                // It's a directory, navigate to it
-                                                navigateTo(path);
-                                            }
-
-                                            bootstrap.Modal.getInstance(document.getElementById('searchModal')).hide();
-                                        });
-                                    });
-                                }
-                            } else {
-                                searchResults.innerHTML = '<tr><td colspan="5" class="text-center text-danger">Error: ' + data.message + '</td></tr>';
-                            }
-                        })
-                        .catch(error => {
-
-                            searchResults.innerHTML = '<tr><td colspan="5" class="text-center text-danger">Error: Failed to perform search</td></tr>';
-                        });
-
-                    const searchModal = new bootstrap.Modal(document.getElementById('searchModal'));
-                    searchModal.show();
-                }
-
-                // This function will handle both copy and move operations
+                // File operation (copy/move)
                 function performFileOperation(operation) {
                     if (selectedItems.length === 0) return;
 
-                    // Set the operation type in the modal title
                     document.getElementById('fileOpTitle').textContent = operation === 'copy' ? 'Copy Items' : 'Move Items';
                     document.getElementById('fileOpType').value = operation;
-
-                    // Set the current path as the default destination
                     document.getElementById('destinationPath').value = currentPath;
 
-                    // Show selected items in the modal
                     const itemsList = document.getElementById('fileOpItems');
                     itemsList.innerHTML = '';
 
                     selectedItems.forEach(item => {
                         const li = document.createElement('li');
+                        li.className = 'list-group-item';
                         li.textContent = item;
                         itemsList.appendChild(li);
                     });
 
-                    // Show the modal
                     const fileOpModal = new bootstrap.Modal(document.getElementById('fileOperationModal'));
                     fileOpModal.show();
                 }
@@ -3799,36 +3034,18 @@ if ($username == null) {
                         });
                 }
 
-                // Fix download function
-                function downloadFiles() {
-                    if (selectedItems.length === 0) return;
-
-                    if (selectedItems.length === 1) {
-                        // Download single file directly - make sure to include the current path
-                        const encodedPath = encodeURIComponent(currentPath);
-                        const encodedFile = encodeURIComponent(selectedItems[0]);
-                        window.location.href = `${window.location.pathname}?action=download&path=${encodedPath}&file=${encodedFile}`;
-                    } else {
-                        // For multiple files, compress them first then download
-                        document.getElementById('compressName').value = 'download_' + Math.floor(Date.now() / 1000);
-                        document.getElementById('compressZip').checked = true;
-
-                        // Set up the compress modal with a callback to download the ZIP after creation
-                        document.getElementById('compressAndDownloadBtn').style.display = 'block';
-                        document.getElementById('compressBtn').style.display = 'none';
-
-                        const compressModal = new bootstrap.Modal(document.getElementById('compressModal'));
-                        compressModal.show();
-                    }
-                }
-
-                // Compress and then download
-                function compressAndDownload() {
+                // Compress items
+                function compressItems() {
                     const name = document.getElementById('compressName').value.trim();
                     const type = document.querySelector('input[name="compressType"]:checked').value;
 
                     if (!name) {
                         showAlert('Error', 'Please enter an archive name');
+                        return;
+                    }
+
+                    if (type === 'gzip' && selectedItems.length > 1) {
+                        showAlert('Error', 'GZip can only compress one file at a time');
                         return;
                     }
 
@@ -3850,31 +3067,8 @@ if ($username == null) {
                         .then(data => {
                             if (data.status === 'success') {
                                 bootstrap.Modal.getInstance(document.getElementById('compressModal')).hide();
-
-                                // Generate the correct extension based on compression type
-                                let extension;
-                                switch (type) {
-                                    case 'zip':
-                                        extension = '.zip';
-                                        break;
-                                    case 'tar':
-                                        extension = '.tar';
-                                        break;
-                                    case 'gzip':
-                                        extension = '.gz';
-                                        break;
-                                    default:
-                                        extension = '.zip';
-                                }
-
-                                // Download the compressed file - make sure to include the current path
-                                const encodedPath = encodeURIComponent(currentPath);
-                                const encodedFile = encodeURIComponent(name + extension);
-                                window.location.href = `${window.location.pathname}?action=download&path=${encodedPath}&file=${encodedFile}`;
-
-                                // Reset the compress modal
-                                document.getElementById('compressAndDownloadBtn').style.display = 'none';
-                                document.getElementById('compressBtn').style.display = 'block';
+                                loadFileList();
+                                document.getElementById('compressName').value = '';
                             } else {
                                 showAlert('Error', data.message);
                             }
@@ -3884,35 +3078,220 @@ if ($username == null) {
                         });
                 }
 
+                // Change permissions
+                function changePermissions() {
+                    const item = document.getElementById('permItem').textContent;
+                    const permValue = document.getElementById('permValue').value.trim();
+
+                    if (!permValue.match(/^0[0-7]{3}$/)) {
+                        showAlert('Error', 'Please enter a valid octal permission value (e.g. 0755)');
+                        return;
+                    }
+
+                    const formData = new FormData();
+                    formData.append('action', 'permissions');
+                    formData.append('path', currentPath);
+                    formData.append('item', item);
+                    formData.append('mode', permValue);
+
+                    fetch(window.location.pathname, {
+                            method: 'POST',
+                            body: formData
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.status === 'success') {
+                                bootstrap.Modal.getInstance(document.getElementById('permissionsModal')).hide();
+                                loadFileList();
+                            } else {
+                                showAlert('Error', data.message);
+                            }
+                        })
+                        .catch(error => {
+                            showAlert('Error', 'Failed to change permissions');
+                        });
+                }
+
+                // Upload files
+                function uploadFiles(files) {
+                    if (files.length === 0) return;
+
+                    const formData = new FormData();
+                    formData.append('path', currentPath);
+
+                    for (let i = 0; i < files.length; i++) {
+                        formData.append('files[]', files[i]);
+                    }
+
+                    // Show progress bar
+                    const progressBar = document.getElementById('upload-progress');
+                    const progressBarInner = progressBar.querySelector('.progress-bar');
+
+                    progressBar.style.display = 'block';
+                    progressBarInner.style.width = '0%';
+                    progressBarInner.setAttribute('aria-valuenow', 0);
+                    progressBarInner.textContent = 'Preparing upload...';
+
+                    const xhr = new XMLHttpRequest();
+                    xhr.open('POST', window.location.pathname, true);
+
+                    xhr.upload.addEventListener('progress', function(e) {
+                        if (e.lengthComputable) {
+                            const percentComplete = Math.round((e.loaded / e.total) * 100);
+                            progressBarInner.style.width = percentComplete + '%';
+                            progressBarInner.setAttribute('aria-valuenow', percentComplete);
+                            progressBarInner.textContent = percentComplete + '% uploaded';
+
+                            if (percentComplete >= 100) {
+                                progressBarInner.classList.remove('progress-bar-animated');
+                                progressBarInner.textContent = 'Processing...';
+                            }
+                        }
+                    });
+
+                    xhr.addEventListener('load', function() {
+                        setTimeout(() => {
+                            progressBar.style.display = 'none';
+                            progressBarInner.classList.add('progress-bar-animated');
+                        }, 500);
+
+                        if (xhr.status === 200) {
+                            try {
+                                const response = JSON.parse(xhr.responseText);
+                                if (response.status === 'success' || response.status === 'partial') {
+                                    loadFileList();
+                                    showAlert('Upload Complete', response.message);
+                                } else {
+                                    showAlert('Error', response.message || 'Unknown error occurred during upload');
+                                }
+                            } catch (error) {
+                                showAlert('Error', 'Failed to parse server response: ' + error.message);
+                            }
+                        } else {
+                            showAlert('Error', 'HTTP Error: ' + xhr.status);
+                        }
+                    });
+
+                    xhr.addEventListener('error', function(e) {
+                        progressBar.style.display = 'none';
+                        showAlert('Error', 'Network error occurred while uploading files');
+                    });
+
+                    xhr.send(formData);
+                }
+
+                // Search files
+                function searchFiles() {
+                    const query = document.getElementById('search-input').value.trim();
+
+                    if (!query) {
+                        showAlert('Error', 'Please enter a search query');
+                        return;
+                    }
+
+                    const searchResults = document.getElementById('search-results');
+                    searchResults.innerHTML = '<tr><td colspan="5" class="text-center"><div class="spinner-border spinner-border-sm" role="status"></div> Searching...</td></tr>';
+
+                    const formData = new FormData();
+                    formData.append('action', 'search');
+                    formData.append('path', currentPath);
+                    formData.append('query', query);
+
+                    fetch(window.location.pathname, {
+                            method: 'POST',
+                            body: formData
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.status === 'success') {
+                                const results = data.data;
+
+                                if (results.length === 0) {
+                                    searchResults.innerHTML = '<tr><td colspan="5" class="text-center">No results found</td></tr>';
+                                } else {
+                                    let html = '';
+
+                                    results.forEach(result => {
+                                        html += `
+                                    <tr class="search-result-item" data-path="${result.path}">
+                                        <td><i class="${result.icon}"></i> ${result.name}</td>
+                                        <td>${result.path}</td>
+                                        <td>${result.type === 'dir' ? 'Folder' : 'File'}</td>
+                                        <td>${result.size || ''}</td>
+                                        <td>${result.last_modified}</td>
+                                    </tr>`;
+                                    });
+
+                                    searchResults.innerHTML = html;
+
+                                    // Add event listeners to search results
+                                    document.querySelectorAll('.search-result-item').forEach(item => {
+                                        item.addEventListener('dblclick', function() {
+                                            const path = this.getAttribute('data-path');
+                                            const dirPath = path.substring(0, path.lastIndexOf('/'));
+                                            navigateTo(dirPath);
+                                            bootstrap.Modal.getInstance(document.getElementById('searchModal')).hide();
+                                        });
+                                    });
+                                }
+                            } else {
+                                searchResults.innerHTML = '<tr><td colspan="5" class="text-center text-danger">Error: ' + data.message + '</td></tr>';
+                            }
+                        })
+                        .catch(error => {
+                            searchResults.innerHTML = '<tr><td colspan="5" class="text-center text-danger">Error: Failed to perform search</td></tr>';
+                        });
+
+                    const searchModal = new bootstrap.Modal(document.getElementById('searchModal'));
+                    searchModal.show();
+                }
+
+                // Open file editor
+                function openFileEditor(fileName) {
+                    const fullPath = SERVER_ROOT_PATH + (currentPath.startsWith('/') ? currentPath : '/' + currentPath);
+                    const completePath = fullPath + (fullPath.endsWith('/') ? '' : '/') + fileName;
+                    window.open('codeEditor.php?filename=' + encodeURIComponent(completePath), '_blank');
+                }
+
+                // Download files
+                function downloadFiles() {
+                    if (selectedItems.length === 0) return;
+
+                    if (selectedItems.length === 1) {
+                        const encodedPath = encodeURIComponent(currentPath);
+                        const encodedFile = encodeURIComponent(selectedItems[0]);
+                        window.location.href = `${window.location.pathname}?action=download&path=${encodedPath}&file=${encodedFile}`;
+                    } else {
+                        // For multiple files, compress them first
+                        document.getElementById('compressName').value = 'download_' + Math.floor(Date.now() / 1000);
+                        document.getElementById('compressZip').checked = true;
+                        const compressModal = new bootstrap.Modal(document.getElementById('compressModal'));
+                        compressModal.show();
+                    }
+                }
 
                 // Initialize permissions modal
                 function initPermissionsModal() {
                     const permValue = document.getElementById('permValue');
                     const permChecks = document.querySelectorAll('.perm-check');
 
-                    // Update permission value when checkboxes change
                     permChecks.forEach(check => {
                         check.addEventListener('change', function() {
                             let value = 0;
-
                             permChecks.forEach(c => {
                                 if (c.checked) {
                                     value += parseInt(c.getAttribute('data-value'));
                                 }
                             });
-
                             permValue.value = '0' + value.toString(8).padStart(3, '0');
                         });
                     });
 
-                    // Update checkboxes when permission value changes
                     permValue.addEventListener('input', function() {
                         const match = this.value.match(/^0([0-7]{3})$/);
-
                         if (match) {
                             const octal = match[1];
                             const decimal = parseInt(octal, 8);
-
                             permChecks.forEach(check => {
                                 const checkValue = parseInt(check.getAttribute('data-value'));
                                 check.checked = (decimal & checkValue) === checkValue;
@@ -3950,52 +3329,18 @@ if ($username == null) {
                     }, false);
                 }
 
-                // Toggle dark mode
-                function toggleDarkMode() {
-                    const isDark = document.getElementById('darkModeSwitch').checked;
-                    document.body.setAttribute('data-theme', isDark ? 'dark' : 'light');
-
-                    // Save preference
-                    localStorage.setItem('darkMode', isDark ? 'dark' : 'light');
-                }
-
                 // Initialize
                 function init() {
-                    // Load current path from localStorage if available
-                    currentPath = localStorage.getItem('currentPath') || '';
-
-
-                    // Load preferences
-                    const darkMode = localStorage.getItem('darkMode');
-                    if (darkMode === 'dark') {
-                        document.getElementById('darkModeSwitch').checked = true;
-                        document.body.setAttribute('data-theme', 'dark');
-                    }
-
-                    // Initialize permissions modal
+                    currentPath = '';
                     initPermissionsModal();
-
-                    // Initialize drag and drop
                     initDragAndDrop();
-
-                    // Load directory tree
                     loadDirectoryTree();
-
-                    // Load file list
                     loadFileList();
                 }
 
                 // Event listeners
-                document.getElementById('sidebarCollapse').addEventListener('click', function() {
-                    document.getElementById('sidebar').classList.toggle('active');
-                    document.getElementById('content').classList.toggle('active');
-                });
-
-                document.getElementById('refresh-btn').addEventListener('click', function() {
-                    loadFileList();
-                });
-
-                document.getElementById('new-folder-btn').addEventListener('click', function() {
+                document.getElementById('new-folder-btn').addEventListener('click', function(e) {
+                    e.preventDefault();
                     document.getElementById('folderName').value = '';
                     const newFolderModal = new bootstrap.Modal(document.getElementById('newFolderModal'));
                     newFolderModal.show();
@@ -4003,7 +3348,8 @@ if ($username == null) {
 
                 document.getElementById('createFolderBtn').addEventListener('click', createFolder);
 
-                document.getElementById('new-file-btn').addEventListener('click', function() {
+                document.getElementById('new-file-btn').addEventListener('click', function(e) {
+                    e.preventDefault();
                     document.getElementById('fileName').value = '';
                     document.getElementById('fileContent').value = '';
                     const newFileModal = new bootstrap.Modal(document.getElementById('newFileModal'));
@@ -4012,7 +3358,8 @@ if ($username == null) {
 
                 document.getElementById('createFileBtn').addEventListener('click', createFile);
 
-                document.getElementById('upload-btn').addEventListener('click', function() {
+                document.getElementById('upload-btn').addEventListener('click', function(e) {
+                    e.preventDefault();
                     document.getElementById('file-upload').click();
                 });
 
@@ -4029,192 +3376,245 @@ if ($username == null) {
                     });
                 });
 
-                document.getElementById('delete-btn').addEventListener('click', deleteItems);
+                document.getElementById('select-all-btn').addEventListener('click', function(e) {
+                    e.preventDefault();
+                    document.getElementById('select-all-checkbox').checked = true;
+                    document.getElementById('select-all-checkbox').dispatchEvent(new Event('change'));
+                });
+
+                document.getElementById('unselect-all-btn').addEventListener('click', function(e) {
+                    e.preventDefault();
+                    if (!this.classList.contains('disabled')) {
+                        document.getElementById('select-all-checkbox').checked = false;
+                        document.getElementById('select-all-checkbox').dispatchEvent(new Event('change'));
+                    }
+                });
+
+                document.getElementById('reload-btn').addEventListener('click', function(e) {
+                    e.preventDefault();
+                    loadFileList();
+                });
+
+                document.getElementById('delete-btn').addEventListener('click', function(e) {
+                    e.preventDefault();
+                    if (!this.classList.contains('disabled')) {
+                        deleteItems();
+                    }
+                });
+
                 document.getElementById('confirmDeleteBtn').addEventListener('click', confirmDelete);
 
-                document.getElementById('download-btn').addEventListener('click', downloadFiles);
+                document.getElementById('download-btn').addEventListener('click', function(e) {
+                    e.preventDefault();
+                    if (!this.classList.contains('disabled')) {
+                        downloadFiles();
+                    }
+                });
 
-                document.getElementById('copy-btn').addEventListener('click', function() {
-                    performFileOperation('copy');
+                document.getElementById('copy-btn').addEventListener('click', function(e) {
+                    e.preventDefault();
+                    if (!this.classList.contains('disabled')) {
+                        performFileOperation('copy');
+                    }
                 });
-                document.getElementById('cut-btn').addEventListener('click', function() {
-                    performFileOperation('move');
+
+                document.getElementById('move-btn').addEventListener('click', function(e) {
+                    e.preventDefault();
+                    if (!this.classList.contains('disabled')) {
+                        performFileOperation('move');
+                    }
                 });
-                // Add event listener for the file operation execute button
+
                 document.getElementById('executeFileOpBtn').addEventListener('click', executeFileOperation);
 
-                // Add event listener for compress and download button
-                document.getElementById('compressAndDownloadBtn').addEventListener('click', compressAndDownload);
-
-                // Show current path in the file operation modal
-                document.getElementById('fileOperationModal').addEventListener('show.bs.modal', function() {
-                    document.getElementById('currentPathDisplay').textContent = currentPath;
-                });
-
-                document.getElementById('compress-btn').addEventListener('click', function() {
-                    if (selectedItems.length === 0) return;
-
-                    document.getElementById('compressName').value = selectedItems.length === 1 ? selectedItems[0] : 'archive';
-
-                    const compressModal = new bootstrap.Modal(document.getElementById('compressModal'));
-                    compressModal.show();
+                document.getElementById('compress-btn').addEventListener('click', function(e) {
+                    e.preventDefault();
+                    if (!this.classList.contains('disabled') && selectedItems.length > 0) {
+                        document.getElementById('compressName').value = selectedItems.length === 1 ? selectedItems[0] : 'archive';
+                        const compressModal = new bootstrap.Modal(document.getElementById('compressModal'));
+                        compressModal.show();
+                    }
                 });
 
                 document.getElementById('compressBtn').addEventListener('click', compressItems);
 
-                document.getElementById('permissions-btn').addEventListener('click', function() {
-                    if (selectedItems.length !== 1) return;
+                document.getElementById('permissions-btn').addEventListener('click', function(e) {
+                    e.preventDefault();
+                    if (!this.classList.contains('disabled') && selectedItems.length === 1) {
+                        document.getElementById('permItem').textContent = selectedItems[0];
 
-                    document.getElementById('permItem').textContent = selectedItems[0];
+                        const item = fileList.find(item => item.name === selectedItems[0]);
+                        if (item) {
+                            const permString = item.permissions;
+                            let octal = '0755';
 
-                    // Get current permissions
-                    const item = fileList.find(item => item.name === selectedItems[0]);
-                    if (item) {
-                        // Convert permission string to octal
-                        const permString = item.permissions;
-                        let octal = '0755'; // Default
+                            if (permString.length >= 10) {
+                                let owner = 0,
+                                    group = 0,
+                                    world = 0;
 
-                        // Simple conversion from rwx notation to octal
-                        // This is a simplification - real conversion should handle all permission bits
-                        if (permString.length >= 10) {
-                            let owner = 0,
-                                group = 0,
-                                world = 0;
+                                if (permString[1] === 'r') owner += 4;
+                                if (permString[2] === 'w') owner += 2;
+                                if (permString[3] === 'x' || permString[3] === 's') owner += 1;
 
-                            // Owner permissions (1-3)
-                            if (permString[1] === 'r') owner += 4;
-                            if (permString[2] === 'w') owner += 2;
-                            if (permString[3] === 'x' || permString[3] === 's') owner += 1;
+                                if (permString[4] === 'r') group += 4;
+                                if (permString[5] === 'w') group += 2;
+                                if (permString[6] === 'x' || permString[6] === 's') group += 1;
 
-                            // Group permissions (4-6)
-                            if (permString[4] === 'r') group += 4;
-                            if (permString[5] === 'w') group += 2;
-                            if (permString[6] === 'x' || permString[6] === 's') group += 1;
+                                if (permString[7] === 'r') world += 4;
+                                if (permString[8] === 'w') world += 2;
+                                if (permString[9] === 'x' || permString[9] === 't') world += 1;
 
-                            // World permissions (7-9)
-                            if (permString[7] === 'r') world += 4;
-                            if (permString[8] === 'w') world += 2;
-                            if (permString[9] === 'x' || permString[9] === 't') world += 1;
+                                octal = '0' + owner.toString() + group.toString() + world.toString();
+                            }
 
-                            octal = '0' + owner.toString() + group.toString() + world.toString();
+                            document.getElementById('permValue').value = octal;
+
+                            const decimal = parseInt(octal.substring(1), 8);
+                            document.querySelectorAll('.perm-check').forEach(check => {
+                                const checkValue = parseInt(check.getAttribute('data-value'));
+                                check.checked = (decimal & checkValue) === checkValue;
+                            });
                         }
 
-                        document.getElementById('permValue').value = octal;
-
-                        // Update checkboxes based on octal value
-                        const decimal = parseInt(octal.substring(1), 8);
-                        document.querySelectorAll('.perm-check').forEach(check => {
-                            const checkValue = parseInt(check.getAttribute('data-value'));
-                            check.checked = (decimal & checkValue) === checkValue;
-                        });
+                        const permissionsModal = new bootstrap.Modal(document.getElementById('permissionsModal'));
+                        permissionsModal.show();
                     }
-
-                    const permissionsModal = new bootstrap.Modal(document.getElementById('permissionsModal'));
-                    permissionsModal.show();
                 });
 
                 document.getElementById('changePermBtn').addEventListener('click', changePermissions);
 
-                document.getElementById('search-btn').addEventListener('click', searchFiles);
+                document.getElementById('search-btn').addEventListener('click', function(e) {
+                    e.preventDefault();
+                    searchFiles();
+                });
+
                 document.getElementById('search-input').addEventListener('keypress', function(e) {
                     if (e.key === 'Enter') {
                         searchFiles();
                     }
                 });
 
-                document.getElementById('darkModeSwitch').addEventListener('change', toggleDarkMode);
-
-                // Context menu event listeners
-                document.getElementById('ctx-open').addEventListener('click', function() {
-                    if (contextTarget) {
-                        navigateTo(currentPath + '/' + contextTarget.name);
-                    }
-                });
-
-                // Context menu download fix
-                document.getElementById('ctx-download').addEventListener('click', function() {
-                    if (contextTarget) {
-                        const encodedPath = encodeURIComponent(currentPath);
-                        const encodedFile = encodeURIComponent(contextTarget.name);
-                        window.location.href = `${window.location.pathname}?action=download&path=${encodedPath}&file=${encodedFile}`;
-                    }
-                });
-
-                document.getElementById('ctx-edit').addEventListener('click', function() {
-                    if (contextTarget && contextTarget.type === 'file') {
-                        openFileEditor(contextTarget.name);
-                    }
-                });
-
-                document.getElementById('ctx-copy').addEventListener('click', function() {
-                    performFileOperation('copy');
-                });
-
-                document.getElementById('ctx-cut').addEventListener('click', function() {
-                    performFileOperation('move');
-                });
-
-
-
-                // Add event listener for the rename button
-                document.getElementById('renameBtn').addEventListener('click', renameItem);
-
-                // Add event listener for the rename context menu item if not already present
-                document.getElementById('ctx-rename').addEventListener('click', function() {
-                    if (contextTarget) {
-                        document.getElementById('oldName').value = contextTarget.name;
-                        document.getElementById('newName').value = contextTarget.name;
-
+                document.getElementById('rename-btn').addEventListener('click', function(e) {
+                    e.preventDefault();
+                    if (!this.classList.contains('disabled') && selectedItems.length === 1) {
+                        document.getElementById('oldName').value = selectedItems[0];
+                        document.getElementById('newName').value = selectedItems[0];
                         const renameModal = new bootstrap.Modal(document.getElementById('renameModal'));
                         renameModal.show();
                     }
                 });
 
-                // Also add Enter key support for the rename dialog
+                document.getElementById('renameBtn').addEventListener('click', renameItem);
+
                 document.getElementById('newName').addEventListener('keypress', function(e) {
                     if (e.key === 'Enter') {
                         renameItem();
                     }
                 });
 
+                document.getElementById('edit-btn').addEventListener('click', function(e) {
+                    e.preventDefault();
+                    if (!this.classList.contains('disabled') && selectedItems.length === 1) {
+                        const fileName = selectedItems[0];
+                        if (isEditable(fileName)) {
+                            openFileEditor(fileName);
+                        } else {
+                            showAlert('Error', 'This file type is not editable');
+                        }
+                    }
+                });
+
+                document.getElementById('collapse-all-btn').addEventListener('click', function() {
+                    document.querySelectorAll('.caret.expanded').forEach(caret => {
+                        caret.click();
+                    });
+                });
+
+                // Context menu event listeners
+                document.getElementById('ctx-open').addEventListener('click', function() {
+                    if (contextTarget && contextTarget.type === 'dir') {
+                        navigateTo(currentPath + '/' + contextTarget.name);
+                    }
+                    document.getElementById('context-menu').style.display = 'none';
+                });
+
+                document.getElementById('ctx-download').addEventListener('click', function() {
+                    if (contextTarget) {
+                        const encodedPath = encodeURIComponent(currentPath);
+                        const encodedFile = encodeURIComponent(contextTarget.name);
+                        window.location.href = `${window.location.pathname}?action=download&path=${encodedPath}&file=${encodedFile}`;
+                    }
+                    document.getElementById('context-menu').style.display = 'none';
+                });
+
+                document.getElementById('ctx-edit').addEventListener('click', function() {
+                    if (contextTarget && contextTarget.type === 'file') {
+                        if (isEditable(contextTarget.name)) {
+                            openFileEditor(contextTarget.name);
+                        } else {
+                            showAlert('Error', 'This file type is not editable');
+                        }
+                    }
+                    document.getElementById('context-menu').style.display = 'none';
+                });
+
+                document.getElementById('ctx-copy').addEventListener('click', function() {
+                    if (contextTarget) {
+                        selectedItems = [contextTarget.name];
+                        performFileOperation('copy');
+                    }
+                    document.getElementById('context-menu').style.display = 'none';
+                });
+
+                document.getElementById('ctx-cut').addEventListener('click', function() {
+                    if (contextTarget) {
+                        selectedItems = [contextTarget.name];
+                        performFileOperation('move');
+                    }
+                    document.getElementById('context-menu').style.display = 'none';
+                });
+
+                document.getElementById('ctx-rename').addEventListener('click', function() {
+                    if (contextTarget) {
+                        document.getElementById('oldName').value = contextTarget.name;
+                        document.getElementById('newName').value = contextTarget.name;
+                        const renameModal = new bootstrap.Modal(document.getElementById('renameModal'));
+                        renameModal.show();
+                    }
+                    document.getElementById('context-menu').style.display = 'none';
+                });
+
                 document.getElementById('ctx-permissions').addEventListener('click', function() {
                     if (contextTarget) {
-                        // Select the item
                         selectedItems = [contextTarget.name];
-
-                        // Show permissions modal
                         document.getElementById('permissions-btn').click();
                     }
+                    document.getElementById('context-menu').style.display = 'none';
                 });
 
                 document.getElementById('ctx-compress').addEventListener('click', function() {
                     if (contextTarget) {
-                        // Select the item
                         selectedItems = [contextTarget.name];
-
-                        // Show compress modal
                         document.getElementById('compress-btn').click();
                     }
+                    document.getElementById('context-menu').style.display = 'none';
                 });
 
                 document.getElementById('ctx-delete').addEventListener('click', function() {
                     if (contextTarget) {
-                        // Select the item
                         selectedItems = [contextTarget.name];
-
-                        // Show delete modal
                         deleteItems();
                     }
+                    document.getElementById('context-menu').style.display = 'none';
                 });
 
                 // Navigation event delegation
                 document.addEventListener('click', function(e) {
                     if (e.target.classList.contains('navigate-link') || e.target.parentElement.classList.contains('navigate-link')) {
                         e.preventDefault();
-
                         const link = e.target.classList.contains('navigate-link') ? e.target : e.target.parentElement;
                         const path = link.getAttribute('data-path');
-
                         navigateTo(path);
                     }
                 });
@@ -4224,84 +3624,363 @@ if ($username == null) {
                     document.getElementById('context-menu').style.display = 'none';
                 });
 
-                // Sort items
-                document.querySelectorAll('.sort-item').forEach(item => {
-                    item.addEventListener('click', function(e) {
-                        e.preventDefault();
-
-                        // Update active state
-                        document.querySelectorAll('.sort-item').forEach(i => i.classList.remove('active'));
-                        this.classList.add('active');
-
-                        // Update sort parameters
-                        currentSort = this.getAttribute('data-sort');
-                        currentOrder = this.getAttribute('data-order');
-
-                        // Reload file list
-                        loadFileList();
-                    });
+                // Show current path in file operation modal
+                document.getElementById('fileOperationModal').addEventListener('show.bs.modal', function() {
+                    document.getElementById('currentPathDisplay').textContent = currentPath;
                 });
 
 
+                // Browser History Stack
+                let pathHistory = [];
+                let historyIndex = -1;
 
+                function navigateToPath(path, pushToHistory = true) {
+                    currentPath = path;
+                    loadFileList();
+                    if (pushToHistory) {
+                        pathHistory = pathHistory.slice(0, historyIndex + 1);
+                        pathHistory.push(path);
+                        historyIndex++;
+                    }
+                }
+
+                // Attach button events
+                document.getElementById('home-btn').addEventListener('click', e => {
+                    e.preventDefault();
+                    navigateToPath('', true);
+                });
+
+                document.getElementById('up-btn').addEventListener('click', e => {
+                    e.preventDefault();
+                    if (!currentPath) return;
+                    const upPath = currentPath.split('/').slice(0, -1).join('/');
+                    navigateToPath(upPath, true);
+                });
+
+                document.getElementById('reload-btn').addEventListener('click', e => {
+                    e.preventDefault();
+                    loadFileList();
+                });
+
+                // Trash View
+                document.getElementById('view-trash-btn').addEventListener('click', e => {
+                    e.preventDefault();
+                    navigateToPath('/.trash', true); // Use special trash identifier path
+                });
+
+                // Sort Button Toggle
+                document.getElementById('sort-btn').addEventListener('click', e => {
+                    e.preventDefault();
+                    currentOrder = (currentOrder === 'asc') ? 'desc' : 'asc';
+                    loadFileList();
+                });
+
+                document.getElementById("extract-btn").addEventListener("click", function() {
+                    if (selectedItems.length === 1) {
+                        // Get the item and check if it's an extractable archive
+                        const fileItem = fileList.find(
+                            (item) => item.name === selectedItems[0]
+                        );
+                        if (fileItem && fileItem.type === "file") {
+                            extractArchive(fileItem.name);
+                        } else {
+                            showAlert("Error", "Please select a file to extract");
+                        }
+                    } else {
+                        showAlert("Error", "Please select exactly one file to extract");
+                    }
+                });
+
+                // Extract archive function
+                function extractArchive(fileName) {
+                    if (!fileName) return;
+
+                    // Show modal to get extraction path
+                    document.getElementById('extractFileName').textContent = fileName;
+
+                    // Set default extraction folder name (remove extension)
+                    const fileNameWithoutExt = fileName.replace(/\.[^/.]+$/, "");
+                    document.getElementById('extractPath').value = currentPath + '/' + fileNameWithoutExt;
+
+                    const extractModal = new bootstrap.Modal(document.getElementById('extractModal'));
+                    extractModal.show();
+                }
+
+                // Confirm extraction
+                function confirmExtraction() {
+                    const fileName = document.getElementById('extractFileName').textContent;
+                    const destination = document.getElementById('extractPath').value.trim();
+
+                    if (!destination) {
+                        showAlert('Error', 'Please enter a destination path');
+                        return;
+                    }
+
+                    // Show loading indicator
+                    document.getElementById('extractConfirmBtn').disabled = true;
+                    document.getElementById('extractConfirmBtn').innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Extracting...';
+
+                    const formData = new FormData();
+                    formData.append('action', 'extract');
+                    formData.append('path', currentPath);
+                    formData.append('file', fileName);
+                    formData.append('destination', destination);
+
+                    fetch(window.location.pathname, {
+                            method: 'POST',
+                            body: formData
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            // Reset button state
+                            document.getElementById('extractConfirmBtn').disabled = false;
+                            document.getElementById('extractConfirmBtn').innerHTML = 'Extract';
+
+                            // Close modal
+                            bootstrap.Modal.getInstance(document.getElementById('extractModal')).hide();
+
+                            if (data.status === 'success') {
+                                loadFileList();
+                                loadDirectoryTree();
+                                showAlert('Success', data.message || 'Archive extracted successfully');
+                            } else {
+                                showAlert('Error', data.message || 'Failed to extract archive');
+                            }
+                        })
+                        .catch(error => {
+                            // Reset button state
+                            document.getElementById('extractConfirmBtn').disabled = false;
+                            document.getElementById('extractConfirmBtn').innerHTML = 'Extract';
+
+                            console.error('Extract error:', error);
+                            showAlert('Error', 'Failed to extract archive: ' + error.message);
+                        });
+                }
+
+
+
+                // Add event listener for extract confirmation
+                const extractConfirmBtn = document.getElementById("extractConfirmBtn");
+                if (extractConfirmBtn) {
+                    extractConfirmBtn.addEventListener("click", confirmExtraction);
+                }
+
+                // Add event listener for path input to handle Enter key
+                const extractPath = document.getElementById("extractPath");
+                if (extractPath) {
+                    extractPath.addEventListener("keypress", function(e) {
+                        if (e.key === "Enter") {
+                            confirmExtraction();
+                        }
+                    });
+                }
+
+                // Update extract button state when selection changes
+                const originalUpdateButtonStates = updateButtonStates;
+                updateButtonStates = function() {
+                    // Call the original function
+                    originalUpdateButtonStates();
+
+                    // Update extract button state
+                    const extractBtn = document.getElementById("extract-btn");
+                    if (extractBtn) {
+                        // Enable button only when a single file is selected
+                        const hasSelection = selectedItems.length === 1;
+
+                        if (hasSelection) {
+                            // Check if the selected file is an archive
+                            const fileItem = fileList.find(
+                                (item) => item.name === selectedItems[0]
+                            );
+                            if (fileItem && fileItem.type === "file") {
+                                const extension = fileItem.extension ?
+                                    fileItem.extension.toLowerCase() :
+                                    "";
+                                const isArchive = [
+                                    "zip",
+                                    "tar",
+                                    "gz",
+                                    "gzip",
+                                    "bz2",
+                                    "bzip2",
+                                    "rar",
+                                    "7z",
+                                ].includes(extension);
+                                extractBtn.disabled = !isArchive;
+                            } else {
+                                extractBtn.disabled = true;
+                            }
+                        } else {
+                            extractBtn.disabled = true;
+                        }
+
+                        if (extractBtn.disabled) {
+                            extractBtn.classList.remove('btn-outline-info');
+                            extractBtn.classList.add('btn-outline-secondary');
+                        } else {
+                            extractBtn.classList.remove('btn-outline-secondary');
+                            extractBtn.classList.add('btn-outline-info');
+                        }
+                    }
+                };
+
+                // Modal Confirm Buttons with Spinner
+                function confirmCopy() {
+                    const btn = document.getElementById('copyConfirmBtn');
+                    if (!btn) return;
+                    btn.disabled = true;
+                    btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Copying...';
+
+                    // TODO: Replace with actual fetch/ajax logic
+                    setTimeout(() => {
+                        btn.disabled = false;
+                        btn.innerHTML = 'Copy';
+                        showAlert('Success', 'Copy completed.');
+                        const modalEl = document.getElementById('copyModal');
+                        if (modalEl) bootstrap.Modal.getInstance(modalEl)?.hide();
+                    }, 2000);
+                }
+
+                function confirmMove() {
+                    const btn = document.getElementById('moveConfirmBtn');
+                    if (!btn) return;
+                    btn.disabled = true;
+                    btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Moving...';
+
+                    // TODO: Replace with actual fetch/ajax logic
+                    setTimeout(() => {
+                        btn.disabled = false;
+                        btn.innerHTML = 'Mov';
+                        showAlert('Success', 'Mov completed.');
+                        const modalEl = document.getElementById('moveModal');
+                        if (modalEl) bootstrap.Modal.getInstance(modalEl)?.hide();
+                    }, 2000);
+                }
+
+                function confirmCompress() {
+                    const btn = document.getElementById('compressConfirmBtn');
+                    if (!btn) return;
+                    btn.disabled = true;
+                    btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Compressing...';
+
+                    // TODO: Replace with actual fetch/ajax logic
+                    setTimeout(() => {
+                        btn.disabled = false;
+                        btn.innerHTML = 'Compress';
+                        showAlert('Success', 'Compress completed.');
+                        const modalEl = document.getElementById('compressModal');
+                        if (modalEl) bootstrap.Modal.getInstance(modalEl)?.hide();
+                    }, 2000);
+                }
+
+
+
+
+                function confirmRestore() {
+                    const btn = document.getElementById('restoreConfirmBtn');
+                    btn.disabled = true;
+                    btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Restoring...';
+
+                    const selected = Array.from(document.querySelectorAll('.file-checkbox:checked')).map(cb => cb.value);
+                    if (selected.length === 0) {
+                        showAlert('Error', 'No items selected');
+                        return;
+                    }
+
+                    const formData = new FormData();
+                    formData.append('action', 'restore');
+                    selected.forEach(item => formData.append('items[]', item));
+                    formData.append('path', currentPath);
+
+                    fetch(window.location.pathname, {
+                            method: 'POST',
+                            body: formData
+                        }).then(res => res.json())
+                        .then(data => {
+                            btn.disabled = false;
+                            btn.innerHTML = 'Yes, Restore';
+                            bootstrap.Modal.getInstance(document.getElementById('restoreModal')).hide();
+                            showAlert(data.status === 'success' ? 'Success' : 'Error', data.message);
+                            loadFileList();
+                        }).catch(error => {
+                            btn.disabled = false;
+                            btn.innerHTML = 'Yes, Restore';
+                            showAlert('Error', 'Restore failed.');
+                        });
+                }
+
+                document.getElementById('restoreConfirmBtn')?.addEventListener('click', confirmRestore);
+
+
+                document.getElementById('restore-btn')?.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    restoreFromTrash();
+                });
+
+                // Add event listener for confirm restore button
+                const confirmRestoreBtn = document.getElementById('confirmRestoreBtn');
+                if (confirmRestoreBtn) {
+                    confirmRestoreBtn.addEventListener('click', confirmRestore);
+                }
+
+                // Make sure the restore functions are properly defined
+                function restoreFromTrash() {
+                    if (selectedItems.length === 0) return;
+
+                    // Make sure we're in the trash directory
+                    if (!currentPath.includes('/.trash')) {
+                        showAlert('Error', 'Restore function is only available inside the trash folder');
+                        return;
+                    }
+
+                    const restoreList = document.getElementById('restoreItems');
+                    restoreList.innerHTML = '';
+
+                    selectedItems.forEach(item => {
+                        const li = document.createElement('li');
+                        li.textContent = item;
+                        restoreList.appendChild(li);
+                    });
+
+                    const restoreModal = new bootstrap.Modal(document.getElementById('restoreModal'));
+                    restoreModal.show();
+                }
+
+                function confirmRestore() {
+                    const formData = new FormData();
+                    formData.append('action', 'restore');
+                    formData.append('path', currentPath);
+
+                    selectedItems.forEach(item => {
+                        formData.append('items[]', item);
+                    });
+
+                    fetch(window.location.pathname, {
+                            method: 'POST',
+                            body: formData
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            bootstrap.Modal.getInstance(document.getElementById('restoreModal')).hide();
+
+                            if (data.status === 'success') {
+                                loadFileList();
+                                loadDirectoryTree();
+                                showAlert('Success', data.message || 'Items restored successfully');
+                            } else {
+                                showAlert('Error', data.message || 'Failed to restore items');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Restore error:', error);
+                            showAlert('Error', 'Failed to restore items');
+                        });
+                }
+
+                // Initialize the application
                 init();
             });
         </script>
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                const sidebarToggle = document.getElementById('sidebarCollapse');
-                const sidebar = document.getElementById('sidebar');
-
-                if (sidebarToggle && sidebar) {
-
-
-                    sidebarToggle.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        sidebar.classList.add('active');
-                        document.body.classList.toggle('sidebar-active');
-                    });
-
-                    // Close sidebar when clicking on body (outside sidebar) when sidebar is active
-                    document.body.addEventListener('click', function(e) {
-                        // Only if we're on mobile
-                        if (window.innerWidth <= 768) {
-                            // Only if sidebar is active and click is not on sidebar or sidebar toggle
-                            if (document.body.classList.contains('sidebar-active') &&
-                                !sidebar.contains(e.target) &&
-                                e.target !== sidebarToggle &&
-                                !sidebarToggle.contains(e.target)) {
-                                sidebar.classList.remove('active');
-                                document.body.classList.remove('sidebar-active');
-                            }
-                        }
-                    });
-
-                    // Close sidebar when clicking a navigation link on mobile
-                    const navLinks = document.querySelectorAll('.navigate-link, .dir-link');
-                    navLinks.forEach(link => {
-                        link.addEventListener('click', function() {
-                            if (window.innerWidth <= 768) {
-                                sidebar.classList.remove('active');
-                                document.body.classList.remove('sidebar-active');
-                            }
-                        });
-                    });
-
-
-                    if (window.innerWidth <= 768) {
-                        const closeSidebar = document.getElementById('closeSidebar');
-
-
-                        closeSidebar.addEventListener('click', function() {
-                            sidebar.classList.remove('active');
-                            document.body.classList.remove('sidebar-active');
-                        });
-
-                    }
-                }
-            });
-        </script>
-    </body>
 
     </html>
 <?php } ?>

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * The Kinsmen File Manager v2.0.1
+ * The Kinsmen File Manager v2.1
  *
  * A comprehensive, modern file manager with cPanel styling and all essential features:
  * - File Tree Navigation
@@ -40,7 +40,7 @@ function securityCheck($path)
     global $config;
     $realPath = realpath($path);
     if (!$realPath) {
-        return false;
+        return $config["root_path"];
     }
     return strpos($realPath, $config["root_path"]) === 0;
 }
@@ -63,42 +63,43 @@ function getFileIcon($file)
     $extension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
 
     $iconMap = [
-        "pdf" => "fas fa-file-pdf",
-        "doc" => "fas fa-file-word",
-        "docx" => "fas fa-file-word",
-        "xls" => "fas fa-file-excel",
-        "xlsx" => "fas fa-file-excel",
-        "ppt" => "fas fa-file-powerpoint",
-        "pptx" => "fas fa-file-powerpoint",
-        "jpg" => "fas fa-file-image",
-        "jpeg" => "fas fa-file-image",
-        "png" => "fas fa-file-image",
-        "gif" => "fas fa-file-image",
-        "txt" => "fas fa-file-alt",
-        "zip" => "fas fa-file-archive",
-        "tar" => "fas fa-file-archive",
-        "gz" => "fas fa-file-archive",
-        "html" => "fas fa-file-code",
-        "htm" => "fas fa-file-code",
-        "css" => "fas fa-file-code",
-        "js" => "fas fa-file-code",
-        "php" => "fas fa-file-code",
-        "py" => "fas fa-file-code",
-        "java" => "fas fa-file-code",
-        "c" => "fas fa-file-code",
-        "cpp" => "fas fa-file-code",
-        "mp3" => "fas fa-file-audio",
-        "mp4" => "fas fa-file-video",
-        "mov" => "fas fa-file-video",
-        "avi" => "fas fa-file-video",
+        "pdf"   => "<i class='fas fa-file-pdf' style='color:#D9534F'></i>",
+        "doc"   => "<i class='fas fa-file-word' style='color:#2B579A'></i>",
+        "docx"  => "<i class='fas fa-file-word' style='color:#2B579A'></i>",
+        "xls"   => "<i class='fas fa-file-excel' style='color:#217346'></i>",
+        "xlsx"  => "<i class='fas fa-file-excel' style='color:#217346'></i>",
+        "ppt"   => "<i class='fas fa-file-powerpoint' style='color:#D24726'></i>",
+        "pptx"  => "<i class='fas fa-file-powerpoint' style='color:#D24726'></i>",
+        "jpg"   => "<i class='fas fa-file-image' style='color:#F4A261'></i>",
+        "jpeg"  => "<i class='fas fa-file-image' style='color:#F4A261'></i>",
+        "png"   => "<i class='fas fa-file-image' style='color:#F4A261'></i>",
+        "gif"   => "<i class='fas fa-file-image' style='color:#F4A261'></i>",
+        "txt"   => "<i class='fas fa-file-alt' style='color:#6C757D'></i>",
+        "zip"   => "<i class='fas fa-file-archive' style='color:#FF9F1C'></i>",
+        "tar"   => "<i class='fas fa-file-archive' style='color:#FF9F1C'></i>",
+        "gz"    => "<i class='fas fa-file-archive' style='color:#FF9F1C'></i>",
+        "html"  => "<i class='fas fa-file-code' style='color:#E34C26'></i>",
+        "htm"   => "<i class='fas fa-file-code' style='color:#E34C26'></i>",
+        "css"   => "<i class='fas fa-file-code' style='color:#264DE4'></i>",
+        "js"    => "<i class='fas fa-file-code' style='color:#F0DB4F'></i>",
+        "php"   => "<i class='fas fa-file-code' style='color:#8892BF'></i>",
+        "py"    => "<i class='fas fa-file-code' style='color:#306998'></i>",
+        "java"  => "<i class='fas fa-file-code' style='color:#B07219'></i>",
+        "c"     => "<i class='fas fa-file-code' style='color:#555555'></i>",
+        "cpp"   => "<i class='fas fa-file-code' style='color:#00599C'></i>",
+        "mp3"   => "<i class='fas fa-file-audio' style='color:#6F42C1'></i>",
+        "mp4"   => "<i class='fas fa-file-video' style='color:#20C997'></i>",
+        "mov"   => "<i class='fas fa-file-video' style='color:#20C997'></i>",
+        "avi"   => "<i class='fas fa-file-video' style='color:#20C997'></i>",
     ];
 
+
     if (is_dir($file)) {
-        return "fas fa-folder";
+        return "<i class='fas fa-folder folder-icon'></i>";
     } elseif (isset($iconMap[$extension])) {
         return $iconMap[$extension];
     } else {
-        return "fas fa-file";
+        return "<i class='fas fa-file' style='color:#6C757D'></i>";
     }
 }
 
@@ -939,7 +940,6 @@ function extract7Zip($source, $destination)
 }
 
 // Handle File Manager Operations
-// Handle File Manager Operations
 if (isset($_POST["action"]) || isset($_GET["action"])) {
     $action = isset($_POST["action"]) ? $_POST["action"] : $_GET["action"];
 
@@ -1565,23 +1565,23 @@ if ($username == null) {
         <link rel="icon" href="icon.png" type="image/png">
         <style>
             :root {
-                --cpanel-primary: #0c0f25;
-                --cpanel-secondary: #2d335d;
-                --cpanel-bg: #f8f9fa;
-                --cpanel-border: #dee2e6;
+                --kinsmen-primary: #0c0f25;
+                --kinsmen-secondary: #2d335d;
+                --kinsmen-bg: #f8f9fa;
+                --kinsmen-border: #dee2e6;
             }
 
             body {
                 font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
                 font-size: 14px;
-                background-color: var(--cpanel-bg);
+                background-color: var(--kinsmen-bg);
             }
 
             .top-header {
-                background-color: var(--cpanel-primary);
+                background-color: var(--kinsmen-primary);
                 color: white;
                 padding: 8px 15px;
-                border-bottom: 1px solid var(--cpanel-border);
+                border-bottom: 1px solid var(--kinsmen-border);
             }
 
             .top-header .brand {
@@ -1596,12 +1596,12 @@ if ($username == null) {
             .main-toolbar {
                 background-color: #e9ecef;
                 padding: 8px 15px;
-                border-bottom: 1px solid var(--cpanel-border);
+                border-bottom: 1px solid var(--kinsmen-border);
                 line-height: 30px;
             }
 
             .main-toolbar .btn {
-                font-size: 13px;
+                font-size: 14px;
                 padding: 4px 8px;
                 margin-right: 5px;
             }
@@ -1609,18 +1609,18 @@ if ($username == null) {
             .navigation-bar {
                 background-color: #f1f3f4;
                 padding: 8px 15px;
-                border-bottom: 1px solid var(--cpanel-border);
+                border-bottom: 1px solid var(--kinsmen-border);
             }
 
             .navigation-bar .btn {
-                font-size: 13px;
+                font-size: 14px;
                 padding: 4px 8px;
                 margin-right: 5px;
             }
 
             .sidebar {
                 background-color: white;
-                border-right: 1px solid var(--cpanel-border);
+                border-right: 1px solid var(--kinsmen-border);
                 height: calc(100vh - 120px);
                 overflow-y: auto;
                 padding: 10px;
@@ -1646,7 +1646,7 @@ if ($username == null) {
             }
 
             .sidebar .folder-tree .folder-item i {
-                width: 16px;
+                width: 14px;
                 margin-right: 5px;
             }
 
@@ -1662,10 +1662,10 @@ if ($username == null) {
 
             .file-table th {
                 background-color: #f8f9fa;
-                border-bottom: 2px solid var(--cpanel-border);
+                border-bottom: 2px solid var(--kinsmen-border);
                 padding: 8px;
                 font-weight: 600;
-                color: var(--cpanel-secondary);
+                color: var(--kinsmen-secondary);
             }
 
             .file-table td {
@@ -1683,12 +1683,12 @@ if ($username == null) {
             }
 
             .file-icon {
-                width: 16px;
+                width: 14px;
                 margin-right: 8px;
             }
 
             .file-name {
-                color: #1976d2;
+                color: #000;
                 text-decoration: none;
                 font-weight: 500;
                 cursor: pointer;
@@ -1704,7 +1704,7 @@ if ($username == null) {
 
             .file-size,
             .file-date {
-                color: var(--cpanel-secondary);
+                color: var(--kinsmen-secondary);
             }
 
             .permissions {
@@ -1721,11 +1721,9 @@ if ($username == null) {
             }
 
             .collapse-all {
-                font-size: 11px;
-                color: var(--cpanel-secondary);
+                font-size: 14px;
+                color: var(--kinsmen-secondary);
                 cursor: pointer;
-                padding: 5px 0;
-                border-bottom: 1px solid var(--cpanel-border);
                 margin-bottom: 10px;
             }
 
@@ -1883,41 +1881,51 @@ if ($username == null) {
         </div>
 
         <!-- Main Toolbar -->
-        <div class="main-toolbar">
-            <a href="#" class="header-btns" id="new-file-btn"><i class="fas fa-file"></i> File</a>
-            <a href="#" class="header-btns" id="new-folder-btn"><i class="fas fa-folder"></i> Folder</a>
-            <a href="#" class="header-btns disabled" id="copy-btn"><i class="fas fa-copy"></i> Copy</a>
-            <a href="#" class="header-btns disabled" id="move-btn"><i class="fas fa-arrows-alt"></i> Move</a>
-            <a href="#" class="header-btns" id="upload-btn"><i class="fas fa-upload"></i> Upload</a>
-            <a href="#" class="header-btns disabled" id="download-btn"><i class="fas fa-download"></i> Download</a>
-            <a href="#" class="header-btns disabled" id="delete-btn"><i class="fas fa-trash"></i> Delete</a>
-            <a href="#" class="header-btns disabled" id="restore-btn"><i class="fas fa-undo"></i> Restore</a>
-            <a href="#" class="header-btns disabled" id="rename-btn"><i class="fas fa-tag"></i> Rename</a>
-            <a href="#" class="header-btns disabled" id="edit-btn"><i class="fas fa-edit"></i> Edit</a>
-            <a href="#" class="header-btns disabled" id="permissions-btn"><i class="fas fa-shield-alt"></i> Permissions</a>
-            <a href="#" class="header-btns disabled" id="extract-btn"><i class="fas fa-file-archive"></i> Extract</a>
-            <a href="#" class="header-btns disabled" id="compress-btn"><i class="fas fa-compress"></i> Compress</a>
-            <input type="file" id="file-upload" multiple style="display: none;">
-        </div>
-
-        <!-- Progress Bar -->
-        <div class="progress" id="upload-progress">
-            <div class="progress-bar progress-bar-striped progress-bar-animated bg-success"
-                role="progressbar"
-                style="width: 0%"
-                aria-valuenow="0"
-                aria-valuemin="0"
-                aria-valuemax="100">
-                Preparing upload...
+        <div class="d-flex align-items-center">
+            <div class="main-toolbar">
+                <a href="#" class="header-btns" id="new-file-btn"><i class="fas fa-file"></i> File</a>
+                <a href="#" class="header-btns" id="new-folder-btn"><i class="fas fa-folder"></i> Folder</a>
+                <a href="#" class="header-btns disabled" id="copy-btn"><i class="fas fa-copy"></i> Copy</a>
+                <a href="#" class="header-btns disabled" id="move-btn"><i class="fas fa-arrows-alt"></i> Move</a>
+                <a href="#" class="header-btns" id="upload-btn"><i class="fas fa-upload"></i> Upload</a>
+                <a href="#" class="header-btns disabled" id="download-btn"><i class="fas fa-download"></i> Download</a>
+                <a href="#" class="header-btns disabled" id="delete-btn"><i class="fas fa-trash"></i> Delete</a>
+                <a href="#" class="header-btns disabled" id="restore-btn"><i class="fas fa-undo"></i> Restore</a>
+                <a href="#" class="header-btns disabled" id="rename-btn"><i class="fas fa-tag"></i> Rename</a>
+                <a href="#" class="header-btns disabled" id="edit-btn"><i class="fas fa-edit"></i> Edit</a>
+                <a href="#" class="header-btns disabled" id="permissions-btn"><i class="fas fa-shield-alt"></i> Permissions</a>
+                <a href="#" class="header-btns disabled" id="extract-btn"><i class="fas fa-file-archive"></i> Extract</a>
+                <a href="#" class="header-btns disabled" id="compress-btn"><i class="fas fa-compress"></i> Compress</a>
+                <input type="file" id="file-upload" multiple style="display: none;">
+            </div>
+            <!-- Progress Bar -->
+            <div class="progress ms-auto me-3 w-25" id="upload-progress">
+                <div class="progress-bar progress-bar-striped progress-bar-animated bg-success"
+                    role="progressbar"
+                    style="width: 0%"
+                    aria-valuenow="0"
+                    aria-valuemin="0"
+                    aria-valuemax="100">
+                    Preparing upload...
+                </div>
             </div>
         </div>
+
+
 
         <!-- Main Content Area -->
         <div class="container-fluid p-0">
             <div class="row g-0">
                 <!-- Sidebar -->
                 <div class="col-md-2 sidebar">
-                    <div class="collapse-all" id="collapse-all-btn">Collapse All</div>
+                    <div class="search-container mb-2">
+                        <div class="input-group input-group-sm">
+                            <button class="btn btn-sm btn-outline-secondary" id="breadcrumb-home-btn"><i class="fas fa-home"></i></button>
+                            <input type="text" class="form-control form-control-sm border-secondary" id="breadcrumb">
+                            <button class="btn btn-secondary btn-sm" id="breadcrumb-search-btn">Go</button>
+                        </div>
+                    </div>
+                    <div class="collapse-all border py-1 text-center" id="collapse-all-btn">Collapse All</div>
                     <div class="folder-tree" id="directory-tree">
                         <div class="folder-item active">
                             <i class="fas fa-home"></i> (/home/<?= $username ?>)
@@ -2394,6 +2402,7 @@ if ($username == null) {
                             if (data.status === 'success') {
                                 fileList = data.data;
 
+                                updateBreadcrumb(data.current_path);
 
                                 // Show files in the table
                                 showFiles(fileList);
@@ -2411,13 +2420,18 @@ if ($username == null) {
                         });
                 }
 
+                function updateBreadcrumb(path) {
+                    const breadcrumb = document.getElementById('breadcrumb');
+                    breadcrumb.value = path;
+                }
+
 
                 // Show files in table
                 function showFiles(files) {
                     const filesList = document.getElementById('files-list');
 
                     if (files.length === 0) {
-                        filesList.innerHTML = '<tr><td colspan="7" class="text-center p-3 text-danger">No files found</td></tr>';
+                        filesList.innerHTML = '<tr><td colspan="7" class="p-2">This directory is empty.</td></tr>';
                         return;
                     }
 
@@ -2427,7 +2441,7 @@ if ($username == null) {
                         html += `
                     <tr class="file-item" data-name="${file.name}" data-type="${file.type}">
                         <td><input type="checkbox" class="form-check-input item-check"></td>
-                        <td><i class="${file.name === "public_html" ? "fas fa-globe text-primary" : file.icon} folder-icon"></i>   </td>
+                        <td>${file.name === "public_html" ? "<i class='fas fa-globe text-primary'></i>" : file.icon}   </td>
                         <td><a href="#" class="file-name">${file.name}</a></td>
                         <td class="file-size">${file.size}</td>
                         <td class="file-date">${file.last_modified}</td>
@@ -3635,6 +3649,18 @@ if ($username == null) {
                 document.getElementById('home-btn').addEventListener('click', e => {
                     e.preventDefault();
                     navigateToPath('', true);
+                });
+
+                document.getElementById('breadcrumb-home-btn').addEventListener('click', e => {
+                    e.preventDefault();
+                    navigateToPath('', true);
+                });
+
+                document.getElementById('breadcrumb-search-btn').addEventListener('click', e => {
+                    e.preventDefault();
+                    const breadcrumbvalue = document.getElementById('breadcrumb').value;
+                    if (breadcrumbvalue.trim() == '') return;
+                    navigateToPath(breadcrumbvalue, true);
                 });
 
                 document.getElementById('up-btn').addEventListener('click', e => {

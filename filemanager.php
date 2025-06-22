@@ -1,7 +1,7 @@
 <?php
 
 /**
- * The Kinsmen File Manager v2.0
+ * The Kinsmen File Manager v2.0.1
  *
  * A comprehensive, modern file manager with cPanel styling and all essential features:
  * - File Tree Navigation
@@ -19,11 +19,65 @@
  * - Sorting and filtering
  */
 
-// Set timezone
-date_default_timezone_set("UTC");
+// CWP Usage
+$cwp = false;
 
-$username = ""; // Username for directory listing
-$root_path = ""; // Path to the root directory
+// Set timezone
+date_default_timezone_set("Africa/Lagos");
+
+if ($cwp) {
+    $path = parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
+    $segments = explode("/", trim($path, "/"));
+
+    $url_token = null;
+    $url_username = null;
+
+    foreach ($segments as $index => $segment) {
+        if ($segment === "filemanager.php" && $index > 0) {
+            $url_username = $segments[$index - 1];
+            if ($index > 1) {
+                $url_token = $segments[$index - 2];
+            }
+            break;
+        }
+    }
+
+    if (!$url_username || !$url_token) {
+        header("HTTP/1.1 403 Forbidden");
+        echo "Access denied. Invalid URL format.";
+        exit();
+    }
+
+    $token_dir = "/home/$url_username/.tokens/";
+    $token_file = $token_dir . $url_token;
+
+    if (!file_exists($token_file)) {
+        header("HTTP/1.1 403 Forbidden");
+        echo "Access denied. Invalid token.";
+        exit();
+    }
+
+    $token_data = json_decode(file_get_contents($token_file), true);
+
+    if (time() > $token_data["expiry"]) {
+        unlink($token_file);
+        header("HTTP/1.1 403 Forbidden");
+        echo "Access denied. Token expired.";
+        exit();
+    }
+
+    if ($token_data["username"] !== $url_username) {
+        header("HTTP/1.1 403 Forbidden");
+        echo "Access denied. Username mismatch.";
+        exit();
+    }
+
+    $username = $token_data["username"];
+    $root_path = "/home/$username";
+} else {
+    $username = "joe";
+    $root_path = "/var/www/html/001_public";
+}
 
 // Configuration
 $config = [
@@ -520,42 +574,7 @@ function compressItems($items, $destination, $type = "zip")
 }
 function isEditable($file)
 {
-    $editableExtensions = [
-        "txt",
-        "html",
-        "htm",
-        "css",
-        "js",
-        "php",
-        "xml",
-        "json",
-        "md",
-        "log",
-        "config",
-        "ini",
-        "yml",
-        "yaml",
-        "sql",
-        "sh",
-        "Dockerfile",
-        ".gitignore",
-        ".gitkeep",
-        ".htaccess",
-        ".htpasswd",
-        ".htaccess.dist",
-        ".env",
-        ".env.example",
-        ".env.local",
-        ".env.test",
-        ".env.development",
-        ".env.staging",
-        ".env",
-        ".ini",
-        ".conf",
-    ];
-    $extension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
-
-    return in_array($extension, $editableExtensions);
+    return true;
 }
 
 // Function to move item to trash
@@ -2554,11 +2573,33 @@ if ($username == null) {
 
                 // Check if a file is editable
                 function isEditable(fileName) {
-                    const editableExtensions = ['txt', 'html', 'htm', 'css', 'js', 'php', 'xml', 'json', 'md', 'log', 'config', 'ini', 'yml', 'yaml', 'sql', 'sh'];
-                    const extension = fileName.split('.').pop().toLowerCase();
+                    const editableExtensions = [
+                        'txt', 'text', 'log', 'md', 'markdown', 'nfo', 'rtf',
+                        'html', 'htm', 'css', 'scss', 'sass', 'less', 'js', 'jsx', 'ts', 'tsx', 'vue', 'svelte',
+                        'php', 'phtml', 'php3', 'php4', 'php5', 'phps',
+                        'py', 'rb', 'pl', 'cgi', 'sh', 'bash', 'zsh', 'ps1', 'bat', 'cmd', 'rake',
+                        'env', 'ini', 'conf', 'config', 'cfg', 'yaml', 'yml', 'toml', 'rc', 'properties', 'prefs',
+                        'json', 'xml', 'csv', 'tsv', 'xhtml',
+                        'sql', 'sqlite', 'db', 'dump',
+                        'htaccess', 'htpasswd', 'user.ini',
+                        'blade.php', 'twig', 'tpl', 'smarty', 'ejs', 'hbs', 'mustache', 'liquid', 'njk',
+                        'makefile', 'mk', 'gradle', 'pom', 'build', 'dockerfile', 'docker-compose',
+                        'gitignore', 'gitattributes', 'editorconfig', 'eslintignore', 'npmrc',
+                        'bashrc', 'zshrc', 'bash_profile', 'profile', 'aliases'
+                    ];
 
-                    return editableExtensions.includes(extension);
+                    const editableFilenames = [
+                        '.env', '.htaccess', '.htpasswd', '.gitignore', '.gitattributes',
+                        '.bashrc', '.zshrc', '.bash_profile', '.editorconfig', '.npmrc',
+                        'Dockerfile', 'Makefile', 'Procfile', 'Vagrantfile', 'README', 'LICENSE'
+                    ];
+
+                    const lower = fileName.toLowerCase();
+                    const ext = lower.includes('.') ? lower.split('.').pop() : '';
+
+                    return editableExtensions.includes(ext) || editableFilenames.includes(fileName);
                 }
+
 
                 // Show context menu
                 function showContextMenu(x, y, type) {

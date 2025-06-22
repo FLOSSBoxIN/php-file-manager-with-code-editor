@@ -13,7 +13,6 @@ This PHP File Manager is a web-based application that allows users to manage fil
 - **Trash Management**: Move files to trash and restore them.
 - **Search Functionality**: Search for files and directories.
 - **Permissions Management**: Change file and directory permissions.
-- **Dark Mode**: Toggle between light and dark themes for better visibility.
 
 ## Requirements
 

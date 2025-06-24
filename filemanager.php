@@ -1,7 +1,6 @@
 <?php
-
 /**
- * The Kinsmen File Manager v2.1
+ * The Kinsmen File Manager v2.1.1
  *
  * A comprehensive, modern file manager with cPanel styling and all essential features:
  * - File Tree Navigation
@@ -1881,8 +1880,8 @@ if ($username == null) {
         </div>
 
         <!-- Main Toolbar -->
-        <div class="d-flex align-items-center">
-            <div class="main-toolbar">
+        <div class="d-flex align-items-center main-toolbar">
+            <div>
                 <a href="#" class="header-btns" id="new-file-btn"><i class="fas fa-file"></i> File</a>
                 <a href="#" class="header-btns" id="new-folder-btn"><i class="fas fa-folder"></i> Folder</a>
                 <a href="#" class="header-btns disabled" id="copy-btn"><i class="fas fa-copy"></i> Copy</a>
@@ -1952,7 +1951,7 @@ if ($username == null) {
                     <table class="table table-sm file-table mb-4">
                         <thead>
                             <tr>
-                                <th class="checkbox-col"><input type="checkbox" class="form-check-input" id="select-all-checkbox"></th>
+                                <th class="checkbox-col"><input type="checkbox" class="form-check-input border-dark" id="select-all-checkbox"></th>
                                 <th class="icon-col"></th>
                                 <th>Name</th>
                                 <th>Size</th>

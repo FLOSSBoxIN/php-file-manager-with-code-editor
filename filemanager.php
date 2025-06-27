@@ -1,6 +1,7 @@
 <?php
+
 /**
- * The Kinsmen File Manager v2.1.1
+ * The Kinsmen File Manager v2.2
  *
  * A comprehensive, modern file manager with cPanel styling and all essential features:
  * - File Tree Navigation
@@ -18,20 +19,27 @@
  * - Sorting and filtering
  */
 
-// Set timezone
-date_default_timezone_set("Africa/Lagos");
-
 $username = ""; // Username for directory listing
 $root_path = ""; // Path to the root directory
 
 // Configuration
 $config = [
     "root_path" => $root_path,
-    "max_upload_size" => 1024 * 1024 * 1024,
     "allowed_extensions" => ["*"],
-    "date_format" => "Y-m-d H:i:s",
-    "theme" => "dark", // light or dark
+    "timezone" => "Africa/Lagos",
+    "date_format" => "M j Y, g:i A",
 ];
+
+if (file_exists("$root_path/.fm-config")) {
+    $userConfig = "$root_path/.fm-config";
+    $settings = json_decode(file_get_contents($userConfig), true);
+
+    $config['timezone'] = $settings['timezone'] ?? $config['timezone'];
+    $config['date_format'] = $settings['date_format'] ?? $config['date_format'];
+}
+
+// Set timezone
+date_default_timezone_set($config["timezone"]);
 
 // Security check function
 function securityCheck($path)
@@ -47,7 +55,7 @@ function securityCheck($path)
 // Helper function to format file size
 function formatSize($bytes)
 {
-    $units = ["b", "kb", "mb", "gb", "tb"];
+    $units = ["bytes", "KB", "MB", "GB", "TB"];
     $i = 0;
     while ($bytes >= 1024 && $i < count($units) - 1) {
         $bytes /= 1024;
@@ -309,6 +317,31 @@ function createFile($path, $name, $content = "")
     }
 }
 
+function updateSettings($timezone, $dateFormat)
+{
+    global $config;
+
+    if (empty($timezone) && empty($dateFormat)) {
+        return ["status" => "error", "message" => "No changes made"];
+    }
+
+    $data = [
+        'timezone' => empty($timezone) ? $config["timezone"] : $timezone,
+        'date_format' => empty($dateFormat) ? $config["date_format"] : $dateFormat
+    ];
+
+    $file = $config["root_path"] . "/.fm-config";
+
+    if (file_put_contents($file, json_encode($data))) {
+        return [
+            "status" => "success",
+            "message" => "Settings updated successfully",
+        ];
+    } else {
+        return ["status" => "error", "message" => "Failed to update settings"];
+    }
+}
+
 function renameItem($path, $oldName, $newName)
 {
     $oldPath = $path . DIRECTORY_SEPARATOR . $oldName;
@@ -412,6 +445,9 @@ function changePermissions($path, $mode)
 
 function compressItems($items, $destination, $type = "zip")
 {
+
+    global $config;
+
     switch ($type) {
         case "empty_trash":
             $trashDir = $config["root_path"] . "/.trash";
@@ -517,10 +553,6 @@ function compressItems($items, $destination, $type = "zip")
                 "message" => "Unknown compression type",
             ];
     }
-}
-function isEditable($file)
-{
-    return true;
 }
 
 // Function to move item to trash
@@ -958,6 +990,12 @@ if (isset($_POST["action"]) || isset($_GET["action"])) {
         $response = ["status" => "error", "message" => "Security violation"];
     } else {
         switch ($action) {
+            case "settings":
+                $tmz = isset($_POST["timezone"]) ? $_POST["timezone"] : "";
+                $dt = isset($_POST["dateformat"]) ? $_POST["dateformat"] : "";
+                $response = updateSettings($tmz, $dt);
+                break;
+
             case "list":
                 $sort = isset($_POST["sort"])
                     ? $_POST["sort"]
@@ -1245,24 +1283,14 @@ if (isset($_POST["action"]) || isset($_GET["action"])) {
                 $itemPath = $currentPath . DIRECTORY_SEPARATOR . $item;
 
                 if (file_exists($itemPath) && is_file($itemPath)) {
-                    if (isEditable($itemPath)) {
-                        $content = file_get_contents($itemPath);
-                        $response = [
-                            "status" => "success",
-                            "data" => [
-                                "content" => $content,
-                                "editable" => true,
-                            ],
-                        ];
-                    } else {
-                        $response = [
-                            "status" => "success",
-                            "data" => [
-                                "editable" => false,
-                                "message" => "This file type is not editable",
-                            ],
-                        ];
-                    }
+                    $content = file_get_contents($itemPath);
+                    $response = [
+                        "status" => "success",
+                        "data" => [
+                            "content" => $content,
+                            "editable" => true,
+                        ],
+                    ];
                 } else {
                     $response = [
                         "status" => "error",
@@ -1278,22 +1306,15 @@ if (isset($_POST["action"]) || isset($_GET["action"])) {
                 $itemPath = $currentPath . DIRECTORY_SEPARATOR . $item;
 
                 if (file_exists($itemPath) && is_file($itemPath)) {
-                    if (isEditable($itemPath)) {
-                        if (file_put_contents($itemPath, $content) !== false) {
-                            $response = [
-                                "status" => "success",
-                                "message" => "File saved successfully",
-                            ];
-                        } else {
-                            $response = [
-                                "status" => "error",
-                                "message" => "Failed to save file",
-                            ];
-                        }
+                    if (file_put_contents($itemPath, $content) !== false) {
+                        $response = [
+                            "status" => "success",
+                            "message" => "File saved successfully",
+                        ];
                     } else {
                         $response = [
                             "status" => "error",
-                            "message" => "This file type is not editable",
+                            "message" => "Failed to save file",
                         ];
                     }
                 } else {
@@ -1497,7 +1518,7 @@ if (isset($_FILES["files"])) {
         }
 
         // File size check
-        if ($files["size"][$i] > $config["max_upload_size"]) {
+        if ($files["size"][$i] > ini_get('upload_max_filesize')) {
             $failed++;
             $failedFiles[] = $fileName . " (Exceeds maximum file size limit)";
             continue;
@@ -1523,8 +1544,7 @@ if (isset($_FILES["files"])) {
 
     $response = [
         "status" => $failed == 0 ? "success" : "partial",
-        "message" =>
-        "Uploaded $uploaded file(s)" .
+        "message" => "Uploaded $uploaded file(s)" .
             ($failed > 0 ? ", Failed $failed file(s)" : ""),
     ];
 
@@ -1561,7 +1581,9 @@ if ($username == null) {
         <title>File Manager</title>
         <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
         <link rel="icon" href="icon.png" type="image/png">
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
         <style>
             :root {
                 --kinsmen-primary: #0c0f25;
@@ -1857,6 +1879,10 @@ if ($username == null) {
                 resize: vertical;
                 width: 100%;
             }
+
+            .modal-header {
+                padding: 10px;
+            }
         </style>
     </head>
 
@@ -1873,9 +1899,9 @@ if ($username == null) {
                         <button class="btn btn-primary btn-sm" id="search-btn">Go</button>
                     </div>
                 </div>
-                <!--  <button class="btn btn-sm btn-outline-light">
+                <button class="btn btn-sm btn-outline-light" id="settings-btn">
                     <i class="fas fa-cog"></i> Settings
-                </button> -->
+                </button>
             </div>
         </div>
 
@@ -1930,7 +1956,7 @@ if ($username == null) {
                             <i class="fas fa-home"></i> (/home/<?= $username ?>)
                         </div>
                         <ul class="file-tree">
-                            <li><i class="fas fa-spinner fa-spin"></i> Loading...</li>
+                            <li><i class="fas fa-spinner fa-spin mt-2"></i> Loading...</li>
                         </ul>
                     </div>
                 </div>
@@ -1992,12 +2018,12 @@ if ($username == null) {
 
         <!-- Modals -->
         <!-- Extract Modal -->
-        <div class="modal fade" id="extractModal" tabindex="-1">
+        <div class="modal fade" id="extractModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title fw-bold fs-6">Extract Archive</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
@@ -2014,20 +2040,20 @@ if ($username == null) {
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn btn-primary" id="extractConfirmBtn">Extract</button>
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary action-btns" id="extractConfirmBtn">Extract</button>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Create Folder Modal -->
-        <div class="modal fade" id="newFolderModal" tabindex="-1">
+        <div class="modal fade" id="newFolderModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title fw-bold fs-6">Create New Folder</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
@@ -2036,20 +2062,20 @@ if ($username == null) {
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn btn-primary" id="createFolderBtn">Create</button>
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary action-btns" id="createFolderBtn">Create</button>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Create File Modal -->
-        <div class="modal fade" id="newFileModal" tabindex="-1">
+        <div class="modal fade" id="newFileModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title fw-bold fs-6">Create New File</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
@@ -2062,20 +2088,20 @@ if ($username == null) {
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn btn-primary" id="createFileBtn">Create</button>
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary action-btns" id="createFileBtn">Create</button>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Rename Modal -->
-        <div class="modal fade" id="renameModal" tabindex="-1">
+        <div class="modal fade" id="renameModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title fw-bold fs-6">Rename Item</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
@@ -2085,20 +2111,20 @@ if ($username == null) {
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn btn-primary" id="renameBtn">Rename</button>
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary action-btns" id="renameBtn">Rename</button>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Permissions Modal -->
-        <div class="modal fade" id="permissionsModal" tabindex="-1">
+        <div class="modal fade" id="permissionsModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title fw-bold fs-6">Change Permissions</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
@@ -2160,20 +2186,20 @@ if ($username == null) {
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn btn-primary" id="changePermBtn">Change Permissions</button>
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary action-btns" id="changePermBtn">Change Permissions</button>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Compress Modal -->
-        <div class="modal fade" id="compressModal" tabindex="-1">
+        <div class="modal fade" id="compressModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title fw-bold fs-6">Compress Items</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
@@ -2203,21 +2229,20 @@ if ($username == null) {
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn btn-primary" id="compressBtn">Compress</button>
-                        <button type="button" class="btn btn-success" id="compressAndDownloadBtn" style="display: none;">Compress & Download</button>
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary action-btns" id="compressBtn">Compress</button>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Delete Confirmation Modal with Trash Option -->
-        <div class="modal fade" id="deleteModal" tabindex="-1">
+        <div class="modal fade" id="deleteModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title fw-bold fs-6">Confirm Delete</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
                     </div>
                     <div class="modal-body">
                         <p>Are you sure you want to delete the selected item(s)?</p>
@@ -2241,8 +2266,8 @@ if ($username == null) {
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn btn-danger" id="confirmDeleteBtn">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary action-btns" id="confirmDeleteBtn">
                             <span id="deleteButtonText">Move to Trash</span>
                         </button>
                     </div>
@@ -2250,31 +2275,13 @@ if ($username == null) {
             </div>
         </div>
 
-        <!-- Alert Modal -->
-        <div class="modal fade" id="alertModal" tabindex="-1">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="alertTitle">Notification</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p id="alertMessage"></p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <!-- Search Results Modal -->
-        <div class="modal fade" id="searchModal" tabindex="-1">
+        <div class="modal fade" id="searchModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title fw-bold fs-6">Search Results</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
                     </div>
                     <div class="modal-body">
                         <div class="table-responsive">
@@ -2297,26 +2304,25 @@ if ($username == null) {
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- File Operation Modal (Copy/Move) -->
-        <div class="modal fade" id="fileOperationModal" tabindex="-1">
+        <div class="modal fade" id="fileOperationModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="fileOpTitle">File Operation</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <h5 class="modal-title fs-6" id="fileOpTitle">File Operation</h5>
+
                     </div>
                     <div class="modal-body">
                         <input type="hidden" id="fileOpType" value="copy">
                         <div class="mb-3">
-                            <label class="form-label">Selected Items:</label>
-                            <ul id="fileOpItems" class="list-group mb-3">
-                            </ul>
+                            <div id="fileOpItems">
+                            </div>
                         </div>
                         <div class="mb-3">
                             <label for="destinationPath" class="form-label">Destination Path</label>
@@ -2325,20 +2331,19 @@ if ($username == null) {
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn btn-primary" id="executeFileOpBtn">Execute</button>
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary action-btns" id="executeFileOpBtn">Execute</button>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Restore Confirmation Modal - Make sure this exists in your HTML -->
-        <div class="modal fade" id="restoreModal" tabindex="-1">
+        <div class="modal fade" id="restoreModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title fw-bold fs-6">Restore Items</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <p>Are you sure you want to restore the following items to their original locations?</p>
@@ -2349,14 +2354,41 @@ if ($username == null) {
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn btn-primary" id="confirmRestoreBtn">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary action-btns" id="confirmRestoreBtn">
                             <i class="bi bi-arrow-counterclockwise me-1"></i> Restore
                         </button>
                     </div>
                 </div>
             </div>
         </div>
+
+        <!-- Settings Folder Modal -->
+        <div class="modal fade" id="settingsModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title fw-bold fs-6">Update Settings</h5>
+
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="folderName" class="form-label">Date Timezone</label>
+                            <input type="text" class="form-control" id="timezone" value="<?= $config['timezone'] ?>" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="folderName" class="form-label">Date Format</label>
+                            <input type="text" class="form-control" id="dateformat" value="<?= $config['date_format'] ?>" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary action-btns" id="updateSettingsBtn">Update</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 
         <!-- Scripts -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
@@ -2380,12 +2412,8 @@ if ($username == null) {
                 function loadFileList() {
                     const filesList = document.getElementById('files-list');
                     filesList.innerHTML = '<tr><td colspan="7" class="text-center"><div class="spinner-border spinner-border-sm" role="status"></div> Loading files...</td></tr>';
-
-                    // Reset selected items
                     selectedItems = [];
                     updateButtonStates();
-
-                    // Make AJAX request to get file list
                     const formData = new FormData();
                     formData.append('action', 'list');
                     formData.append('path', currentPath);
@@ -2402,11 +2430,7 @@ if ($username == null) {
                                 fileList = data.data;
 
                                 updateBreadcrumb(data.current_path);
-
-                                // Show files in the table
                                 showFiles(fileList);
-
-                                // Update current path if returned from server
                                 if (data.current_path !== undefined) {
                                     currentPath = data.current_path;
                                 }
@@ -2423,6 +2447,70 @@ if ($username == null) {
                     const breadcrumb = document.getElementById('breadcrumb');
                     breadcrumb.value = path;
                 }
+
+                function getMimeType(filename) {
+                    const extension = filename.split('.').pop().toLowerCase();
+
+                    const mimeTypes = {
+                        // Text files
+                        'txt': 'text/plain',
+                        'html': 'text/html',
+                        'htm': 'text/html',
+                        'css': 'text/css',
+                        'js': 'application/javascript',
+                        'json': 'application/json',
+                        'xml': 'application/xml',
+                        'csv': 'text/csv',
+                        'md': 'text/markdown',
+
+                        // Images
+                        'jpg': 'image/jpeg',
+                        'jpeg': 'image/jpeg',
+                        'png': 'image/png',
+                        'gif': 'image/gif',
+                        'webp': 'image/webp',
+                        'svg': 'image/svg+xml',
+                        'ico': 'image/x-icon',
+                        'bmp': 'image/bmp',
+                        'tiff': 'image/tiff',
+
+                        // Audio/Video
+                        'mp3': 'audio/mpeg',
+                        'wav': 'audio/wav',
+                        'ogg': 'audio/ogg',
+                        'mp4': 'video/mp4',
+                        'mov': 'video/quicktime',
+                        'avi': 'video/x-msvideo',
+                        'webm': 'video/webm',
+
+                        // Documents
+                        'pdf': 'application/pdf',
+                        'doc': 'application/msword',
+                        'docx': 'application/docx',
+                        'xls': 'application/vnd.ms-excel',
+                        'xlsx': 'application/xlsx',
+                        'ppt': 'application/vnd.ms-powerpoint',
+                        'pptx': 'application/pptx',
+
+                        // Archives
+                        'zip': 'application/zip',
+                        'tar': 'application/x-tar',
+                        'gz': 'application/gzip',
+                        'rar': 'application/vnd.rar',
+                        '7z': 'application/x-7z-compressed',
+
+                        // Code
+                        'php': 'application/x-httpd-php',
+                        'py': 'text/x-python',
+                        'java': 'text/x-java-source',
+                        'c': 'text/x-c',
+                        'cpp': 'text/x-c++',
+                        'sh': 'application/x-sh',
+                    };
+
+                    return mimeTypes[extension] || 'text/x-generic';
+                }
+
 
 
                 // Show files in table
@@ -2444,7 +2532,7 @@ if ($username == null) {
                         <td><a href="#" class="file-name">${file.name}</a></td>
                         <td class="file-size">${file.size}</td>
                         <td class="file-date">${file.last_modified}</td>
-                        <td>${file.type === 'dir' ? 'httpdunix-directory' : 'file'}</td>
+                        <td>${file.type === 'dir' ? 'httpdunix-directory' : getMimeType(file.name)}</td>
                         <td class="permissions">${file.permissions}</td>
                     </tr>`;
                     });
@@ -2532,6 +2620,11 @@ if ($username == null) {
 
                 // Check if a file is editable
                 function isEditable(fileName) {
+
+                    if (fileName.startsWith('.')) {
+                        return true;
+                    }
+
                     const editableExtensions = [
                         'txt', 'text', 'log', 'md', 'markdown', 'nfo', 'rtf',
                         'html', 'htm', 'css', 'scss', 'sass', 'less', 'js', 'jsx', 'ts', 'tsx', 'vue', 'svelte',
@@ -2758,11 +2851,68 @@ if ($username == null) {
 
                 // Show alert modal
                 function showAlert(title, message) {
-                    document.getElementById('alertTitle').textContent = title;
-                    document.getElementById('alertMessage').textContent = message;
+                    Toastify({
+                        text: message,
+                        duration: 3000,
+                        gravity: "top",
+                        position: "right",
+                        stopOnFocus: true,
+                        style: {
+                            background: title === 'Success' ? "#28a745" : "#dc3545",
+                            width: "300px",
+                            marginRight: "20px",
+                        },
+                        onClick: function() {} // Callback after click
+                    }).showToast();
 
-                    const alertModal = new bootstrap.Modal(document.getElementById('alertModal'));
-                    alertModal.show();
+                    document.querySelectorAll('.action-btns').forEach(btn => {
+                        btn.disabled = false;
+                        btn.innerHTML = btn.textContent;
+
+                        const siblingButtons = btn.closest('.modal-footer').querySelectorAll('button');
+                        siblingButtons.forEach(sibling => {
+                            if (sibling !== btn) {
+                                sibling.disabled = false;
+                            }
+                        });
+
+                    });
+
+                    document.querySelectorAll('.modal.show').forEach(modalEl => {
+                        const modal = bootstrap.Modal.getInstance(modalEl);
+                        if (modal) {
+                            modal.hide();
+                        }
+                    });
+                }
+
+                // Create new folder
+                function updateSettings() {
+                    const timezone = document.getElementById('timezone').value.trim();
+                    const dateformat = document.getElementById('dateformat').value.trim();
+
+                    //return;
+
+                    const formData = new FormData();
+                    formData.append('action', 'settings');
+                    formData.append('timezone', timezone);
+                    formData.append('dateformat', dateformat);
+
+                    fetch(window.location.pathname, {
+                            method: 'POST',
+                            body: formData
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.status === 'success') {
+                                showAlert('Success', data.message);
+                            } else {
+                                showAlert('Error', data.message);
+                            }
+                        })
+                        .catch(error => {
+                            showAlert('Error', 'Failed to update settings');
+                        });
                 }
 
                 // Create new folder
@@ -2967,9 +3117,6 @@ if ($username == null) {
                     }
                 }
 
-                // Add event listener for the permanent delete checkbox
-
-                // This code will run after the page is fully loaded
                 document.getElementById('permanentDeleteCheck').addEventListener('change', updateDeleteModalState);
 
                 // File operation (copy/move)
@@ -2981,14 +3128,7 @@ if ($username == null) {
                     document.getElementById('destinationPath').value = currentPath;
 
                     const itemsList = document.getElementById('fileOpItems');
-                    itemsList.innerHTML = '';
-
-                    selectedItems.forEach(item => {
-                        const li = document.createElement('li');
-                        li.className = 'list-group-item';
-                        li.textContent = item;
-                        itemsList.appendChild(li);
-                    });
+                    itemsList.innerHTML = `Selected Items: ${selectedItems.length}`;
 
                     const fileOpModal = new bootstrap.Modal(document.getElementById('fileOperationModal'));
                     fileOpModal.show();
@@ -2998,6 +3138,8 @@ if ($username == null) {
                 function executeFileOperation() {
                     const operation = document.getElementById('fileOpType').value;
                     const destination = document.getElementById('destinationPath').value.trim();
+
+                    return;
 
                     if (!destination) {
                         showAlert('Error', 'Please enter a destination path');
@@ -3012,6 +3154,8 @@ if ($username == null) {
                     selectedItems.forEach(item => {
                         formData.append('items[]', item);
                     });
+
+
 
                     fetch(window.location.href, {
                             method: 'POST',
@@ -3339,6 +3483,13 @@ if ($username == null) {
                 }
 
                 // Event listeners
+                document.getElementById('settings-btn').addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const settingsModal = new bootstrap.Modal(document.getElementById('settingsModal'));
+                    settingsModal.show();
+                });
+                document.getElementById('updateSettingsBtn').addEventListener('click', updateSettings);
+
                 document.getElementById('new-folder-btn').addEventListener('click', function(e) {
                     e.preventDefault();
                     document.getElementById('folderName').value = '';
@@ -3707,10 +3858,8 @@ if ($username == null) {
                 function extractArchive(fileName) {
                     if (!fileName) return;
 
-                    // Show modal to get extraction path
                     document.getElementById('extractFileName').textContent = fileName;
 
-                    // Set default extraction folder name (remove extension)
                     const fileNameWithoutExt = fileName.replace(/\.[^/.]+$/, "");
                     document.getElementById('extractPath').value = currentPath + '/' + fileNameWithoutExt;
 
@@ -3729,8 +3878,8 @@ if ($username == null) {
                     }
 
                     // Show loading indicator
-                    document.getElementById('extractConfirmBtn').disabled = true;
-                    document.getElementById('extractConfirmBtn').innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Extracting...';
+                    //document.getElementById('extractConfirmBtn').disabled = true;
+                    //document.getElementById('extractConfirmBtn').innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Extracting...';
 
                     const formData = new FormData();
                     formData.append('action', 'extract');
@@ -3768,8 +3917,6 @@ if ($username == null) {
                             showAlert('Error', 'Failed to extract archive: ' + error.message);
                         });
                 }
-
-
 
                 // Add event listener for extract confirmation
                 const extractConfirmBtn = document.getElementById("extractConfirmBtn");
@@ -3836,93 +3983,6 @@ if ($username == null) {
                     }
                 };
 
-                // Modal Confirm Buttons with Spinner
-                function confirmCopy() {
-                    const btn = document.getElementById('copyConfirmBtn');
-                    if (!btn) return;
-                    btn.disabled = true;
-                    btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Copying...';
-
-                    // TODO: Replace with actual fetch/ajax logic
-                    setTimeout(() => {
-                        btn.disabled = false;
-                        btn.innerHTML = 'Copy';
-                        showAlert('Success', 'Copy completed.');
-                        const modalEl = document.getElementById('copyModal');
-                        if (modalEl) bootstrap.Modal.getInstance(modalEl)?.hide();
-                    }, 2000);
-                }
-
-                function confirmMove() {
-                    const btn = document.getElementById('moveConfirmBtn');
-                    if (!btn) return;
-                    btn.disabled = true;
-                    btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Moving...';
-
-                    // TODO: Replace with actual fetch/ajax logic
-                    setTimeout(() => {
-                        btn.disabled = false;
-                        btn.innerHTML = 'Mov';
-                        showAlert('Success', 'Mov completed.');
-                        const modalEl = document.getElementById('moveModal');
-                        if (modalEl) bootstrap.Modal.getInstance(modalEl)?.hide();
-                    }, 2000);
-                }
-
-                function confirmCompress() {
-                    const btn = document.getElementById('compressConfirmBtn');
-                    if (!btn) return;
-                    btn.disabled = true;
-                    btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Compressing...';
-
-                    // TODO: Replace with actual fetch/ajax logic
-                    setTimeout(() => {
-                        btn.disabled = false;
-                        btn.innerHTML = 'Compress';
-                        showAlert('Success', 'Compress completed.');
-                        const modalEl = document.getElementById('compressModal');
-                        if (modalEl) bootstrap.Modal.getInstance(modalEl)?.hide();
-                    }, 2000);
-                }
-
-
-
-
-                function confirmRestore() {
-                    const btn = document.getElementById('restoreConfirmBtn');
-                    btn.disabled = true;
-                    btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Restoring...';
-
-                    const selected = Array.from(document.querySelectorAll('.file-checkbox:checked')).map(cb => cb.value);
-                    if (selected.length === 0) {
-                        showAlert('Error', 'No items selected');
-                        return;
-                    }
-
-                    const formData = new FormData();
-                    formData.append('action', 'restore');
-                    selected.forEach(item => formData.append('items[]', item));
-                    formData.append('path', currentPath);
-
-                    fetch(window.location.pathname, {
-                            method: 'POST',
-                            body: formData
-                        }).then(res => res.json())
-                        .then(data => {
-                            btn.disabled = false;
-                            btn.innerHTML = 'Yes, Restore';
-                            bootstrap.Modal.getInstance(document.getElementById('restoreModal')).hide();
-                            showAlert(data.status === 'success' ? 'Success' : 'Error', data.message);
-                            loadFileList();
-                        }).catch(error => {
-                            btn.disabled = false;
-                            btn.innerHTML = 'Yes, Restore';
-                            showAlert('Error', 'Restore failed.');
-                        });
-                }
-
-                document.getElementById('restoreConfirmBtn')?.addEventListener('click', confirmRestore);
-
 
                 document.getElementById('restore-btn')?.addEventListener('click', function(e) {
                     e.preventDefault();
@@ -3988,6 +4048,23 @@ if ($username == null) {
                             showAlert('Error', 'Failed to restore items');
                         });
                 }
+
+                document.querySelectorAll('.action-btns').forEach(btn => {
+                    btn.addEventListener('click', function(e) {
+                        e.preventDefault();
+
+                        btn.disabled = true;
+                        btn.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> ${btn.textContent}`;
+
+                        const siblingButtons = btn.closest('.modal-footer').querySelectorAll('button');
+                        siblingButtons.forEach(sibling => {
+                            if (sibling !== btn) {
+                                sibling.disabled = true;
+                            }
+                        });
+                    });
+                });
+
 
                 // Initialize the application
                 init();

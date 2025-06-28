@@ -1,7 +1,7 @@
 <?php
 
 /**
- * The Kinsmen File Manager v2.2.1
+ * The Kinsmen File Manager v2.2.2
  *
  * A comprehensive, modern file manager with cPanel styling and all essential features:
  * - File Tree Navigation
@@ -11,7 +11,7 @@
  * - Copy/Move operations
  * - Compression (zip, tar, gzip)
  * - Extraction (zip, tar, gzip)
- * - Deletion confirmation
+ * - Deletion confirmations
  * - Rename operations
  * - Permission management
  * - Drag and drop support
@@ -19,9 +19,8 @@
  * - Sorting and filtering
  */
 
-$username = ""; // username for dir listing
-$root_path = ""; // root dir
-
+$username = "joe"; // username
+$root_path = "/home/joe"; // root path
 
 // Configuration
 $config = [
@@ -2870,7 +2869,7 @@ if ($username == null) {
                         position: "right",
                         stopOnFocus: true,
                         style: {
-                            background: title === 'Success' ? "#28a745" : "#dc3545",
+                            background: title === 'Error' ? "#dc3545" : "#28a745",
                             width: "300px",
                             marginRight: "20px",
                         },
@@ -3316,7 +3315,7 @@ if ($username == null) {
                                 const response = JSON.parse(xhr.responseText);
                                 if (response.status === 'success' || response.status === 'partial') {
                                     loadFileList();
-                                    showAlert('Upload Complete', response.message);
+                                    showAlert('Success', response.message);
                                 } else {
                                     showAlert('Error', response.message || 'Unknown error occurred during upload');
                                 }

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * The Kinsmen File Manager v2.2
+ * The Kinsmen File Manager v2.2.1
  *
  * A comprehensive, modern file manager with cPanel styling and all essential features:
  * - File Tree Navigation
@@ -19,8 +19,9 @@
  * - Sorting and filtering
  */
 
-$username = ""; // Username for directory listing
-$root_path = ""; // Path to the root directory
+$username = ""; // username for dir listing
+$root_path = ""; // root dir
+
 
 // Configuration
 $config = [
@@ -1458,7 +1459,17 @@ if (isset($_POST["action"]) || isset($_GET["action"])) {
     }
 }
 
-// Handle file uploads - this replaces the existing file upload handler in your PHP code
+
+function parseSize($size) {
+    $unit = preg_replace('/[^bkmgtpezy]/i', '', $size);
+    $size = preg_replace('/[^0-9\.]/', '', $size);
+    if ($unit) {
+        return round($size * pow(1024, stripos('bkmgtpezy', $unit[0])));
+    }
+    return round($size);
+}
+
+
 if (isset($_FILES["files"])) {
     header("Content-Type: application/json");
     $currentPath = isset($_POST["path"])
@@ -1518,7 +1529,8 @@ if (isset($_FILES["files"])) {
         }
 
         // File size check
-        if ($files["size"][$i] > ini_get('upload_max_filesize')) {
+        $maxFileSize = parseSize(ini_get('upload_max_filesize'));
+        if ($files["size"][$i] > $maxFileSize) {
             $failed++;
             $failedFiles[] = $fileName . " (Exceeds maximum file size limit)";
             continue;

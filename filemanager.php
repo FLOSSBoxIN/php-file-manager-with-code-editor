@@ -1,7 +1,7 @@
 <?php
 
 /**
- * The Kinsmen File Manager v2.4
+ * The Kinsmen File Manager v2.5
  *
  * A comprehensive, modern file manager with cPanel styling and all essential features:
  * - File Tree Navigation
@@ -19,7 +19,7 @@
  * - Sorting and filtering
  */
 
-$username = ""; // user
+$username = ""; //username
 $root_path = ""; // root path
 
 // Configuration
@@ -28,7 +28,7 @@ $config = [
     "allowed_extensions" => ["*"],
     "timezone" => "Africa/Lagos",
     "date_format" => "M j Y, g:i A",
-    "font_size" => "20px",
+    "font_size" => "16px",
 ];
 
 if (file_exists("$root_path/.fm-config")) {
@@ -1099,7 +1099,7 @@ if (isset($_POST["action"]) || isset($_GET["action"])) {
                     ];
                     header('Content-Type: application/json');
                     echo json_encode($response);
-                    exit; 
+                    exit;
                 }
                 if (!$permanent && $action === "delete") {
                     $formData = new FormData();
@@ -1929,6 +1929,11 @@ if ($username == null) {
             .modal-header {
                 padding: 10px;
             }
+
+            #deleteItems li {
+                font-size: 0.5rem;
+
+            }
         </style>
     </head>
 
@@ -2294,7 +2299,7 @@ if ($username == null) {
                     </div>
                     <div class="modal-body">
                         <p>Are you sure you want to delete the selected item(s)?</p>
-                        <ul id="deleteItems" class="mb-3 text-small"></ul>
+                        <ul id="deleteItems" class="mb-3"></ul>
 
                         <div class="form-check mb-3">
                             <input class="form-check-input" type="checkbox" id="permanentDeleteCheck">
@@ -2936,6 +2941,8 @@ if ($username == null) {
                             modal.hide();
                         }
                     });
+
+
                 }
 
                 // Create new folder
@@ -3094,7 +3101,7 @@ if ($username == null) {
                     document.getElementById('permanentDeleteCheck').checked = false;
 
                     // Update alert visibility and button text
-                    //updateDeleteModalState();
+                    updateDeleteModalState();
 
                     const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
                     deleteModal.show();
@@ -3103,9 +3110,18 @@ if ($username == null) {
                 // Update delete modal state based on checkbox
                 function updateDeleteModalState() {
                     const isPermanentDelete = document.getElementById('permanentDeleteCheck').checked;
-                    document.getElementById('deleteInfoAlert').style.display = isPermanentDelete ? 'none' : 'block';
-                    document.getElementById('permanentDeleteAlert').style.display = isPermanentDelete ? 'block' : 'none';
-                    document.getElementById('deleteButtonText').textContent = isPermanentDelete ? 'Delete Permanently' : 'Move to Trash';
+                    if (document.getElementById('deleteInfoAlert')) {
+                        document.getElementById('deleteInfoAlert').style.display = isPermanentDelete ? 'none' : 'block';
+                    }
+
+                    if (document.getElementById('permanentDeleteAlert')) {
+                        document.getElementById('permanentDeleteAlert').style.display = isPermanentDelete ? 'block' : 'none';
+                    }
+
+                    if (document.getElementById('deleteButtonText')) {
+                        document.getElementById('deleteButtonText').textContent = isPermanentDelete ? 'Delete Permanently' : 'Move to Trash';
+                    }
+
                 }
 
                 // Confirm delete or move to trash
@@ -3128,7 +3144,7 @@ if ($username == null) {
                             })
                             .then(response => response.json())
                             .then(data => {
-                                //bootstrap.Modal.getInstance(document.getElementById('deleteModal')).hide();
+                                bootstrap.Modal.getInstance(document.getElementById('deleteModal')).hide();
 
                                 if (data.status === 'success') {
                                     loadFileList();
@@ -3138,9 +3154,6 @@ if ($username == null) {
                                     showAlert('Error', data.message || 'Failed to delete items');
                                 }
 
-                                setTimeout(() => {
-                                    window.location.reload();
-                                }, 1000);
                             })
                             .catch(error => {
                                 showAlert('Error', 'Failed to delete items');
@@ -3161,7 +3174,7 @@ if ($username == null) {
                             })
                             .then(response => response.json())
                             .then(data => {
-                                //bootstrap.Modal.getInstance(document.getElementById('deleteModal')).hide();
+                                bootstrap.Modal.getInstance(document.getElementById('deleteModal')).hide();
 
                                 if (data.status === 'success') {
                                     loadFileList();
@@ -3170,17 +3183,15 @@ if ($username == null) {
                                 } else {
                                     showAlert('Error', data.message || 'Failed to move items to trash');
                                 }
-                                setTimeout(() => {
-                                    window.location.reload();
-                                }, 1000);
                             })
                             .catch(error => {
                                 showAlert('Error', 'Failed to move items to trash');
                             });
                     }
                 }
-
-                document.getElementById('permanentDeleteCheck').addEventListener('change', updateDeleteModalState);
+                if (document.getElementById('permanentDeleteCheck')) {
+                    document.getElementById('permanentDeleteCheck').addEventListener('change', updateDeleteModalState);
+                }
 
                 // File operation (copy/move)
                 function performFileOperation(operation) {
@@ -3615,8 +3626,9 @@ if ($username == null) {
                         deleteItems();
                     }
                 });
-
-                document.getElementById('confirmDeleteBtn').addEventListener('click', confirmDelete);
+                if (document.getElementById('confirmDeleteBtn')) {
+                    document.getElementById('confirmDeleteBtn').addEventListener('click', confirmDelete);
+                }
 
                 document.getElementById('download-btn').addEventListener('click', function(e) {
                     e.preventDefault();
@@ -4112,21 +4124,28 @@ if ($username == null) {
                         });
                 }
 
-                document.querySelectorAll('.action-btns').forEach(btn => {
+                const actionButtons = document.querySelectorAll('.action-btns');
+                actionButtons.forEach(btn => {
+                    const content = btn.textContent.replace(/\s+/g, ' ').trim();
+                    btn.innerHTML = content;
                     btn.addEventListener('click', function(e) {
                         e.preventDefault();
 
                         btn.disabled = true;
-                        btn.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> ${btn.textContent}`;
+                        btn.innerHTML = `<span class="spinner-border spinner-border-sm"></span> ${content}`;
 
                         const siblingButtons = btn.closest('.modal-footer').querySelectorAll('button');
-                        siblingButtons.forEach(sibling => {
-                            if (sibling !== btn) {
-                                sibling.disabled = true;
-                            }
-                        });
+                        if (siblingButtons) {
+                            siblingButtons.forEach(sibling => {
+                                if (sibling !== btn) {
+                                    sibling.disabled = true;
+                                }
+                            });
+                        }
                     });
+
                 });
+
 
 
                 // Initialize the application

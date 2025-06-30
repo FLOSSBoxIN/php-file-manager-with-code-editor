@@ -1,7 +1,7 @@
 <?php
 
 /**
- * The Kinsmen File Manager v2.5
+ * The Kinsmen File Manager v2.6
  *
  * A comprehensive, modern file manager with cPanel styling and all essential features:
  * - File Tree Navigation
@@ -19,8 +19,8 @@
  * - Sorting and filtering
  */
 
-$username = ""; //username
-$root_path = ""; // root path
+$username = ""; // user
+$root_path = ""; // path
 
 // Configuration
 $config = [
@@ -1056,6 +1056,11 @@ if (isset($_POST["action"]) || isset($_GET["action"])) {
 
                 foreach ($items as $item) {
                     $itemPath = $currentPath . DIRECTORY_SEPARATOR . $item;
+                    if ($item == ".fm-config") {
+                        $status = false;
+                        $messages[] = "Cannot delete 'fm-config' file";
+                        continue;
+                    }
 
                     if (moveToTrash($itemPath, $currentPath, $config)) {
                         $movedCount++;
@@ -1079,53 +1084,40 @@ if (isset($_POST["action"]) || isset($_GET["action"])) {
 
             case "delete":
                 $items = isset($_POST["items"]) ? $_POST["items"] : [];
-                $permanent = isset($_POST["permanent"])
-                    ? $_POST["permanent"] === "true"
-                    : false;
+                $permanent = isset($_POST["permanent"]) ? $_POST["permanent"] == true : false;
                 $status = true;
                 $messages = [];
 
-                $stop = [];
                 foreach ($items as $item) {
-                    if (str_contains($item, "fm-config")) {
-                        $stop[] = $item;
-                    }
-                }
+                    $itemPath = $currentPath . DIRECTORY_SEPARATOR . $item;
 
-                if (count($stop) > 0) {
-                    $response = [
-                        "status" => "error",
-                        "message" => "Cannot delete 'fm-config' file: " . implode(", ", $stop),
-                    ];
-                    header('Content-Type: application/json');
-                    echo json_encode($response);
-                    exit;
-                }
-                if (!$permanent && $action === "delete") {
-                    $formData = new FormData();
-                    $formData . append("action", "trash");
-                    $formData . append("path", $currentPath);
-
-                    foreach ($items as $item) {
-                        $formData . append("items[]", $item);
-                    }
-                } else {
-                    foreach ($items as $item) {
-                        $itemPath = $currentPath . DIRECTORY_SEPARATOR . $item;
-                        $result = deleteItem($itemPath);
-
-                        if ($result["status"] != "success") {
-                            $status = false;
-                        }
-
-                        $messages[] = $result["message"];
+                    if ($item == ".fm-config") {
+                        $status = false;
+                        $messages[] = "Cannot delete 'fm-config' file";
+                        continue;
                     }
 
-                    $response = [
-                        "status" => $status ? "success" : "error",
-                        "message" => implode(", ", $messages),
-                    ];
+                    if (!file_exists($itemPath)) {
+                        $status = false;
+                        $messages[] = "Item not found: " . $item;
+                        continue;
+                    }
+
+                    $result = deleteItem($itemPath);
+
+                    if ($result["status"] !== "success") {
+                        $status = false;
+                    }
+
+                    $messages[] = $result["message"];
                 }
+
+                $response = [
+                    "status" => $status ? "success" : "error",
+                    "message" => implode(", ", $messages),
+                ];
+
+
                 break;
 
             case "restore":

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * The Kinsmen File Manager v2.3
+ * The Kinsmen File Manager v2.4
  *
  * A comprehensive, modern file manager with cPanel styling and all essential features:
  * - File Tree Navigation
@@ -19,7 +19,7 @@
  * - Sorting and filtering
  */
 
-$username = ""; //user
+$username = ""; // user
 $root_path = ""; // root path
 
 // Configuration
@@ -28,6 +28,7 @@ $config = [
     "allowed_extensions" => ["*"],
     "timezone" => "Africa/Lagos",
     "date_format" => "M j Y, g:i A",
+    "font_size" => "20px",
 ];
 
 if (file_exists("$root_path/.fm-config")) {
@@ -36,6 +37,7 @@ if (file_exists("$root_path/.fm-config")) {
 
     $config['timezone'] = $settings['timezone'] ?? $config['timezone'];
     $config['date_format'] = $settings['date_format'] ?? $config['date_format'];
+    $config['font_size'] = $settings['font_size'] ?? $config['font_size'];
 }
 
 // Set timezone
@@ -317,17 +319,18 @@ function createFile($path, $name, $content = "")
     }
 }
 
-function updateSettings($timezone, $dateFormat)
+function updateSettings($timezone, $dateFormat, $fontSize)
 {
     global $config;
 
-    if (empty($timezone) && empty($dateFormat)) {
+    if (empty($timezone) && empty($dateFormat) && empty($fontSize)) {
         return ["status" => "error", "message" => "No changes made"];
     }
 
     $data = [
         'timezone' => empty($timezone) ? $config["timezone"] : $timezone,
-        'date_format' => empty($dateFormat) ? $config["date_format"] : $dateFormat
+        'date_format' => empty($dateFormat) ? $config["date_format"] : $dateFormat,
+        'font_size' => empty($fontSize) ? $config["font_size"] : $fontSize,
     ];
 
     $file = $config["root_path"] . "/.fm-config";
@@ -993,7 +996,8 @@ if (isset($_POST["action"]) || isset($_GET["action"])) {
             case "settings":
                 $tmz = isset($_POST["timezone"]) ? $_POST["timezone"] : "";
                 $dt = isset($_POST["dateformat"]) ? $_POST["dateformat"] : "";
-                $response = updateSettings($tmz, $dt);
+                $font = isset($_POST["fontSize"]) ? $_POST["fontSize"] : "";
+                $response = updateSettings($tmz, $dt, $font);
                 break;
 
             case "list":
@@ -1081,7 +1085,7 @@ if (isset($_POST["action"]) || isset($_GET["action"])) {
                 $status = true;
                 $messages = [];
 
-                $stop = [1, 2];
+                $stop = [];
                 foreach ($items as $item) {
                     if (str_contains($item, "fm-config")) {
                         $stop[] = $item;
@@ -1091,10 +1095,13 @@ if (isset($_POST["action"]) || isset($_GET["action"])) {
                 if (count($stop) > 0) {
                     $response = [
                         "status" => "error",
-                        "message" => "Cannot delete 'fm-config' file",
+                        "message" => "Cannot delete 'fm-config' file: " . implode(", ", $stop),
                     ];
-                } else if (!$permanent && $action === "delete") {
-                    // Redirect to trash action
+                    header('Content-Type: application/json');
+                    echo json_encode($response);
+                    exit; 
+                }
+                if (!$permanent && $action === "delete") {
                     $formData = new FormData();
                     $formData . append("action", "trash");
                     $formData . append("path", $currentPath);
@@ -1103,7 +1110,6 @@ if (isset($_POST["action"]) || isset($_GET["action"])) {
                         $formData . append("items[]", $item);
                     }
                 } else {
-                    // Permanent deletion (original delete code)
                     foreach ($items as $item) {
                         $itemPath = $currentPath . DIRECTORY_SEPARATOR . $item;
                         $result = deleteItem($itemPath);
@@ -1481,6 +1487,7 @@ function parseSize($size)
 
 if (isset($_FILES["files"])) {
     header("Content-Type: application/json");
+
     $currentPath = isset($_POST["path"])
         ? $config["root_path"] . $_POST["path"]
         : $config["root_path"];
@@ -1608,14 +1615,15 @@ if ($username == null) {
         <style>
             :root {
                 --kinsmen-primary: #0c0f25;
-                --kinsmen-secondary: #2d335d;
+                --kinsmen-secondary: #428bca;
                 --kinsmen-bg: #f8f9fa;
                 --kinsmen-border: #dee2e6;
             }
 
+            html,
             body {
                 font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-                font-size: 14px;
+                font-size: <?= $config["font_size"] ?>;
                 background-color: var(--kinsmen-bg);
             }
 
@@ -1628,7 +1636,7 @@ if ($username == null) {
 
             .top-header .brand {
                 font-weight: bold;
-                font-size: 14px;
+                font-size: 0.875rem;
             }
 
             .search-container {
@@ -1643,7 +1651,7 @@ if ($username == null) {
             }
 
             .main-toolbar .btn {
-                font-size: 14px;
+                font-size: 0.875rem;
                 padding: 4px 8px;
                 margin-right: 5px;
             }
@@ -1655,7 +1663,7 @@ if ($username == null) {
             }
 
             .navigation-bar .btn {
-                font-size: 14px;
+                font-size: 0.875rem;
                 padding: 4px 8px;
                 margin-right: 5px;
             }
@@ -1665,11 +1673,11 @@ if ($username == null) {
                 border-right: 1px solid var(--kinsmen-border);
                 height: calc(100vh - 120px);
                 overflow-y: auto;
-                padding: 10px;
+                padding: 0 10px;
             }
 
             .sidebar .folder-tree {
-                font-size: 14px;
+                font-size: 0.875rem;
             }
 
             .sidebar .folder-tree .folder-item {
@@ -1699,7 +1707,9 @@ if ($username == null) {
             }
 
             .file-table {
-                font-size: 14px;
+                font-size: 0.875rem;
+                width: 100%;
+                border-collapse: collapse;
             }
 
             .file-table th {
@@ -1751,7 +1761,7 @@ if ($username == null) {
 
             .permissions {
                 font-family: monospace;
-                font-size: 11px;
+                font-size: 0.688rem;
             }
 
             .checkbox-col {
@@ -1763,53 +1773,68 @@ if ($username == null) {
             }
 
             .collapse-all {
-                font-size: 14px;
+                font-size: 0.875rem;
                 color: var(--kinsmen-secondary);
                 cursor: pointer;
                 margin-bottom: 10px;
             }
 
             .btn-sm {
-                font-size: 11px;
+                font-size: 0.688rem;
                 padding: 2px 6px;
             }
 
             .header-btns {
                 text-decoration: none;
-                font-size: 14px;
+                font-size: 0.875rem;
                 margin-right: 15px;
                 color: #495057;
                 transition: color 0.2s;
             }
 
-            .header-btns:hover {
+            .nav-links {
+                text-decoration: none;
+                font-size: 0.875rem;
+                margin-right: 15px;
+                color: var(--kinsmen-secondary);
+                transition: color 0.2s;
+            }
+
+            .header-btns:hover,
+            .nav-links:hover {
                 color: #007bff;
             }
 
-            .header-btns.disabled {
+            .header-btns.disabled,
+            .nav-links.disabled {
                 pointer-events: none;
                 color: #adb5bd;
                 cursor: not-allowed;
             }
 
-            .header-btns.disabled:hover {
+            .header-btns.disabled:hover,
+            .nav-links.disabled:hover {
                 cursor: not-allowed;
                 color: #adb5bd;
             }
 
+
+
             /* Progress bar */
             .progress {
-                margin-top: 10px;
-                margin-bottom: 15px;
                 height: 20px;
+                border-radius: 0;
+                padding-left: 10px;
+                padding-right: 10px;
                 display: none;
+
             }
 
             .progress-bar {
                 transition: width 0.3s ease;
                 text-align: center;
                 line-height: 20px;
-                font-size: 12px;
+                font-size: 0.75rem;
                 font-weight: bold;
                 color: white;
                 overflow: visible;
@@ -1894,7 +1919,7 @@ if ($username == null) {
             .code-editor {
                 color: #67a0f5;
                 font-family: "Fira Code", "Courier New", monospace;
-                font-size: 12px;
+                font-size: 0.75rem;
                 line-height: 1.5;
                 padding: 10px;
                 resize: vertical;
@@ -1917,7 +1942,7 @@ if ($username == null) {
                 <div class="search-container me-3">
                     <div class="input-group input-group-sm">
                         <input type="text" class="form-control form-control-sm" id="search-input" placeholder="Search files">
-                        <button class="btn btn-primary btn-sm" id="search-btn">Go</button>
+                        <button class="btn btn-primary btn-sm ms-1" id="search-btn">Go</button>
                     </div>
                 </div>
                 <button class="btn btn-sm btn-outline-light" id="settings-btn">
@@ -1927,7 +1952,7 @@ if ($username == null) {
         </div>
 
         <!-- Main Toolbar -->
-        <div class="d-flex align-items-center main-toolbar">
+        <div class="d-flex align-items-center main-toolbar mb-2 py-1 px-3">
             <div>
                 <a href="#" class="header-btns" id="new-file-btn"><i class="fas fa-file"></i> File</a>
                 <a href="#" class="header-btns" id="new-folder-btn"><i class="fas fa-folder"></i> Folder</a>
@@ -1960,15 +1985,15 @@ if ($username == null) {
 
 
         <!-- Main Content Area -->
-        <div class="container-fluid p-0">
+        <div class="container-fluid px-2">
             <div class="row g-0">
                 <!-- Sidebar -->
-                <div class="col-md-2 sidebar">
-                    <div class="search-container mb-2">
+                <div class="col-md-2 sidebar border border-0">
+                    <div class="search-container" style="margin-bottom: 10px;">
                         <div class="input-group input-group-sm">
-                            <button class="btn btn-sm btn-outline-secondary" id="breadcrumb-home-btn"><i class="fas fa-home"></i></button>
-                            <input type="text" class="form-control form-control-sm border-secondary" id="breadcrumb">
-                            <button class="btn btn-secondary btn-sm" id="breadcrumb-search-btn">Go</button>
+                            <button class="btn btn-sm btn-outline-secondary rounded-0" id="breadcrumb-home-btn"><i class="fas fa-home"></i></button>
+                            <input type="text" class="form-control form-control-sm border-secondary rounded-0" id="breadcrumb">
+                            <button class="btn btn-secondary btn-sm rounded-0" id="breadcrumb-search-btn">Go</button>
                         </div>
                     </div>
                     <div class="collapse-all border py-1 text-center" id="collapse-all-btn">Collapse All</div>
@@ -1982,37 +2007,39 @@ if ($username == null) {
                     </div>
                 </div>
 
+
                 <!-- Main File Area -->
                 <div class="col-md-10 main-content" id="dropzone">
                     <!-- Navigation Bar -->
-                    <div class="navigation-bar border" style="border: 2px solid #000">
-                        <a href="#" class="header-btns" id="home-btn"><i class="fas fa-home"></i> Home</a>
-                        <a href="#" class="header-btns" id="up-btn"><i class="fas fa-level-up-alt"></i> Up One Level</a>
-                        <a href="#" class="header-btns" id="reload-btn"><i class="fas fa-sync"></i> Reload</a>
-                        <a href="#" class="header-btns" id="select-all-btn"><i class="fas fa-check-square"></i> Select All</a>
-                        <a href="#" class="header-btns disabled" id="unselect-all-btn"><i class="fas fa-square"></i> Unselect All</a>
-                        <a href="#" class="header-btns" id="view-trash-btn"><i class="fas fa-trash-alt"></i> View Trash</a>
-                        <a href="#" class="header-btns" id="sort-btn"><i class="fa-solid fa-arrow-up-wide-short"></i> Sort</a>
+                    <div class="navigation-bar border mb-2 py-1">
+                        <a href="#" class="nav-links" id="home-btn"><i class="fas fa-home"></i> Home</a>
+                        <a href="#" class="nav-links" id="up-btn"><i class="fas fa-level-up-alt"></i> Up One Level</a>
+                        <a href="#" class="nav-links" id="reload-btn"><i class="fas fa-sync"></i> Reload</a>
+                        <a href="#" class="nav-links" id="select-all-btn"><i class="fas fa-check-square"></i> Select All</a>
+                        <a href="#" class="nav-links disabled" id="unselect-all-btn"><i class="fas fa-square"></i> Unselect All</a>
+                        <a href="#" class="nav-links" id="view-trash-btn"><i class="fas fa-trash-alt"></i> View Trash</a>
+                        <a href="#" class="nav-links" id="sort-btn"><i class="fa-solid fa-arrow-up-wide-short"></i> Sort</a>
                     </div>
-
-                    <table class="table table-sm file-table mb-4">
-                        <thead>
-                            <tr>
-                                <th class="checkbox-col"><input type="checkbox" class="form-check-input border-dark" id="select-all-checkbox"></th>
-                                <th class="icon-col"></th>
-                                <th>Name</th>
-                                <th>Size</th>
-                                <th>Last Modified</th>
-                                <th>Type</th>
-                                <th>Permissions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="files-list">
-                            <tr>
-                                <td colspan="7" class="text-center p-2">Loading files...</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div class="border-start h-100">
+                        <table class="table table-sm table-striped border-top border-end file-table mb-4">
+                            <thead>
+                                <tr>
+                                    <th class="checkbox-col"><input type="checkbox" class="form-check-input border-dark" id="select-all-checkbox"></th>
+                                    <th class="icon-col"></th>
+                                    <th>Name</th>
+                                    <th>Size</th>
+                                    <th>Last Modified</th>
+                                    <th>Type</th>
+                                    <th>Permissions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="files-list">
+                                <tr>
+                                    <td colspan="7" class="text-center p-2">Loading files...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
             <div class="text-center py-2">
@@ -2394,12 +2421,18 @@ if ($username == null) {
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label for="folderName" class="form-label">Date Timezone</label>
-                            <input type="text" class="form-control" id="timezone" value="<?= $config['timezone'] ?>" required>
+                            <label for="timezone" class="form-label">Timezone</label>
+                            <input type="text" class="form-control" id="timezone" value="<?= $config['timezone'] ?>" placeholder="UTC" required>
+                            <small>PHP timezone only</small>
                         </div>
                         <div class="mb-3">
-                            <label for="folderName" class="form-label">Date Format</label>
-                            <input type="text" class="form-control" id="dateformat" value="<?= $config['date_format'] ?>" required>
+                            <label for="dateformat" class="form-label">Date Format</label>
+                            <input type="text" class="form-control" id="dateformat" value="<?= $config['date_format'] ?>" placeholder="Y-m-d H:i:s" required>
+                            <small>PHP date format only</small>
+                        </div>
+                        <div class="mb-3">
+                            <label for="fontSize" class="form-label">Font Size</label>
+                            <input type="text" class="form-control" id="fontSize" value="<?= $config['font_size'] ?>" placeholder="16px" required>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -2909,6 +2942,7 @@ if ($username == null) {
                 function updateSettings() {
                     const timezone = document.getElementById('timezone').value.trim();
                     const dateformat = document.getElementById('dateformat').value.trim();
+                    const fontSize = document.getElementById('fontSize').value.trim();
 
                     //return;
 
@@ -2916,6 +2950,7 @@ if ($username == null) {
                     formData.append('action', 'settings');
                     formData.append('timezone', timezone);
                     formData.append('dateformat', dateformat);
+                    formData.append('fontSize', fontSize);
 
                     fetch(window.location.pathname, {
                             method: 'POST',
@@ -2928,6 +2963,9 @@ if ($username == null) {
                             } else {
                                 showAlert('Error', data.message);
                             }
+                            setTimeout(() => {
+                                window.location.reload();
+                            }, 1000);
                         })
                         .catch(error => {
                             showAlert('Error', 'Failed to update settings');

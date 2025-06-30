@@ -1,7 +1,7 @@
 <?php
 
 /**
- * The Kinsmen File Manager v2.2.2
+ * The Kinsmen File Manager v2.3
  *
  * A comprehensive, modern file manager with cPanel styling and all essential features:
  * - File Tree Navigation
@@ -19,8 +19,8 @@
  * - Sorting and filtering
  */
 
-$username = "joe"; // username
-$root_path = "/home/joe"; // root path
+$username = ""; //user
+$root_path = ""; // root path
 
 // Configuration
 $config = [
@@ -1081,8 +1081,19 @@ if (isset($_POST["action"]) || isset($_GET["action"])) {
                 $status = true;
                 $messages = [];
 
-                // If not permanent delete, use trash function instead
-                if (!$permanent && $action === "delete") {
+                $stop = [1, 2];
+                foreach ($items as $item) {
+                    if (str_contains($item, "fm-config")) {
+                        $stop[] = $item;
+                    }
+                }
+
+                if (count($stop) > 0) {
+                    $response = [
+                        "status" => "error",
+                        "message" => "Cannot delete 'fm-config' file",
+                    ];
+                } else if (!$permanent && $action === "delete") {
                     // Redirect to trash action
                     $formData = new FormData();
                     $formData . append("action", "trash");
@@ -1091,8 +1102,6 @@ if (isset($_POST["action"]) || isset($_GET["action"])) {
                     foreach ($items as $item) {
                         $formData . append("items[]", $item);
                     }
-
-                    // This is handled client-side in the JavaScript
                 } else {
                     // Permanent deletion (original delete code)
                     foreach ($items as $item) {
@@ -1459,7 +1468,8 @@ if (isset($_POST["action"]) || isset($_GET["action"])) {
 }
 
 
-function parseSize($size) {
+function parseSize($size)
+{
     $unit = preg_replace('/[^bkmgtpezy]/i', '', $size);
     $size = preg_replace('/[^0-9\.]/', '', $size);
     if ($unit) {
@@ -2257,7 +2267,7 @@ if ($username == null) {
                     </div>
                     <div class="modal-body">
                         <p>Are you sure you want to delete the selected item(s)?</p>
-                        <ul id="deleteItems" class="mb-3"></ul>
+                        <ul id="deleteItems" class="mb-3 text-small"></ul>
 
                         <div class="form-check mb-3">
                             <input class="form-check-input" type="checkbox" id="permanentDeleteCheck">
@@ -2521,8 +2531,6 @@ if ($username == null) {
 
                     return mimeTypes[extension] || 'text/x-generic';
                 }
-
-
 
                 // Show files in table
                 function showFiles(files) {
@@ -3048,7 +3056,7 @@ if ($username == null) {
                     document.getElementById('permanentDeleteCheck').checked = false;
 
                     // Update alert visibility and button text
-                    updateDeleteModalState();
+                    //updateDeleteModalState();
 
                     const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
                     deleteModal.show();
@@ -3067,7 +3075,6 @@ if ($username == null) {
                     const isPermanentDelete = document.getElementById('permanentDeleteCheck').checked;
 
                     if (isPermanentDelete) {
-                        // Permanent delete
                         const formData = new FormData();
                         formData.append('action', 'delete');
                         formData.append('path', currentPath);
@@ -3083,7 +3090,7 @@ if ($username == null) {
                             })
                             .then(response => response.json())
                             .then(data => {
-                                bootstrap.Modal.getInstance(document.getElementById('deleteModal')).hide();
+                                //bootstrap.Modal.getInstance(document.getElementById('deleteModal')).hide();
 
                                 if (data.status === 'success') {
                                     loadFileList();
@@ -3092,6 +3099,10 @@ if ($username == null) {
                                 } else {
                                     showAlert('Error', data.message || 'Failed to delete items');
                                 }
+
+                                setTimeout(() => {
+                                    window.location.reload();
+                                }, 1000);
                             })
                             .catch(error => {
                                 showAlert('Error', 'Failed to delete items');
@@ -3112,7 +3123,7 @@ if ($username == null) {
                             })
                             .then(response => response.json())
                             .then(data => {
-                                bootstrap.Modal.getInstance(document.getElementById('deleteModal')).hide();
+                                //bootstrap.Modal.getInstance(document.getElementById('deleteModal')).hide();
 
                                 if (data.status === 'success') {
                                     loadFileList();
@@ -3121,6 +3132,9 @@ if ($username == null) {
                                 } else {
                                     showAlert('Error', data.message || 'Failed to move items to trash');
                                 }
+                                setTimeout(() => {
+                                    window.location.reload();
+                                }, 1000);
                             })
                             .catch(error => {
                                 showAlert('Error', 'Failed to move items to trash');

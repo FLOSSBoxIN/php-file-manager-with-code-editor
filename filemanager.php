@@ -3204,9 +3204,6 @@ if ($username == null) {
                 function executeFileOperation() {
                     const operation = document.getElementById('fileOpType').value;
                     const destination = document.getElementById('destinationPath').value.trim();
-
-                    return;
-
                     if (!destination) {
                         showAlert('Error', 'Please enter a destination path');
                         return;

@@ -2,6 +2,12 @@
 
 This PHP File Manager is a web-based application that allows users to manage files and directories on a server. It provides a user-friendly interface for performing various file operations such as creating, renaming, deleting, copying, moving, compressing, and extracting files and directories. It is accompanied by a cool code editor based on Ace Editor. You can find the code editor repository [here](https://github.com/JosephChuks/cwp-codeEditor).
 
+<img width="2089" height="1262" alt="image" src="https://github.com/user-attachments/assets/9a477337-63fd-49a0-a314-471aa3e648d5" />
+
+<img width="2089" height="1262" alt="image" src="https://github.com/user-attachments/assets/f8571ecf-958d-4532-aab4-331aee1648bc" />
+
+
+
 ## Features
 
 - **Directory Listing**: View and navigate through directories.

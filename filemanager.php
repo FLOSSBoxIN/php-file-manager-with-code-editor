@@ -1,9 +1,9 @@
 <?php
 
 /**
- * The Kinsmen File Manager v2.7
+ * The Kinsmen File Manager v3.0
  *
- * A comprehensive, modern file manager with cPanel styling and all essential features:
+ * A comprehensive, modern file manager with CWP dark theme styling:
  * - File Tree Navigation
  * - Search functionality
  * - Create/Edit/Delete files and folders
@@ -72,34 +72,34 @@ function getFileIcon($file)
     $extension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
 
     $iconMap = [
-        "pdf"   => "<i class='fas fa-file-pdf' style='color:#D9534F'></i>",
-        "doc"   => "<i class='fas fa-file-word' style='color:#2B579A'></i>",
-        "docx"  => "<i class='fas fa-file-word' style='color:#2B579A'></i>",
-        "xls"   => "<i class='fas fa-file-excel' style='color:#217346'></i>",
-        "xlsx"  => "<i class='fas fa-file-excel' style='color:#217346'></i>",
-        "ppt"   => "<i class='fas fa-file-powerpoint' style='color:#D24726'></i>",
-        "pptx"  => "<i class='fas fa-file-powerpoint' style='color:#D24726'></i>",
-        "jpg"   => "<i class='fas fa-file-image' style='color:#F4A261'></i>",
-        "jpeg"  => "<i class='fas fa-file-image' style='color:#F4A261'></i>",
-        "png"   => "<i class='fas fa-file-image' style='color:#F4A261'></i>",
-        "gif"   => "<i class='fas fa-file-image' style='color:#F4A261'></i>",
-        "txt"   => "<i class='fas fa-file-alt' style='color:#6C757D'></i>",
-        "zip"   => "<i class='fas fa-file-archive' style='color:#FF9F1C'></i>",
-        "tar"   => "<i class='fas fa-file-archive' style='color:#FF9F1C'></i>",
-        "gz"    => "<i class='fas fa-file-archive' style='color:#FF9F1C'></i>",
-        "html"  => "<i class='fas fa-file-code' style='color:#E34C26'></i>",
-        "htm"   => "<i class='fas fa-file-code' style='color:#E34C26'></i>",
-        "css"   => "<i class='fas fa-file-code' style='color:#264DE4'></i>",
-        "js"    => "<i class='fas fa-file-code' style='color:#F0DB4F'></i>",
-        "php"   => "<i class='fas fa-file-code' style='color:#8892BF'></i>",
-        "py"    => "<i class='fas fa-file-code' style='color:#306998'></i>",
-        "java"  => "<i class='fas fa-file-code' style='color:#B07219'></i>",
-        "c"     => "<i class='fas fa-file-code' style='color:#555555'></i>",
-        "cpp"   => "<i class='fas fa-file-code' style='color:#00599C'></i>",
-        "mp3"   => "<i class='fas fa-file-audio' style='color:#6F42C1'></i>",
-        "mp4"   => "<i class='fas fa-file-video' style='color:#20C997'></i>",
-        "mov"   => "<i class='fas fa-file-video' style='color:#20C997'></i>",
-        "avi"   => "<i class='fas fa-file-video' style='color:#20C997'></i>",
+        "pdf"   => "<i class='fas fa-file-pdf' style='color:#ef4444'></i>",
+        "doc"   => "<i class='fas fa-file-word' style='color:#3b82f6'></i>",
+        "docx"  => "<i class='fas fa-file-word' style='color:#3b82f6'></i>",
+        "xls"   => "<i class='fas fa-file-excel' style='color:#22c55e'></i>",
+        "xlsx"  => "<i class='fas fa-file-excel' style='color:#22c55e'></i>",
+        "ppt"   => "<i class='fas fa-file-powerpoint' style='color:#f97316'></i>",
+        "pptx"  => "<i class='fas fa-file-powerpoint' style='color:#f97316'></i>",
+        "jpg"   => "<i class='fas fa-file-image' style='color:#a78bfa'></i>",
+        "jpeg"  => "<i class='fas fa-file-image' style='color:#a78bfa'></i>",
+        "png"   => "<i class='fas fa-file-image' style='color:#a78bfa'></i>",
+        "gif"   => "<i class='fas fa-file-image' style='color:#a78bfa'></i>",
+        "txt"   => "<i class='fas fa-file-alt' style='color:#94a3b8'></i>",
+        "zip"   => "<i class='fas fa-file-archive' style='color:#fbbf24'></i>",
+        "tar"   => "<i class='fas fa-file-archive' style='color:#fbbf24'></i>",
+        "gz"    => "<i class='fas fa-file-archive' style='color:#fbbf24'></i>",
+        "html"  => "<i class='fas fa-file-code' style='color:#f97316'></i>",
+        "htm"   => "<i class='fas fa-file-code' style='color:#f97316'></i>",
+        "css"   => "<i class='fas fa-file-code' style='color:#38bdf8'></i>",
+        "js"    => "<i class='fas fa-file-code' style='color:#facc15'></i>",
+        "php"   => "<i class='fas fa-file-code' style='color:#a78bfa'></i>",
+        "py"    => "<i class='fas fa-file-code' style='color:#60a5fa'></i>",
+        "java"  => "<i class='fas fa-file-code' style='color:#fb923c'></i>",
+        "c"     => "<i class='fas fa-file-code' style='color:#94a3b8'></i>",
+        "cpp"   => "<i class='fas fa-file-code' style='color:#38bdf8'></i>",
+        "mp3"   => "<i class='fas fa-file-audio' style='color:#c084fc'></i>",
+        "mp4"   => "<i class='fas fa-file-video' style='color:#34d399'></i>",
+        "mov"   => "<i class='fas fa-file-video' style='color:#34d399'></i>",
+        "avi"   => "<i class='fas fa-file-video' style='color:#34d399'></i>",
     ];
 
 
@@ -108,7 +108,7 @@ function getFileIcon($file)
     } elseif (isset($iconMap[$extension])) {
         return $iconMap[$extension];
     } else {
-        return "<i class='fas fa-file' style='color:#6C757D'></i>";
+        return "<i class='fas fa-file' style='color:#64748b'></i>";
     }
 }
 
@@ -118,66 +118,32 @@ function getPermissions($file)
     $perms = fileperms($file);
 
     if (($perms & 0xc000) == 0xc000) {
-        // Socket
         $info = "s";
     } elseif (($perms & 0xa000) == 0xa000) {
-        // Symbolic Link
         $info = "l";
     } elseif (($perms & 0x8000) == 0x8000) {
-        // Regular
         $info = "-";
     } elseif (($perms & 0x6000) == 0x6000) {
-        // Block special
         $info = "b";
     } elseif (($perms & 0x4000) == 0x4000) {
-        // Directory
         $info = "d";
     } elseif (($perms & 0x2000) == 0x2000) {
-        // Character special
         $info = "c";
     } elseif (($perms & 0x1000) == 0x1000) {
-        // FIFO pipe
         $info = "p";
     } else {
-        // Unknown
         $info = "u";
     }
 
-    // Owner
     $info .= $perms & 0x0100 ? "r" : "-";
     $info .= $perms & 0x0080 ? "w" : "-";
-    $info .=
-        $perms & 0x0040
-        ? ($perms & 0x0800
-            ? "s"
-            : "x")
-        : ($perms & 0x0800
-            ? "S"
-            : "-");
-
-    // Group
+    $info .= $perms & 0x0040 ? ($perms & 0x0800 ? "s" : "x") : ($perms & 0x0800 ? "S" : "-");
     $info .= $perms & 0x0020 ? "r" : "-";
     $info .= $perms & 0x0010 ? "w" : "-";
-    $info .=
-        $perms & 0x0008
-        ? ($perms & 0x0400
-            ? "s"
-            : "x")
-        : ($perms & 0x0400
-            ? "S"
-            : "-");
-
-    // World
+    $info .= $perms & 0x0008 ? ($perms & 0x0400 ? "s" : "x") : ($perms & 0x0400 ? "S" : "-");
     $info .= $perms & 0x0004 ? "r" : "-";
     $info .= $perms & 0x0002 ? "w" : "-";
-    $info .=
-        $perms & 0x0001
-        ? ($perms & 0x0200
-            ? "t"
-            : "x")
-        : ($perms & 0x0200
-            ? "T"
-            : "-");
+    $info .= $perms & 0x0001 ? ($perms & 0x0200 ? "t" : "x") : ($perms & 0x0200 ? "T" : "-");
 
     return $info;
 }
@@ -193,20 +159,15 @@ function buildDirectoryTree($dir, $relativePath = "")
     foreach ($cdir as $key => $value) {
         if (!in_array($value, [".", ".."])) {
             $fullPath = $dir . DIRECTORY_SEPARATOR . $value;
-
-            // Make sure relativePath does not start with a slash
-            $relPathPrefix = $relativePath
-                ? ltrim($relativePath, "/") . "/"
-                : "";
+            $relPathPrefix = $relativePath ? ltrim($relativePath, "/") . "/" : "";
             $relPath = $relPathPrefix . $value;
 
             if (is_dir($fullPath)) {
-                // Ensure security check passes
                 if (securityCheck($fullPath)) {
                     $result[] = [
                         "name" => $value,
                         "type" => "dir",
-                        "path" => "/" . ltrim($relPath, "/"), // Ensure consistent format
+                        "path" => "/" . ltrim($relPath, "/"),
                         "children" => buildDirectoryTree($fullPath, $relPath),
                     ];
                 }
@@ -230,21 +191,11 @@ function getDirectoryContents($dir, $sort = "name", $order = "asc")
             $fileInfo = [
                 "name" => $value,
                 "type" => is_dir($fullPath) ? "dir" : "file",
-                "size" => is_dir($fullPath)
-                    ? ""
-                    : formatSize(filesize($fullPath)),
+                "size" => is_dir($fullPath) ? "" : formatSize(filesize($fullPath)),
                 "size_raw" => is_dir($fullPath) ? 0 : filesize($fullPath),
-                "extension" => is_dir($fullPath)
-                    ? ""
-                    : pathinfo($value, PATHINFO_EXTENSION),
-                "date_added" => date(
-                    $GLOBALS["config"]["date_format"],
-                    filectime($fullPath)
-                ),
-                "last_modified" => date(
-                    $GLOBALS["config"]["date_format"],
-                    filemtime($fullPath)
-                ),
+                "extension" => is_dir($fullPath) ? "" : pathinfo($value, PATHINFO_EXTENSION),
+                "date_added" => date($GLOBALS["config"]["date_format"], filectime($fullPath)),
+                "last_modified" => date($GLOBALS["config"]["date_format"], filemtime($fullPath)),
                 "permissions" => getPermissions($fullPath),
                 "icon" => getFileIcon($fullPath),
             ];
@@ -253,22 +204,16 @@ function getDirectoryContents($dir, $sort = "name", $order = "asc")
         }
     }
 
-    // Sort results
     usort($result, function ($a, $b) use ($sort, $order) {
-        // Directories always come first
         if ($a["type"] != $b["type"]) {
             return $a["type"] == "dir" ? -1 : 1;
         }
-
-        // Then sort by the specified field
         $valA = $a[$sort];
         $valB = $b[$sort];
-
         if ($sort == "size") {
             $valA = $a["size_raw"];
             $valB = $b["size_raw"];
         }
-
         if ($order == "asc") {
             return $valA <=> $valB;
         } else {
@@ -279,22 +224,14 @@ function getDirectoryContents($dir, $sort = "name", $order = "asc")
     return $result;
 }
 
-// Include all the other functions from filemanager.php
 function createDirectory($path, $name)
 {
     $dirPath = $path . DIRECTORY_SEPARATOR . $name;
-
     if (!file_exists($dirPath)) {
         if (mkdir($dirPath, 0755)) {
-            return [
-                "status" => "success",
-                "message" => "Directory created successfully",
-            ];
+            return ["status" => "success", "message" => "Directory created successfully"];
         } else {
-            return [
-                "status" => "error",
-                "message" => "Failed to create directory",
-            ];
+            return ["status" => "error", "message" => "Failed to create directory"];
         }
     } else {
         return ["status" => "error", "message" => "Directory already exists"];
@@ -304,13 +241,9 @@ function createDirectory($path, $name)
 function createFile($path, $name, $content = "")
 {
     $filePath = $path . DIRECTORY_SEPARATOR . $name;
-
     if (!file_exists($filePath)) {
         if (file_put_contents($filePath, $content) !== false) {
-            return [
-                "status" => "success",
-                "message" => "File created successfully",
-            ];
+            return ["status" => "success", "message" => "File created successfully"];
         } else {
             return ["status" => "error", "message" => "Failed to create file"];
         }
@@ -322,24 +255,17 @@ function createFile($path, $name, $content = "")
 function updateSettings($timezone, $dateFormat, $fontSize)
 {
     global $config;
-
     if (empty($timezone) && empty($dateFormat) && empty($fontSize)) {
         return ["status" => "error", "message" => "No changes made"];
     }
-
     $data = [
         'timezone' => empty($timezone) ? $config["timezone"] : $timezone,
         'date_format' => empty($dateFormat) ? $config["date_format"] : $dateFormat,
         'font_size' => empty($fontSize) ? $config["font_size"] : $fontSize,
     ];
-
     $file = $config["root_path"] . "/.fm-config";
-
     if (file_put_contents($file, json_encode($data))) {
-        return [
-            "status" => "success",
-            "message" => "Settings updated successfully",
-        ];
+        return ["status" => "success", "message" => "Settings updated successfully", "type" => "confirm"];
     } else {
         return ["status" => "error", "message" => "Failed to update settings"];
     }
@@ -349,21 +275,14 @@ function renameItem($path, $oldName, $newName)
 {
     $oldPath = $path . DIRECTORY_SEPARATOR . $oldName;
     $newPath = $path . DIRECTORY_SEPARATOR . $newName;
-
     if (file_exists($oldPath) && !file_exists($newPath)) {
         if (rename($oldPath, $newPath)) {
-            return [
-                "status" => "success",
-                "message" => "Item renamed successfully",
-            ];
+            return ["status" => "success", "message" => "Item renamed successfully"];
         } else {
             return ["status" => "error", "message" => "Failed to rename item"];
         }
     } else {
-        return [
-            "status" => "error",
-            "message" => "Source does not exist or destination already exists",
-        ];
+        return ["status" => "error", "message" => "Source does not exist or destination already exists"];
     }
 }
 
@@ -371,11 +290,9 @@ function deleteItem($path)
 {
     if (is_dir($path)) {
         $files = array_diff(scandir($path), [".", ".."]);
-
         foreach ($files as $file) {
             deleteItem($path . DIRECTORY_SEPARATOR . $file);
         }
-
         if (rmdir($path)) {
             return true;
         } else {
@@ -396,26 +313,14 @@ function copyItem($source, $destination)
         if (!file_exists($destination)) {
             mkdir($destination, 0755);
         }
-
         $files = array_diff(scandir($source), [".", ".."]);
-
         foreach ($files as $file) {
-            copyItem(
-                $source . DIRECTORY_SEPARATOR . $file,
-                $destination . DIRECTORY_SEPARATOR . $file
-            );
+            copyItem($source . DIRECTORY_SEPARATOR . $file, $destination . DIRECTORY_SEPARATOR . $file);
         }
-
-        return [
-            "status" => "success",
-            "message" => "Directory copied successfully",
-        ];
+        return ["status" => "success", "message" => "Directory copied successfully"];
     } else {
         if (copy($source, $destination)) {
-            return [
-                "status" => "success",
-                "message" => "File copied successfully",
-            ];
+            return ["status" => "success", "message" => "File copied successfully"];
         } else {
             return ["status" => "error", "message" => "Failed to copy file"];
         }
@@ -425,28 +330,18 @@ function copyItem($source, $destination)
 function changePermissions($path, $mode)
 {
     if (chmod($path, octdec($mode))) {
-        return [
-            "status" => "success",
-            "message" => "Permissions changed successfully",
-        ];
+        return ["status" => "success", "message" => "Permissions changed successfully"];
     } else {
-        return [
-            "status" => "error",
-            "message" => "Failed to change permissions",
-        ];
+        return ["status" => "error", "message" => "Failed to change permissions"];
     }
 }
 
 function compressItems($items, $destination, $type = "zip")
 {
-
     global $config;
 
     if (count($items) < 1) {
-        return [
-            "status" => "error",
-            "message" => "No selected items to compress",
-        ];
+        return ["status" => "error", "message" => "No selected items to compress"];
     }
 
     switch ($type) {
@@ -456,7 +351,6 @@ function compressItems($items, $destination, $type = "zip")
                 $response = ["status" => "error", "message" => "Trash directory not found"];
                 break;
             }
-
             $items = scandir($trashDir);
             $deleted = 0;
             foreach ($items as $item) {
@@ -471,31 +365,18 @@ function compressItems($items, $destination, $type = "zip")
                     }
                 }
             }
-
-            $response = [
-                "status" => "success",
-                "message" => "Trash emptied ($deleted item(s) deleted)"
-            ];
+            $response = ["status" => "success", "message" => "Trash emptied ($deleted item(s) deleted)"];
             break;
         case "zip":
             $zip = new ZipArchive();
-
             if ($zip->open($destination, ZipArchive::CREATE) === true) {
                 foreach ($items as $item) {
                     if (is_dir($item)) {
-                        $files = new RecursiveIteratorIterator(
-                            new RecursiveDirectoryIterator($item),
-                            RecursiveIteratorIterator::LEAVES_ONLY
-                        );
-
+                        $files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($item), RecursiveIteratorIterator::LEAVES_ONLY);
                         foreach ($files as $file) {
                             if (!$file->isDir()) {
                                 $filePath = $file->getRealPath();
-                                $relativePath = substr(
-                                    $filePath,
-                                    strlen(dirname($item)) + 1
-                                );
-
+                                $relativePath = substr($filePath, strlen(dirname($item)) + 1);
                                 $zip->addFile($filePath, $relativePath);
                             }
                         }
@@ -503,490 +384,267 @@ function compressItems($items, $destination, $type = "zip")
                         $zip->addFile($item, basename($item));
                     }
                 }
-
                 $zip->close();
-                return [
-                    "status" => "success",
-                    "message" => "Files compressed successfully (ZIP)",
-                ];
+                return ["status" => "success", "message" => "Files compressed successfully (ZIP)"];
             } else {
-                return [
-                    "status" => "error",
-                    "message" => "Failed to create ZIP archive",
-                ];
+                return ["status" => "error", "message" => "Failed to create ZIP archive"];
             }
             break;
-
         case "tar":
             $phar = new PharData($destination);
-
             foreach ($items as $item) {
                 $phar->addFile($item, basename($item));
             }
-
-            return [
-                "status" => "success",
-                "message" => "Files compressed successfully (TAR)",
-            ];
+            return ["status" => "success", "message" => "Files compressed successfully (TAR)"];
             break;
-
         case "gzip":
             if (count($items) > 1) {
-                return [
-                    "status" => "error",
-                    "message" => "GZip can only compress one file at a time",
-                ];
+                return ["status" => "error", "message" => "GZip can only compress one file at a time"];
             }
-
             $content = file_get_contents($items[0]);
             $gzContent = gzencode($content, 9);
             file_put_contents($destination, $gzContent);
-
-            return [
-                "status" => "success",
-                "message" => "File compressed successfully (GZip)",
-            ];
+            return ["status" => "success", "message" => "File compressed successfully (GZip)"];
             break;
-
         default:
-            return [
-                "status" => "error",
-                "message" => "Unknown compression type",
-            ];
+            return ["status" => "error", "message" => "Unknown compression type"];
     }
 }
 
-// Function to move item to trash
 function moveToTrash($source, $currentPath, $config)
 {
-    // Create trash directory if it doesn't exist
     $trashDir = $config["root_path"] . "/.trash";
     if (!file_exists($trashDir)) {
         mkdir($trashDir, 0755, true);
     }
-
-    // Get the item name from the source path
     $itemName = basename($source);
-
-    // Create a unique name if a file with the same name already exists in trash
     $destinationPath = $trashDir . "/" . $itemName;
     $counter = 1;
-
     $originalName = pathinfo($itemName, PATHINFO_FILENAME);
     $extension = pathinfo($itemName, PATHINFO_EXTENSION);
-
     while (file_exists($destinationPath)) {
         if ($extension) {
-            $destinationPath =
-                $trashDir .
-                "/" .
-                $originalName .
-                " (" .
-                $counter .
-                ")." .
-                $extension;
+            $destinationPath = $trashDir . "/" . $originalName . " (" . $counter . ")." . $extension;
         } else {
-            $destinationPath =
-                $trashDir . "/" . $originalName . " (" . $counter . ")";
+            $destinationPath = $trashDir . "/" . $originalName . " (" . $counter . ")";
         }
         $counter++;
     }
-
-    // Move the item to trash
     if (rename($source, $destinationPath)) {
-        // Create metadata file to store original location
         $metaFilename = $destinationPath . ".trashinfo";
         $metadata = [
-            "original_path" =>
-            str_replace($config["root_path"], "", $currentPath) .
-                "/" .
-                $itemName,
+            "original_path" => str_replace($config["root_path"], "", $currentPath) . "/" . $itemName,
             "deletion_date" => date("Y-m-d H:i:s"),
             "original_name" => $itemName,
         ];
-
-        file_put_contents(
-            $metaFilename,
-            json_encode($metadata, JSON_PRETTY_PRINT)
-        );
-
+        file_put_contents($metaFilename, json_encode($metadata, JSON_PRETTY_PRINT));
         return true;
     }
-
     return false;
 }
 
-// Function to restore an item from trash
 function restoreFromTrash($source, $config)
 {
-    // Check if metadata file exists
     $metaFilename = $source . ".trashinfo";
     if (!file_exists($metaFilename)) {
         return ["status" => "error", "message" => "Trash metadata not found"];
     }
-
-    // Read metadata
     $metadata = json_decode(file_get_contents($metaFilename), true);
     if (!$metadata || !isset($metadata["original_path"])) {
         return ["status" => "error", "message" => "Invalid trash metadata"];
     }
-
-    // Construct destination path
     $destPath = $config["root_path"] . $metadata["original_path"];
     $destDir = dirname($destPath);
-
-    // Create destination directory if it doesn't exist
     if (!file_exists($destDir)) {
         if (!mkdir($destDir, 0755, true)) {
-            return [
-                "status" => "error",
-                "message" => "Failed to create destination directory",
-            ];
+            return ["status" => "error", "message" => "Failed to create destination directory"];
         }
     }
-
-    // Check if destination already exists
     if (file_exists($destPath)) {
-        // Create a unique name if a file with the same name already exists
         $originalName = pathinfo($destPath, PATHINFO_FILENAME);
         $extension = pathinfo($destPath, PATHINFO_EXTENSION);
         $counter = 1;
-
         $newDestPath = $destPath;
         while (file_exists($newDestPath)) {
             if ($extension) {
-                $newDestPath =
-                    $destDir .
-                    "/" .
-                    $originalName .
-                    " (restored " .
-                    $counter .
-                    ")." .
-                    $extension;
+                $newDestPath = $destDir . "/" . $originalName . " (restored " . $counter . ")." . $extension;
             } else {
-                $newDestPath =
-                    $destDir .
-                    "/" .
-                    $originalName .
-                    " (restored " .
-                    $counter .
-                    ")";
+                $newDestPath = $destDir . "/" . $originalName . " (restored " . $counter . ")";
             }
             $counter++;
         }
-
         $destPath = $newDestPath;
     }
-
-    // Move the item back to original location
     if (rename($source, $destPath)) {
-        // Delete metadata file
         if (file_exists($metaFilename)) {
             unlink($metaFilename);
         }
-        return [
-            "status" => "success",
-            "message" => "Item restored successfully",
-        ];
+        return ["status" => "success", "message" => "Item restored successfully"];
     }
-
     return ["status" => "error", "message" => "Failed to restore item"];
 }
 
-// Function to extract archives
 function extractArchive($source, $destination, $config)
 {
-    // Make sure destination exists
     if (!file_exists($destination)) {
         if (!mkdir($destination, 0755, true)) {
-            return [
-                "status" => "error",
-                "message" => "Failed to create destination directory",
-            ];
+            return ["status" => "error", "message" => "Failed to create destination directory"];
         }
     }
-
-    // Get file extension to determine archive type
     $extension = strtolower(pathinfo($source, PATHINFO_EXTENSION));
-
-    // Handle different archive types
     switch ($extension) {
         case "zip":
             return extractZip($source, $destination);
-
         case "tar":
             return extractTar($source, $destination);
-
         case "gz":
         case "gzip":
             return extractGzip($source, $destination);
-
         case "bz2":
         case "bzip2":
             return extractBzip2($source, $destination);
-
         case "rar":
             return extractRar($source, $destination);
-
         case "7z":
             return extract7Zip($source, $destination);
-
         default:
-            return [
-                "status" => "error",
-                "message" => "Unsupported archive type: " . $extension,
-            ];
+            return ["status" => "error", "message" => "Unsupported archive type: " . $extension];
     }
 }
 
-// Extract ZIP archive
 function extractZip($source, $destination)
 {
     $zip = new ZipArchive();
     $res = $zip->open($source);
-
     if ($res === true) {
         $zip->extractTo($destination);
         $zip->close();
-        return [
-            "status" => "success",
-            "message" => "ZIP archive extracted successfully",
-        ];
+        return ["status" => "success", "message" => "ZIP archive extracted successfully"];
     } else {
-        return [
-            "status" => "error",
-            "message" =>
-            "Failed to open ZIP archive (Error code: " . $res . ")",
-        ];
+        return ["status" => "error", "message" => "Failed to open ZIP archive (Error code: " . $res . ")"];
     }
 }
 
-// Extract TAR archive
 function extractTar($source, $destination)
 {
     try {
         $phar = new PharData($source);
-        $phar->extractTo($destination, null, true); // Extract all files, overwrite
-        return [
-            "status" => "success",
-            "message" => "TAR archive extracted successfully",
-        ];
+        $phar->extractTo($destination, null, true);
+        return ["status" => "success", "message" => "TAR archive extracted successfully"];
     } catch (Exception $e) {
-        return [
-            "status" => "error",
-            "message" => "Failed to extract TAR archive: " . $e->getMessage(),
-        ];
+        return ["status" => "error", "message" => "Failed to extract TAR archive: " . $e->getMessage()];
     }
 }
 
-// Extract GZIP archive
 function extractGzip($source, $destination)
 {
-    // GZIP usually contains a single file
     $basename = basename($source, ".gz");
     if (substr($basename, -4) === ".tar") {
-        // Handle .tar.gz files
         try {
             $phar = new PharData($source);
             $phar->extractTo($destination, null, true);
-            return [
-                "status" => "success",
-                "message" => "TAR.GZ archive extracted successfully",
-            ];
+            return ["status" => "success", "message" => "TAR.GZ archive extracted successfully"];
         } catch (Exception $e) {
-            return [
-                "status" => "error",
-                "message" =>
-                "Failed to extract TAR.GZ archive: " . $e->getMessage(),
-            ];
+            return ["status" => "error", "message" => "Failed to extract TAR.GZ archive: " . $e->getMessage()];
         }
     } else {
-        // Regular .gz file (single file)
         $destFile = $destination . DIRECTORY_SEPARATOR . $basename;
-
         $sfp = gzopen($source, "rb");
         $fp = fopen($destFile, "wb");
-
         if (!$sfp || !$fp) {
-            return [
-                "status" => "error",
-                "message" => "Failed to open files for extraction",
-            ];
+            return ["status" => "error", "message" => "Failed to open files for extraction"];
         }
-
         while (!gzeof($sfp)) {
             fwrite($fp, gzread($sfp, 4096));
         }
-
         gzclose($sfp);
         fclose($fp);
-
-        return [
-            "status" => "success",
-            "message" => "GZIP file extracted successfully",
-        ];
+        return ["status" => "success", "message" => "GZIP file extracted successfully"];
     }
 }
 
-// Extract BZIP2 archive
 function extractBzip2($source, $destination)
 {
-    // BZIP2 usually contains a single file
     $basename = basename($source, ".bz2");
     if (substr($basename, -4) === ".tar") {
-        // Handle .tar.bz2 files
         try {
             $phar = new PharData($source);
             $phar->extractTo($destination, null, true);
-            return [
-                "status" => "success",
-                "message" => "TAR.BZ2 archive extracted successfully",
-            ];
+            return ["status" => "success", "message" => "TAR.BZ2 archive extracted successfully"];
         } catch (Exception $e) {
-            return [
-                "status" => "error",
-                "message" =>
-                "Failed to extract TAR.BZ2 archive: " . $e->getMessage(),
-            ];
+            return ["status" => "error", "message" => "Failed to extract TAR.BZ2 archive: " . $e->getMessage()];
         }
     } else {
-        // Regular .bz2 file (single file)
         $destFile = $destination . DIRECTORY_SEPARATOR . $basename;
-
         $sfp = bzopen($source, "r");
         $fp = fopen($destFile, "w");
-
         if (!$sfp || !$fp) {
-            return [
-                "status" => "error",
-                "message" => "Failed to open files for extraction",
-            ];
+            return ["status" => "error", "message" => "Failed to open files for extraction"];
         }
-
         while (!feof($sfp)) {
             fwrite($fp, bzread($sfp, 4096));
         }
-
         bzclose($sfp);
         fclose($fp);
-
-        return [
-            "status" => "success",
-            "message" => "BZIP2 file extracted successfully",
-        ];
+        return ["status" => "success", "message" => "BZIP2 file extracted successfully"];
     }
 }
 
-// Extract RAR archive (requires rar extension or unrar command)
 function extractRar($source, $destination)
 {
-    // Try using RarArchive class if available
     if (class_exists("RarArchive")) {
         $rar = RarArchive::open($source);
         if ($rar === false) {
-            return [
-                "status" => "error",
-                "message" => "Failed to open RAR archive",
-            ];
+            return ["status" => "error", "message" => "Failed to open RAR archive"];
         }
-
         $entries = $rar->getEntries();
         foreach ($entries as $entry) {
             $entry->extract($destination);
         }
-
         $rar->close();
-        return [
-            "status" => "success",
-            "message" => "RAR archive extracted successfully",
-        ];
-    }
-    // Try using unrar command
-    elseif (function_exists("exec")) {
-        $command =
-            "unrar x -o+ " .
-            escapeshellarg($source) .
-            " " .
-            escapeshellarg($destination);
+        return ["status" => "success", "message" => "RAR archive extracted successfully"];
+    } elseif (function_exists("exec")) {
+        $command = "unrar x -o+ " . escapeshellarg($source) . " " . escapeshellarg($destination);
         $output = [];
         $returnVar = 0;
-
         exec($command, $output, $returnVar);
-
         if ($returnVar === 0) {
-            return [
-                "status" => "success",
-                "message" =>
-                "RAR archive extracted successfully using unrar command",
-            ];
+            return ["status" => "success", "message" => "RAR archive extracted successfully using unrar command"];
         } else {
-            return [
-                "status" => "error",
-                "message" =>
-                "Failed to extract RAR archive using unrar command",
-            ];
+            return ["status" => "error", "message" => "Failed to extract RAR archive using unrar command"];
         }
     } else {
-        return [
-            "status" => "error",
-            "message" =>
-            "RAR extraction not supported - PHP RAR extension or exec() function required",
-        ];
+        return ["status" => "error", "message" => "RAR extraction not supported - PHP RAR extension or exec() function required"];
     }
 }
 
-// Extract 7Zip archive (requires 7zip command)
 function extract7Zip($source, $destination)
 {
     if (function_exists("exec")) {
-        $command =
-            "7z x " .
-            escapeshellarg($source) .
-            " -o" .
-            escapeshellarg($destination) .
-            " -y";
+        $command = "7z x " . escapeshellarg($source) . " -o" . escapeshellarg($destination) . " -y";
         $output = [];
         $returnVar = 0;
-
         exec($command, $output, $returnVar);
-
         if ($returnVar === 0) {
-            return [
-                "status" => "success",
-                "message" => "7Zip archive extracted successfully",
-            ];
+            return ["status" => "success", "message" => "7Zip archive extracted successfully"];
         } else {
-            return [
-                "status" => "error",
-                "message" =>
-                "Failed to extract 7Zip archive: " . implode("\n", $output),
-            ];
+            return ["status" => "error", "message" => "Failed to extract 7Zip archive: " . implode("\n", $output)];
         }
     } else {
-        return [
-            "status" => "error",
-            "message" =>
-            "7Zip extraction not supported - exec() function required",
-        ];
+        return ["status" => "error", "message" => "7Zip extraction not supported - exec() function required"];
     }
 }
 
 // Handle File Manager Operations
 if (isset($_POST["action"]) || isset($_GET["action"])) {
     $action = isset($_POST["action"]) ? $_POST["action"] : $_GET["action"];
-
-    // Default response
     $response = ["status" => "error", "message" => "Unknown action"];
 
-    // Current directory
-    $currentPath = isset($_POST["path"])
-        ? $config["root_path"] . $_POST["path"]
-        : $config["root_path"];
+    $currentPath = isset($_POST["path"]) ? $config["root_path"] . $_POST["path"] : $config["root_path"];
     if (isset($_GET["path"])) {
         $currentPath = $config["root_path"] . $_GET["path"];
     }
 
-    // Security check
     if (!securityCheck($currentPath) && $action != "search") {
         $response = ["status" => "error", "message" => "Security violation"];
     } else {
@@ -997,77 +655,47 @@ if (isset($_POST["action"]) || isset($_GET["action"])) {
                 $font = isset($_POST["fontSize"]) ? $_POST["fontSize"] : "";
                 $response = updateSettings($tmz, $dt, $font);
                 break;
-
             case "list":
-                $sort = isset($_POST["sort"])
-                    ? $_POST["sort"]
-                    : (isset($_GET["sort"])
-                        ? $_GET["sort"]
-                        : "name");
-                $order = isset($_POST["order"])
-                    ? $_POST["order"]
-                    : (isset($_GET["order"])
-                        ? $_GET["order"]
-                        : "asc");
+                $sort = isset($_POST["sort"]) ? $_POST["sort"] : (isset($_GET["sort"]) ? $_GET["sort"] : "name");
+                $order = isset($_POST["order"]) ? $_POST["order"] : (isset($_GET["order"]) ? $_GET["order"] : "asc");
                 $response = [
                     "status" => "success",
                     "data" => getDirectoryContents($currentPath, $sort, $order),
-                    "current_path" => str_replace(
-                        $config["root_path"],
-                        "",
-                        $currentPath
-                    ),
+                    "current_path" => str_replace($config["root_path"], "", $currentPath),
                 ];
                 break;
-
-
             case "tree":
-                $response = [
-                    "status" => "success",
-                    "data" => buildDirectoryTree($config["root_path"]),
-                ];
+                $response = ["status" => "success", "data" => buildDirectoryTree($config["root_path"])];
                 break;
-
             case "create_dir":
                 $name = isset($_POST["name"]) ? $_POST["name"] : "";
                 $response = createDirectory($currentPath, $name);
                 break;
-
             case "create_file":
                 $name = isset($_POST["name"]) ? $_POST["name"] : "";
                 $content = isset($_POST["content"]) ? $_POST["content"] : "";
                 $response = createFile($currentPath, $name, $content);
                 break;
-
             case "rename":
                 $oldName = isset($_POST["old_name"]) ? $_POST["old_name"] : "";
                 $newName = isset($_POST["new_name"]) ? $_POST["new_name"] : "";
                 $response = renameItem($currentPath, $oldName, $newName);
                 break;
-
             case "trash":
                 $itemsArray = isset($_POST["items"]) ? $_POST["items"] : "";
                 $items = explode(",", $itemsArray);
                 $status = true;
-                $messages = [];
                 $movedCount = 0;
                 $failedCount = 0;
-
                 if ($itemsArray == "") {
-                    $response = [
-                        "status" => "error",
-                        "message" => "No items selected",
-                    ];
+                    $response = ["status" => "error", "message" => "No items selected"];
                     break;
                 }
-
                 foreach ($items as $item) {
                     $itemPath = $currentPath . DIRECTORY_SEPARATOR . $item;
-
                     if (!file_exists($itemPath)) {
                         continue;
                     }
-
                     if (moveToTrash($itemPath, $currentPath, $config)) {
                         $movedCount++;
                     } else {
@@ -1075,41 +703,23 @@ if (isset($_POST["action"]) || isset($_GET["action"])) {
                         $status = false;
                     }
                 }
-
-                $response = [
-                    "status" => $status ? "success" : "error",
-                    "message" =>
-                    "Moved $movedCount item(s) to trash" .
-                        ($failedCount > 0
-                            ? ", Failed $failedCount item(s)"
-                            : ""),
-                ];
+                $response = ["status" => $status ? "success" : "error", "message" => "Moved $movedCount item(s) to trash" . ($failedCount > 0 ? ", Failed $failedCount item(s)" : "")];
                 break;
-
             case "delete":
                 $itemsArray = isset($_POST["items"]) ? $_POST["items"] : "";
                 $status = true;
-                $messages = [];
                 $movedCount = 0;
                 $failedCount = 0;
-                $fmconfig = ".fm-config";
                 $items = explode(",", $itemsArray);
-
                 if ($itemsArray == "") {
-                    $response = [
-                        "status" => "error",
-                        "message" => "No items selected",
-                    ];
+                    $response = ["status" => "error", "message" => "No items selected"];
                     break;
                 }
-
                 foreach ($items as $item) {
                     $itemPath = $currentPath . DIRECTORY_SEPARATOR . $item;
-
                     if (!file_exists($itemPath)) {
                         continue;
                     }
-
                     if (deleteItem($itemPath)) {
                         $movedCount++;
                     } else {
@@ -1117,153 +727,75 @@ if (isset($_POST["action"]) || isset($_GET["action"])) {
                         $status = false;
                     }
                 }
-
-                $response = [
-                    "status" => $status ? "success" : "error",
-                    "message" =>
-                    "Deleted $movedCount item(s) successfully" .
-                        ($failedCount > 0
-                            ? ", $failedCount item(s) Failed to delete"
-                            : ""),
-                ];
-
+                $response = ["status" => $status ? "success" : "error", "message" => "Deleted $movedCount item(s) successfully" . ($failedCount > 0 ? ", $failedCount item(s) Failed to delete" : "")];
                 break;
-
             case "restore":
                 $itemsArray = isset($_POST["items"]) ? $_POST["items"] : "";
                 $items = explode(",", $itemsArray);
                 if ($itemsArray == "") {
-                    $response = [
-                        "status" => "error",
-                        "message" => "No items selected",
-                    ];
+                    $response = ["status" => "error", "message" => "No items selected"];
                     break;
                 }
                 $status = true;
-                $messages = [];
                 $restoredCount = 0;
                 $failedCount = 0;
-
+                $messages = [];
                 foreach ($items as $item) {
                     $itemPath = $currentPath . DIRECTORY_SEPARATOR . $item;
-
                     $result = restoreFromTrash($itemPath, $config);
-
                     if ($result["status"] === "success") {
                         $restoredCount++;
                         $messages[] = "$item restored successfully";
                     } else {
                         $failedCount++;
                         $status = false;
-                        $messages[] =
-                            "Failed to restore $item: " . $result["message"];
+                        $messages[] = "Failed to restore $item: " . $result["message"];
                     }
                 }
-
-                $response = [
-                    "status" => $status ? "success" : "error",
-                    "message" =>
-                    "Restored $restoredCount item(s)" .
-                        ($failedCount > 0
-                            ? ", Failed $failedCount item(s)"
-                            : ""),
-                ];
+                $response = ["status" => $status ? "success" : "error", "message" => "Restored $restoredCount item(s)" . ($failedCount > 0 ? ", Failed $failedCount item(s)" : "")];
                 break;
-
             case "copy":
                 $itemsArray = isset($_POST["items"]) ? $_POST["items"] : "";
                 $items = explode(",", $itemsArray);
                 if ($itemsArray == "") {
-                    $response = [
-                        "status" => "error",
-                        "message" => "No items selected",
-                    ];
+                    $response = ["status" => "error", "message" => "No items selected"];
                     break;
                 }
-
-                $destination = isset($_POST["destination"])
-                    ? $config["root_path"] . $_POST["destination"]
-                    : "";
-
+                $destination = isset($_POST["destination"]) ? $config["root_path"] . $_POST["destination"] : "";
                 if (!securityCheck($destination)) {
-                    $response = [
-                        "status" => "error",
-                        "message" => "Security violation on destination",
-                    ];
+                    $response = ["status" => "error", "message" => "Security violation on destination"];
                     break;
                 }
-
                 $status = true;
                 $messages = [];
-
                 foreach ($items as $item) {
                     $sourcePath = $currentPath . DIRECTORY_SEPARATOR . $item;
                     $destPath = $destination . DIRECTORY_SEPARATOR . $item;
-
                     $result = copyItem($sourcePath, $destPath);
-
                     if ($result["status"] != "success") {
                         $status = false;
                     }
-
                     $messages[] = $result["message"];
                 }
-
-                $response = [
-                    "status" => $status ? "success" : "error",
-                    "message" => implode(", ", $messages),
-                ];
+                $response = ["status" => $status ? "success" : "error", "message" => implode(", ", $messages)];
                 break;
-
             case "move":
                 $itemsArray = isset($_POST["items"]) ? $_POST["items"] : "";
                 $items = explode(",", $itemsArray);
                 if ($itemsArray == "") {
-                    $response = [
-                        "status" => "error",
-                        "message" => "No items selected",
-                    ];
+                    $response = ["status" => "error", "message" => "No items selected"];
                     break;
                 }
-                $destination = isset($_POST["destination"])
-                    ? $config["root_path"] . $_POST["destination"]
-                    : "";
-
+                $destination = isset($_POST["destination"]) ? $config["root_path"] . $_POST["destination"] : "";
                 if (!securityCheck($destination)) {
-                    $response = [
-                        "status" => "error",
-                        "message" => "Security violation on destination",
-                    ];
+                    $response = ["status" => "error", "message" => "Security violation on destination"];
                     break;
-
-                    $movedCount = 0;
-                    $messages = [];
-
-                    foreach ($items as $item) {
-                        $sourcePath = $config["root_path"] . $item;
-                        $destPath = rtrim($destination, "/") . "/" . basename($item);
-
-                        if (rename($sourcePath, $destPath)) {
-                            $movedCount++;
-                            $messages[] = "Moved $item successfully";
-                        } else {
-                            $messages[] = "Failed to move $item";
-                        }
-                    }
-
-                    $response = [
-                        "status" => $movedCount > 0 ? "success" : "error",
-                        "message" => implode("\n", $messages),
-                    ];
                 }
-
                 $status = true;
                 $messages = [];
-
                 foreach ($items as $item) {
                     $sourcePath = $currentPath . DIRECTORY_SEPARATOR . $item;
                     $destPath = $destination . DIRECTORY_SEPARATOR . $item;
-
                     if (!file_exists($destPath)) {
                         if (rename($sourcePath, $destPath)) {
                             $messages[] = "Moved $item successfully";
@@ -1276,33 +808,23 @@ if (isset($_POST["action"]) || isset($_GET["action"])) {
                         $messages[] = "$item already exists in destination";
                     }
                 }
-
-                $response = [
-                    "status" => $status ? "success" : "error",
-                    "message" => implode(", ", $messages),
-                ];
+                $response = ["status" => $status ? "success" : "error", "message" => implode(", ", $messages)];
                 break;
-
             case "permissions":
                 $item = isset($_POST["item"]) ? $_POST["item"] : "";
                 $mode = isset($_POST["mode"]) ? $_POST["mode"] : "0644";
-
                 $itemPath = $currentPath . DIRECTORY_SEPARATOR . $item;
                 $response = changePermissions($itemPath, $mode);
                 break;
-
             case "compress":
                 $itemsArray = isset($_POST["items"]) ? $_POST["items"] : "";
                 $type = isset($_POST["type"]) ? $_POST["type"] : "zip";
                 $name = isset($_POST["name"]) ? $_POST["name"] : "archive_" . time();
-
                 $items = explode(",", $itemsArray);
-
                 $itemPaths = [];
                 foreach ($items as $item) {
                     $itemPaths[] = $currentPath . DIRECTORY_SEPARATOR . $item;
                 }
-
                 $extension = "";
                 switch ($type) {
                     case "zip":
@@ -1315,167 +837,82 @@ if (isset($_POST["action"]) || isset($_GET["action"])) {
                         $extension = ".gz";
                         break;
                 }
-
                 $destination = $currentPath . DIRECTORY_SEPARATOR . $name . $extension;
                 $response = compressItems($itemPaths, $destination, $type);
                 break;
-
             case "read_file":
                 $item = isset($_POST["item"]) ? $_POST["item"] : "";
                 $itemPath = $currentPath . DIRECTORY_SEPARATOR . $item;
-
                 if (file_exists($itemPath) && is_file($itemPath)) {
                     $content = file_get_contents($itemPath);
-                    $response = [
-                        "status" => "success",
-                        "data" => [
-                            "content" => $content,
-                            "editable" => true,
-                        ],
-                    ];
+                    $response = ["status" => "success", "data" => ["content" => $content, "editable" => true]];
                 } else {
-                    $response = [
-                        "status" => "error",
-                        "message" => "File not found",
-                    ];
+                    $response = ["status" => "error", "message" => "File not found"];
                 }
                 break;
-
             case "save_file":
                 $item = isset($_POST["item"]) ? $_POST["item"] : "";
                 $content = isset($_POST["content"]) ? $_POST["content"] : "";
-
                 $itemPath = $currentPath . DIRECTORY_SEPARATOR . $item;
-
                 if (file_exists($itemPath) && is_file($itemPath)) {
                     if (file_put_contents($itemPath, $content) !== false) {
-                        $response = [
-                            "status" => "success",
-                            "message" => "File saved successfully",
-                        ];
+                        $response = ["status" => "success", "message" => "File saved successfully"];
                     } else {
-                        $response = [
-                            "status" => "error",
-                            "message" => "Failed to save file",
-                        ];
+                        $response = ["status" => "error", "message" => "Failed to save file"];
                     }
                 } else {
-                    $response = [
-                        "status" => "error",
-                        "message" => "File not found",
-                    ];
+                    $response = ["status" => "error", "message" => "File not found"];
                 }
                 break;
-
             case "search":
                 $query = isset($_POST["query"]) ? $_POST["query"] : "";
-                $path = isset($_POST["path"])
-                    ? $config["root_path"] . $_POST["path"]
-                    : $config["root_path"];
-
+                $path = isset($_POST["path"]) ? $config["root_path"] . $_POST["path"] : $config["root_path"];
                 if (!securityCheck($path)) {
-                    $response = [
-                        "status" => "error",
-                        "message" => "Security violation",
-                    ];
+                    $response = ["status" => "error", "message" => "Security violation"];
                     break;
                 }
-
                 $results = [];
-
                 if (!empty($query)) {
-                    $iterator = new RecursiveIteratorIterator(
-                        new RecursiveDirectoryIterator(
-                            $path,
-                            RecursiveDirectoryIterator::SKIP_DOTS
-                        ),
-                        RecursiveIteratorIterator::SELF_FIRST
-                    );
-
+                    $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path, RecursiveDirectoryIterator::SKIP_DOTS), RecursiveIteratorIterator::SELF_FIRST);
                     foreach ($iterator as $file) {
                         if (stripos($file->getFilename(), $query) !== false) {
-                            $relativePath = str_replace(
-                                $config["root_path"],
-                                "",
-                                $file->getPathname()
-                            );
-
-                            $results[] = [
-                                "name" => $file->getFilename(),
-                                "path" => $relativePath,
-                                "type" => $file->isDir() ? "dir" : "file",
-                                "size" => $file->isDir()
-                                    ? ""
-                                    : formatSize($file->getSize()),
-                                "last_modified" => date(
-                                    $config["date_format"],
-                                    $file->getMTime()
-                                ),
-                                "icon" => getFileIcon($file->getPathname()),
-                            ];
+                            $relativePath = str_replace($config["root_path"], "", $file->getPathname());
+                            $results[] = ["name" => $file->getFilename(), "path" => $relativePath, "type" => $file->isDir() ? "dir" : "file", "size" => $file->isDir() ? "" : formatSize($file->getSize()), "last_modified" => date($config["date_format"], $file->getMTime()), "icon" => getFileIcon($file->getPathname())];
                         }
                     }
                 }
-
                 $response = ["status" => "success", "data" => $results];
                 break;
-
             case "extract":
                 $file = isset($_POST["file"]) ? $_POST["file"] : "";
-                $destination = isset($_POST["destination"])
-                    ? $_POST["destination"]
-                    : "";
-
+                $destination = isset($_POST["destination"]) ? $_POST["destination"] : "";
                 if (empty($file)) {
-                    $response = [
-                        "status" => "error",
-                        "message" => "No file specified for extraction",
-                    ];
+                    $response = ["status" => "error", "message" => "No file specified for extraction"];
                     break;
                 }
-
                 $filePath = $currentPath . DIRECTORY_SEPARATOR . $file;
-
-                // If no destination specified, create a folder with the same name as the archive
                 if (empty($destination)) {
                     $fileInfo = pathinfo($file);
-                    $destination =
-                        $currentPath .
-                        DIRECTORY_SEPARATOR .
-                        $fileInfo["filename"];
+                    $destination = $currentPath . DIRECTORY_SEPARATOR . $fileInfo["filename"];
                 } else {
                     $destination = $config["root_path"] . $destination;
                 }
-
-                // Make sure the destination directory exists
                 if (!file_exists($destination)) {
                     if (!mkdir($destination, 0755, true)) {
-                        $response = [
-                            "status" => "error",
-                            "message" =>
-                            "Failed to create destination directory",
-                        ];
+                        $response = ["status" => "error", "message" => "Failed to create destination directory"];
                         break;
                     }
                 }
-
                 $result = extractArchive($filePath, $destination, $config);
                 $response = $result;
                 break;
-
             case "download":
                 $file = isset($_GET["file"]) ? $_GET["file"] : "";
                 $filePath = $currentPath . DIRECTORY_SEPARATOR . $file;
-
                 if (file_exists($filePath) && is_file($filePath)) {
-                    // Set headers for file download
                     header("Content-Description: File Transfer");
                     header("Content-Type: application/octet-stream");
-                    header(
-                        'Content-Disposition: attachment; filename="' .
-                            basename($filePath) .
-                            '"'
-                    );
+                    header('Content-Disposition: attachment; filename="' . basename($filePath) . '"');
                     header("Expires: 0");
                     header("Cache-Control: must-revalidate");
                     header("Pragma: public");
@@ -1483,16 +920,12 @@ if (isset($_POST["action"]) || isset($_GET["action"])) {
                     readfile($filePath);
                     exit();
                 } else {
-                    $response = [
-                        "status" => "error",
-                        "message" => "File not found",
-                    ];
+                    $response = ["status" => "error", "message" => "File not found"];
                 }
                 break;
         }
     }
 
-    // Return JSON response for AJAX requests
     if ($action != "download") {
         header("Content-Type: application/json");
         echo json_encode($response);
@@ -1514,40 +947,27 @@ function parseSize($size)
 
 if (isset($_FILES["files"])) {
     header("Content-Type: application/json");
-
-    $currentPath = isset($_POST["path"])
-        ? $config["root_path"] . $_POST["path"]
-        : $config["root_path"];
-
+    $currentPath = isset($_POST["path"]) ? $config["root_path"] . $_POST["path"] : $config["root_path"];
     if (!securityCheck($currentPath)) {
-        echo json_encode([
-            "status" => "error",
-            "message" => "Security violation",
-        ]);
+        echo json_encode(["status" => "error", "message" => "Security violation"]);
         exit();
     }
-
     $files = $_FILES["files"];
     $uploaded = 0;
     $failed = 0;
     $failedFiles = [];
-
     for ($i = 0; $i < count($files["name"]); $i++) {
         $fileName = $files["name"][$i];
         $filePath = $currentPath . DIRECTORY_SEPARATOR . $fileName;
-
-        // Check upload error codes
         if ($files["error"][$i] !== UPLOAD_ERR_OK) {
             $failed++;
             $errorMsg = "";
             switch ($files["error"][$i]) {
                 case UPLOAD_ERR_INI_SIZE:
-                    $errorMsg =
-                        "File exceeds upload_max_filesize directive in php.ini";
+                    $errorMsg = "File exceeds upload_max_filesize directive in php.ini";
                     break;
                 case UPLOAD_ERR_FORM_SIZE:
-                    $errorMsg =
-                        "File exceeds MAX_FILE_SIZE directive specified in the HTML form";
+                    $errorMsg = "File exceeds MAX_FILE_SIZE directive specified in the HTML form";
                     break;
                 case UPLOAD_ERR_PARTIAL:
                     $errorMsg = "File was only partially uploaded";
@@ -1570,16 +990,12 @@ if (isset($_FILES["files"])) {
             $failedFiles[] = $fileName . " (" . $errorMsg . ")";
             continue;
         }
-
-        // File size check
         $maxFileSize = parseSize(ini_get('upload_max_filesize'));
         if ($files["size"][$i] > $maxFileSize) {
             $failed++;
             $failedFiles[] = $fileName . " (Exceeds maximum file size limit)";
             continue;
         }
-
-        // Extension check
         if ($config["allowed_extensions"][0] !== "*") {
             $extension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
             if (!in_array($extension, $config["allowed_extensions"])) {
@@ -1588,7 +1004,6 @@ if (isset($_FILES["files"])) {
                 continue;
             }
         }
-
         if (move_uploaded_file($files["tmp_name"][$i], $filePath)) {
             $uploaded++;
         } else {
@@ -1596,17 +1011,10 @@ if (isset($_FILES["files"])) {
             $failedFiles[] = $fileName . " (Server error during move)";
         }
     }
-
-    $response = [
-        "status" => $failed == 0 ? "success" : "partial",
-        "message" => "Uploaded $uploaded file(s)" .
-            ($failed > 0 ? ", Failed $failed file(s)" : ""),
-    ];
-
+    $response = ["status" => $failed == 0 ? "success" : "partial", "message" => "Uploaded $uploaded file(s)" . ($failed > 0 ? ", Failed $failed file(s)" : "")];
     if (!empty($failedFiles)) {
         $response["failedFiles"] = $failedFiles;
     }
-
     echo json_encode($response);
     exit();
 }
@@ -1619,7 +1027,6 @@ foreach ($lines as $line) {
     }
 }
 
-
 $version = explode(" ", $versionInfo);
 $version = end($version);
 
@@ -1627,377 +1034,895 @@ if ($username == null) {
     $username = "";
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
-    <title>File Manager</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Manager — The Kinsmen</title>
     <link rel="icon" href="icon.png" type="image/png">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/coolalertjs@latest/dist/coolalert.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.6/dist/htmx.min.js"></script>
     <style>
+        /* ── Design Tokens ───────────────────────────────────────── */
         :root {
-            --kinsmen-primary: #0c0f25;
-            --kinsmen-secondary: #428bca;
-            --kinsmen-bg: #f8f9fa;
-            --kinsmen-border: #dee2e6;
+            --bg-deep: #0f1117;
+            --bg-main: #1a1d2e;
+            --bg-surface: #1e2235;
+            --bg-elevated: #242840;
+            --bg-hover: rgba(255, 255, 255, 0.04);
+            --bg-selected: rgba(59, 130, 246, 0.12);
+
+            --border-subtle: rgba(255, 255, 255, 0.06);
+            --border-default: rgba(255, 255, 255, 0.10);
+            --border-accent: #3b82f6;
+
+            --text-primary: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --text-link: #60a5fa;
+            --text-link-hover: #93c5fd;
+
+            --accent: #3b82f6;
+            --accent-hover: #2563eb;
+            --accent-success: #10b981;
+            --accent-danger: #ef4444;
+            --accent-warning: #f59e0b;
+
+            --folder-color: #fbbf24;
+
+            --radius-sm: 4px;
+            --radius-md: 6px;
+            --radius-lg: 8px;
+
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
+            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.5);
+            --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.6);
+
+            --font-size: <?= $config["font_size"] ?>;
+            --font-mono: 'Fira Code', 'Cascadia Code', 'Courier New', monospace;
+        }
+
+        /* ── Reset & Base ────────────────────────────────────────── */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
         }
 
         html,
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            font-size: <?= $config["font_size"] ?>;
-            background-color: var(--kinsmen-bg);
+            font-size: var(--font-size);
+            background-color: var(--bg-deep);
+            color: var(--text-primary);
+            height: 100%;
+            margin: 0;
+            overflow: hidden;
         }
 
-        .cool-alert-toast {
-            background-color: var(--kinsmen-primary) !important;
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
         }
 
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--bg-elevated);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent);
+        }
+
+        /* ── Top Header ──────────────────────────────────────────── */
         .top-header {
-            background-color: var(--kinsmen-primary);
-            color: white;
-            padding: 8px 15px;
-            border-bottom: 1px solid var(--kinsmen-border);
+            background: var(--bg-main);
+            border-bottom: 1px solid var(--border-subtle);
+            padding: 7px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 46px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
-        .top-header .brand {
-            font-weight: bold;
-            font-size: 0.875rem;
+        .top-header .brand img {
+            display: block;
         }
 
         .search-container {
-            max-width: 300px;
+            max-width: 280px;
         }
 
-        .main-toolbar {
-            background-color: #e9ecef;
-            padding: 8px 15px;
-            border-bottom: 1px solid var(--kinsmen-border);
-            line-height: 30px;
+        .search-container .input-group .form-control {
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-default);
+            color: var(--text-primary);
+            font-size: 0.8rem;
+            border-radius: var(--radius-sm) 0 0 var(--radius-sm);
         }
 
-        .main-toolbar .btn {
-            font-size: 0.875rem;
-            padding: 4px 8px;
-            margin-right: 5px;
+        .search-container .input-group .form-control:focus {
+            background: var(--bg-elevated);
+            border-color: var(--accent);
+            color: var(--text-primary);
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25);
         }
 
-        .navigation-bar {
-            background-color: #f1f3f4;
-            padding: 8px 15px;
-            border-bottom: 1px solid var(--kinsmen-border);
+        .search-container .input-group .form-control::placeholder {
+            color: var(--text-muted);
         }
 
-        .navigation-bar .btn {
-            font-size: 0.875rem;
-            padding: 4px 8px;
-            margin-right: 5px;
-        }
-
-        .sidebar {
-            background-color: white;
-            border-right: 1px solid var(--kinsmen-border);
-            height: calc(100vh - 120px);
-            overflow-y: auto;
-            padding: 0 10px;
-        }
-
-        .sidebar .folder-tree {
-            font-size: 0.875rem;
-        }
-
-        .sidebar .folder-tree .folder-item {
-            padding: 2px 0;
+        .btn-search {
+            background: var(--accent);
+            border: none;
+            color: #fff;
+            font-size: 0.8rem;
+            padding: 4px 10px;
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
             cursor: pointer;
+            transition: background 0.15s;
+        }
+
+        .btn-search:hover {
+            background: var(--accent-hover);
+            color: #fff;
+        }
+
+        .btn-settings {
+            background: transparent;
+            border: 1px solid var(--border-default);
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            padding: 4px 10px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all 0.15s;
             white-space: nowrap;
         }
 
-        .sidebar .folder-tree .folder-item:hover {
-            background-color: #f8f9fa;
+        .btn-settings:hover {
+            border-color: var(--accent);
+            color: var(--text-link);
+            background: rgba(59, 130, 246, 0.08);
         }
 
-        .sidebar .folder-tree .folder-item.active {
-            background-color: #e3f2fd;
-            color: #1976d2;
-        }
-
-        .sidebar .folder-tree .folder-item i {
-            width: 14px;
-            margin-right: 5px;
-        }
-
-        .main-content {
-            background-color: white;
-            height: calc(100vh - 120px);
-            overflow-y: auto;
-        }
-
-        .file-table {
-            font-size: 0.875rem;
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .file-table th {
-            background-color: #f8f9fa;
-            border-bottom: 2px solid var(--kinsmen-border);
-            padding: 8px;
-            font-weight: 600;
-            color: var(--kinsmen-secondary);
-        }
-
-        .file-table td {
-            padding: 6px 8px;
-            border-bottom: 1px solid #f0f0f0;
-            vertical-align: middle;
-        }
-
-        .file-table tr:hover {
-            background-color: #f8f9fa;
-        }
-
-        .file-table tr.selected {
-            background-color: rgba(13, 110, 253, 0.1);
-        }
-
-        .file-icon {
-            width: 14px;
-            margin-right: 8px;
-        }
-
-        .file-name {
-            color: #000;
-            text-decoration: none;
-            font-weight: 500;
-            cursor: pointer;
-        }
-
-        .file-name:hover {
-            text-decoration: underline;
-        }
-
-        .folder-icon {
-            color: #ffa726;
-        }
-
-        .file-size,
-        .file-date {
-            color: var(--kinsmen-secondary);
-        }
-
-        .permissions {
-            font-family: monospace;
-            font-size: 0.688rem;
-        }
-
-        .checkbox-col {
-            width: 30px;
-        }
-
-        .icon-col {
-            width: 40px;
-        }
-
-        .collapse-all {
-            font-size: 0.875rem;
-            color: var(--kinsmen-secondary);
-            cursor: pointer;
-            margin-bottom: 10px;
-        }
-
-        .btn-sm {
-            font-size: 0.688rem;
-            padding: 2px 6px;
+        /* ── Main Toolbar ────────────────────────────────────────── */
+        .main-toolbar {
+            background: var(--bg-surface);
+            border-bottom: 1px solid var(--border-subtle);
+            padding: 6px 14px;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2px;
+            min-height: 38px;
         }
 
         .header-btns {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
             text-decoration: none;
-            font-size: 0.875rem;
-            margin-right: 15px;
-            color: #495057;
-            transition: color 0.2s;
+            font-size: 0.78rem;
+            color: var(--text-secondary);
+            padding: 4px 8px;
+            border-radius: var(--radius-sm);
+            transition: all 0.15s;
+            white-space: nowrap;
+            border: 1px solid transparent;
         }
 
-        .nav-links {
-            text-decoration: none;
-            font-size: 0.875rem;
-            margin-right: 15px;
-            color: var(--kinsmen-secondary);
-            transition: color 0.2s;
+        .header-btns i {
+            font-size: 0.72rem;
         }
 
-        .header-btns:hover,
-        .nav-links:hover {
-            color: #007bff;
+        .header-btns:hover {
+            color: var(--text-link);
+            background: rgba(59, 130, 246, 0.1);
+            border-color: rgba(59, 130, 246, 0.2);
         }
 
-        .header-btns.disabled,
-        .nav-links.disabled {
+        .header-btns.disabled {
+            color: var(--text-muted) !important;
             pointer-events: none;
-            color: #adb5bd;
-            cursor: not-allowed;
+            opacity: 0.45;
         }
 
-        .header-btns.disabled:hover,
-        .nav-links.disabled:hover {
-            cursor: not-allowed;
-            color: #adb5bd;
+        .toolbar-divider {
+            width: 1px;
+            height: 18px;
+            background: var(--border-subtle);
+            margin: 0 4px;
         }
 
-
-
-        /* Progress bar */
+        /* ── Progress Bar ────────────────────────────────────────── */
         .progress {
-            height: 20px;
-            border-radius: 0;
+            height: 18px;
+            border-radius: var(--radius-sm);
             display: none;
-            text-align: center;
-
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-default);
+            overflow: hidden;
         }
 
         .progress-bar {
             transition: width 0.3s ease;
+            font-size: 0.7rem;
+            font-weight: 600;
+            line-height: 18px;
             text-align: center;
-            line-height: 20px;
+            color: #fff;
+            white-space: nowrap;
+            background: linear-gradient(90deg, var(--accent-success), #059669);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        /* ── Layout Shell ────────────────────────────────────────── */
+        .fm-layout {
+            display: flex;
+            height: calc(100vh - 84px);
+            /* header + toolbar */
+            overflow: hidden;
+        }
+
+        /* ── Sidebar ─────────────────────────────────────────────── */
+        .sidebar {
+            width: 220px;
+            min-width: 220px;
+            background: var(--bg-main);
+            border-right: 1px solid var(--border-subtle);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .sidebar-path-bar {
+            padding: 8px 10px;
+            border-bottom: 1px solid var(--border-subtle);
+            display: flex;
+            gap: 4px;
+        }
+
+        .sidebar-path-bar .form-control {
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-default);
+            color: var(--text-primary);
             font-size: 0.75rem;
-            font-weight: bold;
-            color: white;
-            overflow: visible;
-            text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.9);
+            padding: 3px 7px;
+            border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+            min-width: 0;
+        }
+
+        .sidebar-path-bar .form-control:focus {
+            background: var(--bg-elevated);
+            border-color: var(--accent);
+            color: var(--text-primary);
+            box-shadow: none;
+            outline: none;
+        }
+
+        .sidebar-path-bar .form-control::placeholder {
+            color: var(--text-muted);
+        }
+
+        .sidebar-path-bar .btn-icon {
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-default);
+            color: var(--text-secondary);
+            padding: 3px 8px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.15s;
             white-space: nowrap;
         }
 
-        /* Context menu */
-        .context-menu {
-            position: absolute;
-            z-index: 1000;
-            background-color: #fff;
-            border: 1px solid #dee2e6;
-            border-radius: 0.25rem;
-            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
-            min-width: 180px;
-            display: none;
+        .sidebar-path-bar .btn-icon:first-child {
+            border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+            border-right: none;
         }
 
-        .context-menu-item {
-            padding: 0.5rem 1rem;
+        .sidebar-path-bar .btn-icon:last-child {
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+        }
+
+        .sidebar-path-bar .btn-icon:hover {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #fff;
+        }
+
+        .collapse-all-btn {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            text-align: center;
+            padding: 4px;
             cursor: pointer;
+            border-bottom: 1px solid var(--border-subtle);
+            transition: color 0.15s;
+            letter-spacing: 0.03em;
         }
 
-        .context-menu-item:hover {
-            background-color: #f8f9fa;
+        .collapse-all-btn:hover {
+            color: var(--text-link);
         }
 
-        .context-menu-divider {
-            border-top: 1px solid #dee2e6;
-            margin: 0.25rem 0;
+        .sidebar-home-item {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            padding: 7px 10px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            border-bottom: 1px solid var(--border-subtle);
+            transition: all 0.15s;
         }
 
-        /* Drag and drop */
-        .drag-over {
-            background-color: rgba(13, 110, 253, 0.1);
-            border: 2px dashed #086bfc !important;
+        .sidebar-home-item:hover {
+            color: var(--text-link);
+            background: var(--bg-hover);
         }
 
-        /* File tree styles */
+        .sidebar-home-item i {
+            color: var(--accent);
+            font-size: 0.75rem;
+        }
+
+        .tree-scroll {
+            overflow-y: auto;
+            flex: 1;
+            padding: 6px 0;
+        }
+
+        /* ── File Tree ───────────────────────────────────────────── */
         .file-tree {
             list-style: none;
-            padding-left: 0;
+            padding: 0;
+            margin: 0;
+        }
+
+        .file-tree li {
+            margin: 0;
         }
 
         .file-tree .folder-item {
             display: flex;
             align-items: center;
-            padding: 2px 5px;
-            margin: 1px 0;
-            border-radius: 3px;
+            gap: 5px;
+            padding: 3px 10px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
             cursor: pointer;
+            border-radius: 0;
+            transition: all 0.12s;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .file-tree .folder-item:hover {
-            background-color: #f8f9fa;
+            background: var(--bg-hover);
+            color: var(--text-primary);
         }
 
         .file-tree .folder-item.active {
-            background-color: #e3f2fd;
-            color: #1976d2;
+            background: rgba(59, 130, 246, 0.12);
+            color: var(--text-link);
+            border-left: 2px solid var(--accent);
         }
 
-        .file-tree .caret {
-            margin-right: 5px;
-            transition: transform 0.2s;
+        .file-tree .folder-item .fa-folder {
+            color: var(--folder-color);
+            font-size: 0.75rem;
         }
 
-        .file-tree .caret.expanded {
+        .file-tree .folder-item .caret {
+            font-size: 0.6rem;
+            color: var(--text-muted);
+            transition: transform 0.15s;
+            min-width: 10px;
+        }
+
+        .file-tree .folder-item .caret.expanded {
             transform: rotate(90deg);
         }
 
         .file-tree .nested {
             display: none;
-            padding-left: 20px;
+            padding-left: 16px;
         }
 
         .file-tree .nested.active {
             display: block;
         }
 
-        .code-editor {
-            color: #67a0f5;
-            font-family: "Fira Code", "Courier New", monospace;
+        /* ── Main Content Area ───────────────────────────────────── */
+        .main-content {
+            flex: 1;
+            background: var(--bg-deep);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* ── Navigation Bar ──────────────────────────────────────── */
+        .navigation-bar {
+            background: var(--bg-surface);
+            border-bottom: 1px solid var(--border-subtle);
+            padding: 5px 12px;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2px;
+        }
+
+        .nav-links {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            text-decoration: none;
+            font-size: 0.78rem;
+            color: var(--text-secondary);
+            padding: 3px 8px;
+            border-radius: var(--radius-sm);
+            transition: all 0.15s;
+            white-space: nowrap;
+        }
+
+        .nav-links i {
+            font-size: 0.72rem;
+        }
+
+        .nav-links:hover {
+            color: var(--text-link);
+            background: rgba(59, 130, 246, 0.08);
+        }
+
+        .nav-links.disabled {
+            color: var(--text-muted) !important;
+            pointer-events: none;
+            opacity: 0.45;
+        }
+
+        /* ── File Table ──────────────────────────────────────────── */
+        .file-table-wrap {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0;
+        }
+
+        .file-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.8rem;
+        }
+
+        .file-table thead th {
+            background: var(--bg-surface);
+            border-bottom: 1px solid var(--border-default);
+            padding: 7px 10px;
+            font-weight: 600;
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--text-muted);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            white-space: nowrap;
+        }
+
+        .file-table tbody tr.file-item {
+            border-bottom: 1px solid var(--border-subtle);
+            transition: background 0.1s;
+            cursor: pointer;
+        }
+
+        .file-table tbody tr.file-item:hover {
+            background: var(--bg-hover);
+        }
+
+        .file-table tbody tr.file-item.selected {
+            background: var(--bg-selected);
+        }
+
+        .file-table td {
+            padding: 5px 10px;
+            vertical-align: middle;
+            color: var(--text-primary);
+        }
+
+        .checkbox-col {
+            width: 32px;
+        }
+
+        .icon-col {
+            width: 32px;
+            padding-right: 0;
+        }
+
+        .file-name {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .file-name:hover {
+            color: var(--text-link);
+            text-decoration: underline;
+        }
+
+        .folder-icon {
+            color: var(--folder-color);
+        }
+
+        .file-size,
+        .file-date,
+        .file-type {
+            color: var(--text-secondary);
             font-size: 0.75rem;
-            line-height: 1.5;
+        }
+
+        .file-type {
+            color: var(--text-muted);
+            font-size: 0.7rem;
+        }
+
+        .permissions {
+            font-family: var(--font-mono);
+            font-size: 0.68rem;
+            color: var(--text-muted);
+            letter-spacing: 0.02em;
+        }
+
+        .form-check-input {
+            background-color: var(--bg-elevated);
+            border-color: var(--border-default);
+            cursor: pointer;
+        }
+
+        .form-check-input:checked {
+            background-color: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .form-check-input:focus {
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25);
+        }
+
+        /* ── Footer bar ──────────────────────────────────────────── */
+        .fm-footer {
+            background: var(--bg-surface);
+            border-top: 1px solid var(--border-subtle);
+            padding: 4px 14px;
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            text-align: center;
+        }
+
+        .fm-footer a {
+            color: var(--text-link);
+            text-decoration: none;
+        }
+
+        .fm-footer a:hover {
+            color: var(--text-link-hover);
+            text-decoration: underline;
+        }
+
+        /* ── Context Menu ────────────────────────────────────────── */
+        .context-menu {
+            position: fixed;
+            z-index: 9999;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-default);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-lg);
+            min-width: 170px;
+            display: none;
+            padding: 4px 0;
+            backdrop-filter: blur(8px);
+        }
+
+        .context-menu-item {
+            padding: 6px 14px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.12s;
+        }
+
+        .context-menu-item i {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            width: 14px;
+        }
+
+        .context-menu-item:hover {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--text-primary);
+        }
+
+        .context-menu-item:hover i {
+            color: var(--text-link);
+        }
+
+        .context-menu-item.danger {
+            color: #f87171;
+        }
+
+        .context-menu-item.danger i {
+            color: #f87171;
+        }
+
+        .context-menu-item.danger:hover {
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .context-menu-divider {
+            border-top: 1px solid var(--border-subtle);
+            margin: 3px 0;
+        }
+
+        /* ── Drag-over ───────────────────────────────────────────── */
+        .drag-over {
+            background: rgba(59, 130, 246, 0.05) !important;
+            outline: 2px dashed var(--accent) !important;
+            outline-offset: -4px;
+        }
+
+        /* ── Modals ──────────────────────────────────────────────── */
+        .modal-content {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-default);
+            border-radius: var(--radius-lg);
+            color: var(--text-primary);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .modal-header {
+            background: var(--bg-elevated);
+            border-bottom: 1px solid var(--border-subtle);
+            padding: 10px 16px;
+            border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+        }
+
+        .modal-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .modal-body {
+            padding: 16px;
+        }
+
+        .modal-footer {
+            background: var(--bg-elevated);
+            border-top: 1px solid var(--border-subtle);
+            padding: 10px 16px;
+            border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+        }
+
+        .form-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+        }
+
+        .form-control,
+        .form-select {
+            background: var(--bg-deep);
+            border: 1px solid var(--border-default);
+            color: var(--text-primary);
+            font-size: 0.82rem;
+            border-radius: var(--radius-sm);
+            transition: border-color 0.15s, box-shadow 0.15s;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            background: var(--bg-deep);
+            border-color: var(--accent);
+            color: var(--text-primary);
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+        }
+
+        .form-control::placeholder {
+            color: var(--text-muted);
+        }
+
+        .form-control-sm {
+            font-size: 0.78rem;
+            padding: 4px 8px;
+        }
+
+        .form-text,
+        small {
+            color: var(--text-muted);
+            font-size: 0.72rem;
+        }
+
+        /* Buttons */
+        .btn {
+            border-radius: var(--radius-sm);
+            font-size: 0.8rem;
+            padding: 5px 12px;
+            font-weight: 500;
+            transition: all 0.15s;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #fff;
+        }
+
+        .btn-primary:hover,
+        .btn-primary:focus {
+            background: var(--accent-hover);
+            border-color: var(--accent-hover);
+            color: #fff;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25);
+        }
+
+        .btn-danger {
+            background: var(--accent-danger);
+            border-color: var(--accent-danger);
+            color: #fff;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+            border-color: #dc2626;
+            color: #fff;
+        }
+
+        .btn-outline-secondary {
+            border-color: var(--border-default);
+            color: var(--text-secondary);
+            background: transparent;
+        }
+
+        .btn-outline-secondary:hover {
+            background: var(--bg-elevated);
+            color: var(--text-primary);
+            border-color: var(--border-default);
+        }
+
+        .btn-outline-light {
+            border-color: var(--border-default);
+            color: var(--text-secondary);
+            background: transparent;
+        }
+
+        .btn-outline-light:hover {
+            background: var(--bg-elevated);
+            color: var(--text-primary);
+            border-color: var(--border-default);
+        }
+
+        .btn-sm {
+            padding: 3px 8px;
+            font-size: 0.75rem;
+        }
+
+        /* Alert boxes inside modals */
+        .alert {
+            font-size: 0.8rem;
+            border-radius: var(--radius-sm);
+            padding: 8px 12px;
+        }
+
+        .alert-info {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.25);
+            color: #93c5fd;
+        }
+
+        .alert-danger {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.25);
+            color: #fca5a5;
+        }
+
+        /* Radio/Checkbox in modals */
+        .form-check-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .form-check {
+            margin-bottom: 3px;
+        }
+
+        /* Border in permissions boxes */
+        .border {
+            border-color: var(--border-default) !important;
+        }
+
+        .border.p-2 {
+            background: var(--bg-deep);
+            border-radius: var(--radius-sm);
+        }
+
+        /* Code editor textarea */
+        .code-editor {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            line-height: 1.6;
+            color: #93c5fd;
+            background: var(--bg-deep);
+            border: 1px solid var(--border-default);
+            border-radius: var(--radius-sm);
             padding: 10px;
             resize: vertical;
             width: 100%;
         }
 
-        .modal-header {
-            padding: 10px;
+        .code-editor:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+            outline: none;
         }
 
-        #deleteItems li {
-            font-size: 0.5rem;
-
+        /* Table inside modals */
+        .table {
+            color: var(--text-primary);
+            font-size: 0.8rem;
         }
 
-        .htmx-request #submit-button {
-            cursor: not-allowed;
-            opacity: 0.5;
+        .table thead th {
+            background: var(--bg-elevated);
+            color: var(--text-muted);
+            border-bottom: 1px solid var(--border-default);
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 7px 10px;
         }
 
-
-        .htmx-request .spinner-border {
-            display: inline-block !important;
+        .table tbody td {
+            border-bottom: 1px solid var(--border-subtle);
+            padding: 6px 10px;
         }
 
+        .table-hover tbody tr:hover {
+            background: var(--bg-hover);
+        }
+
+        /* Spinner */
         .spinner-container {
             display: flex;
-            justify-content: center;
             align-items: center;
-            background-color: transparent;
+            justify-content: center;
         }
 
         .spinners {
-            border: 2px solid #fff;
-            border-top: 2px solid #9733eb;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top-color: #fff;
             border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            background: transparent !important;
-            animation: spin 1s linear infinite;
+            animation: spin 0.7s linear infinite;
         }
 
         @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
+            to {
                 transform: rotate(360deg);
             }
         }
@@ -2008,180 +1933,216 @@ if ($username == null) {
 
         .htmx-request .my-indicator {
             display: inline;
-
         }
 
         .htmx-request.my-indicator {
             display: inline;
         }
+
+        /* CoolAlert override */
+        .cool-alert-toast {
+            background-color: var(--bg-elevated) !important;
+            color: var(--text-primary) !important;
+        }
+
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 48px 16px;
+            color: var(--text-muted);
+        }
+
+        .empty-state i {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            opacity: 0.3;
+        }
+
+        .empty-state p {
+            font-size: 0.82rem;
+        }
     </style>
 </head>
 
 <body>
-    <!-- Top Header -->
-    <div class="top-header d-flex justify-content-between align-items-center">
-        <div class="d-flex align-items-center">
-            <span class="brand"><img src="logo.png" width="100px" /></span>
+
+    <!-- ── Top Header ──────────────────────────────────────────── -->
+    <div class="top-header">
+        <div class="brand">
+            <img src="logo.png" height="26" alt="The Kinsmen">
         </div>
-        <div class="d-flex align-items-center">
-            <div class="search-container me-3">
+        <div class="d-flex align-items-center gap-2">
+            <div class="search-container">
                 <div class="input-group input-group-sm">
-                    <input type="text" class="form-control form-control-sm" id="search-input" placeholder="Search files">
-                    <button class="btn btn-primary btn-sm ms-1" id="search-btn">Go</button>
+                    <input type="text" class="form-control" id="search-input" placeholder="Search files…">
+                    <button class="btn-search" id="search-btn"><i class="fas fa-search"></i></button>
                 </div>
             </div>
-            <button class="btn btn-sm btn-outline-light" data-bs-toggle="modal" data-bs-target="#settingsModal">
+            <button class="btn-settings" data-bs-toggle="modal" data-bs-target="#settingsModal">
                 <i class="fas fa-cog"></i> Settings
             </button>
         </div>
     </div>
 
-    <!-- Main Toolbar -->
-    <div class="d-flex align-items-center main-toolbar mb-2 py-1 px-3">
-        <div>
-            <a href="#" class="header-btns" id="new-file-btn"><i class="fas fa-file"></i> File</a>
-            <a href="#" class="header-btns" id="new-folder-btn"><i class="fas fa-folder"></i> Folder</a>
-            <a href="#" class="header-btns disabled" id="copy-btn"><i class="fas fa-copy"></i> Copy</a>
-            <a href="#" class="header-btns disabled" id="move-btn"><i class="fas fa-arrows-alt"></i> Move</a>
-            <a href="#" class="header-btns" id="upload-btn"><i class="fas fa-upload"></i> Upload</a>
-            <a href="#" class="header-btns disabled" id="download-btn"><i class="fas fa-download"></i> Download</a>
-            <a href="#" class="header-btns disabled" id="delete-btn"><i class="fas fa-trash"></i> Delete</a>
-            <a href="#" class="header-btns disabled" id="restore-btn"><i class="fas fa-undo"></i> Restore</a>
-            <a href="#" class="header-btns disabled" id="rename-btn"><i class="fas fa-tag"></i> Rename</a>
-            <a href="#" class="header-btns disabled" id="edit-btn"><i class="fas fa-edit"></i> Edit</a>
-            <a href="#" class="header-btns disabled" id="permissions-btn"><i class="fas fa-shield-alt"></i> Permissions</a>
-            <a href="#" class="header-btns disabled" id="extract-btn"><i class="fas fa-file-archive"></i> Extract</a>
-            <a href="#" class="header-btns disabled" id="compress-btn"><i class="fas fa-compress"></i> Compress</a>
-            <input type="file" id="file-upload" multiple style="display: none;">
-        </div>
-        <!-- Progress Bar -->
-        <div class="progress ms-auto me-3 w-25 border border-success" id="upload-progress">
-            <div class="progress-bar progress-bar-striped progress-bar-animated bg-success"
-                role="progressbar"
-                style="width: 0%"
-                aria-valuenow="0"
-                aria-valuemin="0"
-                aria-valuemax="100">
-                Preparing upload...
+    <!-- ── Main Toolbar ─────────────────────────────────────────── -->
+    <div class="main-toolbar">
+        <a href="#" class="header-btns" id="new-file-btn"><i class="fas fa-file"></i> New File</a>
+        <a href="#" class="header-btns" id="new-folder-btn"><i class="fas fa-folder-plus"></i> New Folder</a>
+        <div class="toolbar-divider"></div>
+        <a href="#" class="header-btns disabled" id="copy-btn"><i class="fas fa-copy"></i> Copy</a>
+        <a href="#" class="header-btns disabled" id="move-btn"><i class="fas fa-arrows-alt"></i> Move</a>
+        <div class="toolbar-divider"></div>
+        <a href="#" class="header-btns" id="upload-btn"><i class="fas fa-upload"></i> Upload</a>
+        <a href="#" class="header-btns disabled" id="download-btn"><i class="fas fa-download"></i> Download</a>
+        <div class="toolbar-divider"></div>
+        <a href="#" class="header-btns disabled" id="rename-btn"><i class="fas fa-tag"></i> Rename</a>
+        <a href="#" class="header-btns disabled" id="edit-btn"><i class="fas fa-code"></i> Edit</a>
+        <a href="#" class="header-btns disabled" id="permissions-btn"><i class="fas fa-shield-alt"></i> Permission</a>
+        <div class="toolbar-divider"></div>
+        <a href="#" class="header-btns disabled" id="extract-btn"><i class="fas fa-box-open"></i> Extract</a>
+        <a href="#" class="header-btns disabled" id="compress-btn"><i class="fas fa-file-archive"></i> Compress</a>
+        <div class="toolbar-divider"></div>
+        <a href="#" class="header-btns disabled" id="delete-btn"><i class="fas fa-trash"></i> Delete</a>
+        <a href="#" class="header-btns disabled" id="restore-btn"><i class="fas fa-undo"></i> Restore</a>
+        <input type="file" id="file-upload" multiple style="display:none">
+
+        <!-- Upload progress -->
+        <div class="progress ms-auto" style="width:220px" id="upload-progress">
+            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width:0%"
+                aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                Preparing…
             </div>
         </div>
     </div>
 
+    <!-- ── App Layout ────────────────────────────────────────────── -->
+    <div class="fm-layout">
 
-
-    <!-- Main Content Area -->
-    <div class="container-fluid px-2">
-        <div class="row g-0">
-            <!-- Sidebar -->
-            <div class="col-md-2 sidebar border border-0">
-                <div class="search-container" style="margin-bottom: 10px;">
-                    <div class="input-group input-group-sm">
-                        <button class="btn btn-sm btn-outline-secondary rounded-0" id="breadcrumb-home-btn"><i class="fas fa-home"></i></button>
-                        <input type="text" class="form-control form-control-sm border-secondary rounded-0" id="breadcrumb">
-                        <button class="btn btn-secondary btn-sm rounded-0" id="breadcrumb-search-btn">Go</button>
-                    </div>
-                </div>
-                <div class="collapse-all border py-1 text-center" id="collapse-all-btn">Collapse All</div>
-                <div class="folder-tree" id="directory-tree">
-                    <div class="folder-item active">
-                        <i class="fas fa-home"></i> (/home/<?= $username ?>)
-                    </div>
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-path-bar">
+                <button class="btn-icon" id="breadcrumb-home-btn" title="Home"><i class="fas fa-home"></i></button>
+                <input type="text" class="form-control" id="breadcrumb" placeholder="/path">
+                <button class="btn-icon" id="breadcrumb-search-btn">Go</button>
+            </div>
+            <div class="collapse-all-btn" id="collapse-all-btn">
+                <i class="fas fa-compress-alt"></i> Collapse All
+            </div>
+            <div class="sidebar-home-item" id="sidebar-home-item">
+                <i class="fas fa-home"></i>
+                <span>/home/<?= htmlspecialchars($username) ?></span>
+            </div>
+            <div class="tree-scroll">
+                <div id="directory-tree">
                     <ul class="file-tree">
-                        <li><i class="fas fa-spinner fa-spin mt-2"></i> Loading...</li>
+                        <li style="padding: 8px 14px; font-size: 0.78rem; color: var(--text-muted);">
+                            <i class="fas fa-spinner fa-spin me-2"></i> Loading…
+                        </li>
                     </ul>
                 </div>
             </div>
+        </div>
 
+        <!-- Main File Area -->
+        <div class="main-content" id="dropzone">
+            <!-- Nav bar -->
+            <div class="navigation-bar">
+                <a href="#" class="nav-links" id="home-btn"><i class="fas fa-home"></i> Home</a>
+                <a href="#" class="nav-links" id="up-btn"><i class="fas fa-level-up-alt"></i> Up</a>
+                <a href="#" class="nav-links" id="reload-btn"><i class="fas fa-sync-alt"></i> Reload</a>
+                <a href="#" class="nav-links" id="select-all-btn"><i class="fas fa-check-square"></i> Select All</a>
+                <a href="#" class="nav-links disabled" id="unselect-all-btn"><i class="fas fa-square"></i> Unselect</a>
+                <a href="#" class="nav-links" id="view-trash-btn"><i class="fas fa-trash-alt"></i> Trash</a>
+                <a href="#" class="nav-links" id="sort-btn"><i class="fas fa-sort-amount-down"></i> Sort</a>
+            </div>
 
-            <!-- Main File Area -->
-            <div class="col-md-10 main-content" id="dropzone">
-                <!-- Navigation Bar -->
-                <div class="navigation-bar border mb-2 py-1">
-                    <a href="#" class="nav-links" id="home-btn"><i class="fas fa-home"></i> Home</a>
-                    <a href="#" class="nav-links" id="up-btn"><i class="fas fa-level-up-alt"></i> Up One Level</a>
-                    <a href="#" class="nav-links" id="reload-btn"><i class="fas fa-sync"></i> Reload</a>
-                    <a href="#" class="nav-links" id="select-all-btn"><i class="fas fa-check-square"></i> Select All</a>
-                    <a href="#" class="nav-links disabled" id="unselect-all-btn"><i class="fas fa-square"></i> Unselect All</a>
-                    <a href="#" class="nav-links" id="view-trash-btn"><i class="fas fa-trash-alt"></i> View Trash</a>
-                    <a href="#" class="nav-links" id="sort-btn"><i class="fa-solid fa-arrow-up-wide-short"></i> Sort</a>
-                </div>
-                <div class="border-start h-100">
-                    <table class="table table-sm table-striped border-top border-end file-table mb-4">
-                        <thead>
-                            <tr>
-                                <th class="checkbox-col"><input type="checkbox" class="form-check-input border-dark" id="select-all-checkbox"></th>
-                                <th class="icon-col"></th>
-                                <th>Name</th>
-                                <th>Size</th>
-                                <th>Last Modified</th>
-                                <th>Type</th>
-                                <th>Permissions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="files-list">
-                            <tr>
-                                <td colspan="7" class="text-center p-2">Loading files...</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+            <!-- File table -->
+            <div class="file-table-wrap">
+                <table class="file-table">
+                    <thead>
+                        <tr>
+                            <th class="checkbox-col">
+                                <input type="checkbox" class="form-check-input" id="select-all-checkbox">
+                            </th>
+                            <th class="icon-col"></th>
+                            <th>Name</th>
+                            <th>Size</th>
+                            <th>Modified</th>
+                            <th>Type</th>
+                            <th>Permissions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="files-list">
+                        <tr>
+                            <td colspan="7" class="text-center" style="padding: 32px; color: var(--text-muted);">
+                                <i class="fas fa-spinner fa-spin me-2"></i> Loading files…
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Footer -->
+            <div class="fm-footer py-2 pb-3">
+                &copy; <?= date('Y') ?> <a href="https://thekinsmen.net" target="_blank">The Kinsmen</a>
+                &nbsp;·&nbsp; <?= htmlspecialchars($versionInfo) ?>
+                &nbsp;·&nbsp; <a href="https://github.com/JosephChuks/php-file-manager-with-code-editor"
+                    target="_blank"><i class="fa-brands fa-github"></i> GitHub</a>
             </div>
         </div>
-        <div class="text-center py-2">
-            &copy; <?= date('Y') ?> <a href="https://thekinsmen.net" class="text-decoration-none" target="_blank">The Kinsmen</a> | <?= $versionInfo ?> | <a href="https://github.com/JosephChuks/php-file-manager-with-code-editor" class="text-decoration-none" target="_blank"><i class="fa-brands fa-github"></i> github</a>
-        </div>
     </div>
 
-
-    <!-- Context Menu -->
+    <!-- ── Context Menu ──────────────────────────────────────────── -->
     <div class="context-menu" id="context-menu">
-        <div class="context-menu-item" id="ctx-open"><i class="fas fa-folder-open me-2"></i> Open</div>
-        <div class="context-menu-item" id="ctx-download"><i class="fas fa-download me-2"></i> Download</div>
-        <div class="context-menu-item" id="ctx-edit"><i class="fas fa-edit me-2"></i> Edit</div>
+        <div class="context-menu-item" id="ctx-open"><i class="fas fa-folder-open"></i> Open</div>
+        <div class="context-menu-item" id="ctx-download"><i class="fas fa-download"></i> Download</div>
+        <div class="context-menu-item" id="ctx-edit"><i class="fas fa-code"></i> Edit</div>
         <div class="context-menu-divider"></div>
-        <div class="context-menu-item" id="ctx-copy"><i class="fas fa-copy me-2"></i> Copy</div>
-        <div class="context-menu-item" id="ctx-cut"><i class="fas fa-cut me-2"></i> Move</div>
+        <div class="context-menu-item" id="ctx-copy"><i class="fas fa-copy"></i> Copy</div>
+        <div class="context-menu-item" id="ctx-cut"><i class="fas fa-arrows-alt"></i> Move</div>
         <div class="context-menu-divider"></div>
-        <div class="context-menu-item" id="ctx-rename"><i class="fas fa-tag me-2"></i> Rename</div>
-        <div class="context-menu-item" id="ctx-permissions"><i class="fas fa-shield-alt me-2"></i> Permissions</div>
-        <div class="context-menu-item" id="ctx-compress"><i class="fas fa-compress me-2"></i> Compress</div>
+        <div class="context-menu-item" id="ctx-rename"><i class="fas fa-tag"></i> Rename</div>
+        <div class="context-menu-item" id="ctx-permissions"><i class="fas fa-shield-alt"></i> Permissions</div>
+        <div class="context-menu-item" id="ctx-compress"><i class="fas fa-file-archive"></i> Compress</div>
         <div class="context-menu-divider"></div>
-        <div class="context-menu-item text-danger" id="ctx-delete"><i class="fas fa-trash me-2"></i> Delete</div>
+        <div class="context-menu-item danger" id="ctx-delete"><i class="fas fa-trash"></i> Delete</div>
     </div>
 
-    <!-- Modals -->
-    <!-- Extract Modal -->
+    <!-- ── Modals ─────────────────────────────────────────────────── -->
+
+    <!-- Extract -->
     <div class="modal fade" id="extractModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form hx-post=""
-                    hx-trigger="submit, keyup[enter]"
-                    hx-swap="none">
+                <form hx-post="" hx-trigger="submit" hx-swap="none">
                     <div class="modal-header">
-                        <h5 class="modal-title fw-bold fs-6">Extract Archive</h5>
+                        <h5 class="modal-title"><i class="fas fa-box-open me-2 text-warning"></i>Extract Archive</h5>
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label class="form-label">Archive: <span id="extractFileName" class="fw-bold"></span></label>
+                            <label class="form-label">Archive: <strong id="extractFileName"
+                                    style="color:var(--text-link)"></strong></label>
                         </div>
                         <div class="mb-3">
-                            <label for="extractPath" class="form-label">Extract to</label>
-                            <input type="text" class="form-control" id="extractPath" name="destination" placeholder="Extraction path">
+                            <label class="form-label">Extract to</label>
+                            <input type="text" class="form-control" id="extractPath" name="destination"
+                                placeholder="Extraction path">
                             <input type="hidden" name="action" value="extract">
                             <input type="hidden" name="path" id="extractPathName">
                             <input type="hidden" name="file" id="extractFileNameValue">
-                            <small class="text-muted">Leave empty to extract to a folder with the same name as the archive</small>
+                            <div class="form-text mt-1">Leave empty to extract into a folder matching the archive name
+                            </div>
                         </div>
                         <div class="alert alert-info">
-                            <i class="bi bi-info-circle me-2"></i>
-                            The archive will be extracted to the specified location. If the directory doesn't exist, it will be created.
+                            <i class="fas fa-info-circle me-1"></i>
+                            The destination directory will be created if it doesn't exist.
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary d-flex justify-content-center align-items-center">
+                        <button type="submit" class="btn btn-primary d-flex align-items-center gap-2">
                             <span>Extract</span>
-                            <div class="spinner-container ms-2 my-indicator">
+                            <div class="spinner-container my-indicator">
                                 <div class="spinners"></div>
                             </div>
                         </button>
@@ -2191,29 +2152,27 @@ if ($username == null) {
         </div>
     </div>
 
-    <!-- Create Folder Modal -->
+    <!-- New Folder -->
     <div class="modal fade" id="newFolderModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form hx-post=""
-                    hx-trigger="submit"
-                    hx-swap="none">
+                <form hx-post="" hx-trigger="submit" hx-swap="none">
                     <div class="modal-header">
-                        <h5 class="modal-title fw-bold fs-6">Create New Folder</h5>
+                        <h5 class="modal-title"><i class="fas fa-folder-plus me-2"
+                                style="color:var(--folder-color)"></i>Create New Folder</h5>
                     </div>
                     <div class="modal-body">
-                        <div class="mb-3">
-                            <label for="folderName" class="form-label">Folder Name</label>
-                            <input type="text" name="name" class="form-control" id="folderName" placeholder="Enter folder name">
-                            <input type="hidden" name="path" id="currenPathValue">
-                            <input type="hidden" name="action" value="create_dir">
-                        </div>
+                        <label class="form-label">Folder Name</label>
+                        <input type="text" name="name" class="form-control" id="folderName" placeholder="my-new-folder"
+                            autofocus>
+                        <input type="hidden" name="path" id="currenPathValue">
+                        <input type="hidden" name="action" value="create_dir">
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary d-flex justify-content-center align-items-center">
+                        <button type="submit" class="btn btn-primary d-flex align-items-center gap-2">
                             <span>Create</span>
-                            <div class="spinner-container ms-2 my-indicator">
+                            <div class="spinner-container my-indicator">
                                 <div class="spinners"></div>
                             </div>
                         </button>
@@ -2223,34 +2182,33 @@ if ($username == null) {
         </div>
     </div>
 
-    <!-- Create File Modal -->
+    <!-- New File -->
     <div class="modal fade" id="newFileModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
-                <form hx-post=""
-                    hx-trigger="submit"
-                    hx-swap="none">
+                <form hx-post="" hx-trigger="submit" hx-swap="none">
                     <div class="modal-header">
-                        <h5 class="modal-title fw-bold fs-6">Create New File</h5>
-
+                        <h5 class="modal-title"><i class="fas fa-file-plus me-2" style="color:var(--accent)"></i>Create
+                            New File</h5>
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label for="fileName" class="form-label">File Name</label>
-                            <input type="text" name="name" class="form-control" id="fileName" placeholder="Enter file name">
+                            <label class="form-label">File Name</label>
+                            <input type="text" name="name" class="form-control" id="fileName" placeholder="index.php">
                             <input type="hidden" name="path" id="filePath">
                             <input type="hidden" name="action" value="create_file">
                         </div>
-                        <div class="mb-3">
-                            <label for="fileContent" class="form-label">Content</label>
-                            <textarea class="code-editor" name="content" id="fileContent" rows="10"></textarea>
+                        <div class="mb-1">
+                            <label class="form-label">Content</label>
                         </div>
+                        <textarea class="code-editor" name="content" id="fileContent" rows="12"
+                            placeholder="// File contents..."></textarea>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary d-flex justify-content-center align-items-center">
+                        <button type="submit" class="btn btn-primary d-flex align-items-center gap-2">
                             <span>Create</span>
-                            <div class="spinner-container ms-2 my-indicator">
+                            <div class="spinner-container my-indicator">
                                 <div class="spinners"></div>
                             </div>
                         </button>
@@ -2260,30 +2218,27 @@ if ($username == null) {
         </div>
     </div>
 
-    <!-- Rename Modal -->
+    <!-- Rename -->
     <div class="modal fade" id="renameModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form hx-post=""
-                    hx-trigger="submit"
-                    hx-swap="none">
+                <form hx-post="" hx-trigger="submit" hx-swap="none">
                     <div class="modal-header">
-                        <h5 class="modal-title fw-bold fs-6">Rename Item</h5>
+                        <h5 class="modal-title"><i class="fas fa-tag me-2" style="color:var(--accent)"></i>Rename Item
+                        </h5>
                     </div>
                     <div class="modal-body">
-                        <div class="mb-3">
-                            <label for="newName" class="form-label">New Name</label>
-                            <input type="text" name="new_name" class="form-control" id="newName">
-                            <input type="hidden" name="old_name" id="oldName">
-                            <input type="hidden" name="path" id="renamePath">
-                            <input type="hidden" name="action" value="rename">
-                        </div>
+                        <label class="form-label">New Name</label>
+                        <input type="text" name="new_name" class="form-control" id="newName">
+                        <input type="hidden" name="old_name" id="oldName">
+                        <input type="hidden" name="path" id="renamePath">
+                        <input type="hidden" name="action" value="rename">
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary d-flex justify-content-center align-items-center">
+                        <button type="submit" class="btn btn-primary d-flex align-items-center gap-2">
                             <span>Rename</span>
-                            <div class="spinner-container ms-2 my-indicator">
+                            <div class="spinner-container my-indicator">
                                 <div class="spinners"></div>
                             </div>
                         </button>
@@ -2293,39 +2248,42 @@ if ($username == null) {
         </div>
     </div>
 
-    <!-- Settings Folder Modal -->
+    <!-- Settings -->
     <div class="modal fade" id="settingsModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form hx-post=""
-                    hx-trigger="submit"
-                    hx-swap="none">
+                <form hx-post="" hx-trigger="submit" hx-swap="none">
                     <div class="modal-header">
-                        <h5 class="modal-title fw-bold fs-6">Update Settings</h5>
-
+                        <h5 class="modal-title"><i class="fas fa-cog me-2" style="color:var(--accent)"></i>File Manager
+                            Settings</h5>
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label for="timezone" class="form-label">Timezone</label>
-                            <input type="text" class="form-control" name="timezone" value="<?= $config['timezone'] ?>" placeholder="UTC" required>
+                            <label class="form-label">Timezone</label>
+                            <input type="text" class="form-control" name="timezone"
+                                value="<?= htmlspecialchars($config['timezone']) ?>" placeholder="Africa/Lagos"
+                                required>
                             <input type="hidden" name="action" value="settings">
-                            <small>PHP timezone only</small>
+                            <div class="form-text">PHP timezone identifier (e.g. Africa/Lagos, UTC)</div>
                         </div>
                         <div class="mb-3">
-                            <label for="dateformat" class="form-label">Date Format</label>
-                            <input type="text" class="form-control" name="dateformat" value="<?= $config['date_format'] ?>" placeholder="Y-m-d H:i:s" required>
-                            <small>PHP date format only</small>
+                            <label class="form-label">Date Format</label>
+                            <input type="text" class="form-control" name="dateformat"
+                                value="<?= htmlspecialchars($config['date_format']) ?>" placeholder="M j Y, g:i A"
+                                required>
+                            <div class="form-text">PHP date() format string</div>
                         </div>
                         <div class="mb-3">
-                            <label for="fontSize" class="form-label">Font Size</label>
-                            <input type="text" class="form-control" name="fontSize" value="<?= $config['font_size'] ?>" placeholder="16px" required>
+                            <label class="form-label">Font Size</label>
+                            <input type="text" class="form-control" name="fontSize"
+                                value="<?= htmlspecialchars($config['font_size']) ?>" placeholder="14px" required>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary d-flex justify-content-center align-items-center">
-                            <span>Update</span>
-                            <div class="spinner-container ms-2 my-indicator">
+                        <button type="submit" class="btn btn-primary d-flex align-items-center gap-2">
+                            <span>Save Settings</span>
+                            <div class="spinner-container my-indicator">
                                 <div class="spinners"></div>
                             </div>
                         </button>
@@ -2335,84 +2293,80 @@ if ($username == null) {
         </div>
     </div>
 
-    <!-- Permissions Modal -->
+    <!-- Permissions -->
     <div class="modal fade" id="permissionsModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form hx-post=""
-                    hx-trigger="submit"
-                    hx-swap="none">
+                <form hx-post="" hx-trigger="submit" hx-swap="none">
                     <div class="modal-header">
-                        <h5 class="modal-title fw-bold fs-6">Change Permissions</h5>
-
+                        <h5 class="modal-title"><i class="fas fa-shield-alt me-2" style="color:var(--accent)"></i>Change
+                            Permissions</h5>
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label class="form-label">Item: <span id="permItem"></span></label>
+                            <label class="form-label">Item: <span id="permItem"
+                                    style="color:var(--text-link)"></span></label>
                         </div>
                         <div class="mb-3">
-                            <label for="permValue" class="form-label">Octal Permission Value</label>
-                            <input type="text" name="mode" class="form-control" id="permValue" placeholder="e.g. 0755">
+                            <label class="form-label">Octal Value</label>
+                            <input type="text" name="mode" class="form-control" id="permValue" placeholder="0755">
                             <input type="hidden" name="path" id="permissionPath">
                             <input type="hidden" name="item" id="permItemValue">
                             <input type="hidden" name="action" value="permissions">
                         </div>
-                        <div class="row mb-3">
+                        <div class="row mb-2 g-2">
                             <div class="col-4">
-                                <div class="border p-2">
-                                    <div class="form-check">
-                                        <input class="form-check-input perm-check" type="checkbox" id="ownerRead" data-value="400">
-                                        <label class="form-check-label">Owner Read</label>
+                                <div class="border p-2" style="border-radius:var(--radius-sm)">
+                                    <div class="form-text mb-1" style="color:var(--text-muted);font-weight:600">Owner
                                     </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input perm-check" type="checkbox" id="ownerWrite" data-value="200">
-                                        <label class="form-check-label">Owner Write</label>
+                                    <div class="form-check"><input class="form-check-input perm-check" type="checkbox"
+                                            id="ownerRead" data-value="400"><label class="form-check-label">Read</label>
                                     </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input perm-check" type="checkbox" id="ownerExec" data-value="100">
-                                        <label class="form-check-label">Owner Execute</label>
-                                    </div>
+                                    <div class="form-check"><input class="form-check-input perm-check" type="checkbox"
+                                            id="ownerWrite" data-value="200"><label
+                                            class="form-check-label">Write</label></div>
+                                    <div class="form-check"><input class="form-check-input perm-check" type="checkbox"
+                                            id="ownerExec" data-value="100"><label
+                                            class="form-check-label">Execute</label></div>
                                 </div>
                             </div>
                             <div class="col-4">
-                                <div class="border p-2">
-                                    <div class="form-check">
-                                        <input class="form-check-input perm-check" type="checkbox" id="groupRead" data-value="40">
-                                        <label class="form-check-label">Group Read</label>
+                                <div class="border p-2" style="border-radius:var(--radius-sm)">
+                                    <div class="form-text mb-1" style="color:var(--text-muted);font-weight:600">Group
                                     </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input perm-check" type="checkbox" id="groupWrite" data-value="20">
-                                        <label class="form-check-label">Group Write</label>
+                                    <div class="form-check"><input class="form-check-input perm-check" type="checkbox"
+                                            id="groupRead" data-value="40"><label class="form-check-label">Read</label>
                                     </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input perm-check" type="checkbox" id="groupExec" data-value="10">
-                                        <label class="form-check-label">Group Execute</label>
-                                    </div>
+                                    <div class="form-check"><input class="form-check-input perm-check" type="checkbox"
+                                            id="groupWrite" data-value="20"><label
+                                            class="form-check-label">Write</label></div>
+                                    <div class="form-check"><input class="form-check-input perm-check" type="checkbox"
+                                            id="groupExec" data-value="10"><label
+                                            class="form-check-label">Execute</label></div>
                                 </div>
                             </div>
                             <div class="col-4">
-                                <div class="border p-2">
-                                    <div class="form-check">
-                                        <input class="form-check-input perm-check" type="checkbox" id="publicRead" data-value="4">
-                                        <label class="form-check-label">Public Read</label>
+                                <div class="border p-2" style="border-radius:var(--radius-sm)">
+                                    <div class="form-text mb-1" style="color:var(--text-muted);font-weight:600">Public
                                     </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input perm-check" type="checkbox" id="publicWrite" data-value="2">
-                                        <label class="form-check-label">Public Write</label>
+                                    <div class="form-check"><input class="form-check-input perm-check" type="checkbox"
+                                            id="publicRead" data-value="4"><label class="form-check-label">Read</label>
                                     </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input perm-check" type="checkbox" id="publicExec" data-value="1">
-                                        <label class="form-check-label">Public Execute</label>
-                                    </div>
+                                    <div class="form-check"><input class="form-check-input perm-check" type="checkbox"
+                                            id="publicWrite" data-value="2"><label
+                                            class="form-check-label">Write</label></div>
+                                    <div class="form-check"><input class="form-check-input perm-check" type="checkbox"
+                                            id="publicExec" data-value="1"><label
+                                            class="form-check-label">Execute</label></div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary d-flex justify-content-center align-items-center">
-                            <span>Change Permission</span>
-                            <div class="spinner-container ms-2 my-indicator">
+                        <button type="submit" class="btn btn-primary d-flex align-items-center gap-2">
+                            <span>Apply</span>
+                            <div class="spinner-container my-indicator">
                                 <div class="spinners"></div>
                             </div>
                         </button>
@@ -2422,52 +2376,43 @@ if ($username == null) {
         </div>
     </div>
 
-    <!-- Compress Modal -->
+    <!-- Compress -->
     <div class="modal fade" id="compressModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form
-                    hx-post=""
-                    hx-trigger="submit"
-                    hx-swap="none">
+                <form hx-post="" hx-trigger="submit" hx-swap="none">
                     <div class="modal-header">
-                        <h5 class="modal-title fw-bold fs-6">Compress Items</h5>
+                        <h5 class="modal-title"><i class="fas fa-file-archive me-2"
+                                style="color:var(--accent-warning)"></i>Compress Items</h5>
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label for="compressName" class="form-label">Archive Name</label>
+                            <label class="form-label">Archive Name</label>
                             <input type="text" class="form-control" name="name" id="compressName" placeholder="archive">
                             <input type="hidden" name="items" id="compressItems">
                             <input type="hidden" name="path" id="compressPath">
                             <input type="hidden" name="action" value="compress">
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label">Compression Type</label>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="type" id="compressZip" value="zip" checked>
-                                <label class="form-check-label" for="compressZip">
-                                    ZIP (.zip)
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="type" id="compressTar" value="tar">
-                                <label class="form-check-label" for="compressTar">
-                                    TAR (.tar)
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="type" id="compressGzip" value="gzip">
-                                <label class="form-check-label" for="compressGzip">
-                                    GZip (.gz) - Single file only
-                                </label>
+                        <div class="mb-2">
+                            <label class="form-label mb-2">Format</label>
+                            <div class="d-flex gap-3">
+                                <div class="form-check"><input class="form-check-input" type="radio" name="type"
+                                        id="compressZip" value="zip" checked><label class="form-check-label"
+                                        for="compressZip">ZIP</label></div>
+                                <div class="form-check"><input class="form-check-input" type="radio" name="type"
+                                        id="compressTar" value="tar"><label class="form-check-label"
+                                        for="compressTar">TAR</label></div>
+                                <div class="form-check"><input class="form-check-input" type="radio" name="type"
+                                        id="compressGzip" value="gzip"><label class="form-check-label"
+                                        for="compressGzip">GZip (single file)</label></div>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary d-flex justify-content-center align-items-center">
+                        <button type="submit" class="btn btn-primary d-flex align-items-center gap-2">
                             <span>Compress</span>
-                            <div class="spinner-container ms-2 my-indicator">
+                            <div class="spinner-container my-indicator">
                                 <div class="spinners"></div>
                             </div>
                         </button>
@@ -2477,46 +2422,39 @@ if ($username == null) {
         </div>
     </div>
 
-    <!-- Delete Confirmation Modal with Trash Option -->
+    <!-- Delete -->
     <div class="modal fade" id="deleteModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form
-                    hx-post=""
-                    hx-trigger="submit"
-                    hx-swap="none">
+                <form hx-post="" hx-trigger="submit" hx-swap="none">
                     <div class="modal-header">
-                        <h5 class="modal-title fw-bold fs-6">Confirm Delete</h5>
-
+                        <h5 class="modal-title"><i class="fas fa-trash me-2"
+                                style="color:var(--accent-danger)"></i>Confirm Delete</h5>
                     </div>
                     <div class="modal-body">
-                        <p>Are you sure you want to delete the selected item(s)?</p>
+                        <p style="font-size:0.82rem;color:var(--text-secondary)">Are you sure you want to delete the
+                            selected item(s)?</p>
                         <input type="hidden" name="items" id="deleteItems">
                         <input type="hidden" name="path" id="deletePath">
-                        <input type="hidden" name="action" id="deleteAction">
-
+                        <input type="hidden" name="action" id="deleteAction" value="trash">
                         <div class="form-check mb-3">
                             <input class="form-check-input" type="checkbox" id="permanentDeleteCheck">
-                            <label class="form-check-label" for="permanentDeleteCheck">
-                                Skip the trash and permanently delete the files
-                            </label>
+                            <label class="form-check-label" for="permanentDeleteCheck">Permanently delete (skip
+                                trash)</label>
                         </div>
-
                         <div class="alert alert-info" id="deleteInfoAlert">
-                            <i class="bi bi-info-circle me-2"></i>
-                            Items will be moved to the trash folder and can be restored later.
+                            <i class="fas fa-recycle me-1"></i> Items will be moved to trash and can be restored.
                         </div>
-
-                        <div class="alert alert-danger" id="permanentDeleteAlert" style="display: none;">
-                            <i class="bi bi-exclamation-triangle me-2"></i>
-                            <strong>Warning:</strong> This action cannot be undone. Items will be permanently deleted.
+                        <div class="alert alert-danger" id="permanentDeleteAlert" style="display:none">
+                            <i class="fas fa-exclamation-triangle me-1"></i> <strong>Warning:</strong> This cannot be
+                            undone.
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary d-flex justify-content-center align-items-center">
+                        <button type="submit" class="btn btn-primary d-flex align-items-center gap-2">
                             <span id="deleteButtonText">Move to Trash</span>
-                            <div class="spinner-container ms-2 my-indicator">
+                            <div class="spinner-container my-indicator">
                                 <div class="spinners"></div>
                             </div>
                         </button>
@@ -2526,29 +2464,30 @@ if ($username == null) {
         </div>
     </div>
 
-    <!-- Search Results Modal -->
+    <!-- Search Results -->
     <div class="modal fade" id="searchModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title fw-bold fs-6">Search Results</h5>
-
+                    <h5 class="modal-title"><i class="fas fa-search me-2" style="color:var(--accent)"></i>Search Results
+                    </h5>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body" style="padding:0">
                     <div class="table-responsive">
-                        <table class="table table-hover" id="search-results-table">
+                        <table class="table table-hover mb-0" id="search-results-table">
                             <thead>
                                 <tr>
                                     <th>Name</th>
                                     <th>Path</th>
                                     <th>Type</th>
                                     <th>Size</th>
-                                    <th>Last Modified</th>
+                                    <th>Modified</th>
                                 </tr>
                             </thead>
                             <tbody id="search-results">
                                 <tr>
-                                    <td colspan="5" class="text-center">Searching...</td>
+                                    <td colspan="5" class="text-center" style="padding:24px;color:var(--text-muted)">
+                                        Searching…</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -2561,38 +2500,32 @@ if ($username == null) {
         </div>
     </div>
 
-    <!-- File Operation Modal (Copy/Move) -->
+    <!-- Copy / Move -->
     <div class="modal fade" id="fileOperationModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-dialog">
-
             <div class="modal-content">
-                <form
-                    hx-post=""
-                    hx-trigger="submit"
-                    hx-swap="none">
+                <form hx-post="" hx-trigger="submit" hx-swap="none">
                     <div class="modal-header">
-                        <h5 class="modal-title fs-6" id="fileOpTitle">File Operation</h5>
-
+                        <h5 class="modal-title" id="fileOpTitle">File Operation</h5>
                     </div>
                     <div class="modal-body">
                         <input type="hidden" name="action" id="fileOpType" value="copy">
-                        <div class="mb-3">
-                            <div id="fileOpItems">
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <label for="destinationPath" class="form-label">Destination Path</label>
-                            <input type="text" name="destination" class="form-control" id="destinationPath" placeholder="Enter destination path" required>
+                        <div class="mb-3" id="fileOpItems" style="font-size:0.8rem;color:var(--text-secondary)"></div>
+                        <div class="mb-2">
+                            <label class="form-label">Destination Path</label>
+                            <input type="text" name="destination" class="form-control" id="destinationPath"
+                                placeholder="/path/to/destination" required>
                             <input type="hidden" name="path" id="copyPath">
                             <input type="hidden" name="items" id="copyItems">
-                            <small class="text-muted">Current path: <span id="currentPathDisplay"></span></small>
+                            <div class="form-text">Current: <span id="currentPathDisplay"
+                                    style="color:var(--text-link)"></span></div>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary d-flex justify-content-center align-items-center">
-                            <span id="deleteButtonText">Execute</span>
-                            <div class="spinner-container ms-2 my-indicator">
+                        <button type="submit" class="btn btn-primary d-flex align-items-center gap-2">
+                            <span>Execute</span>
+                            <div class="spinner-container my-indicator">
                                 <div class="spinners"></div>
                             </div>
                         </button>
@@ -2602,33 +2535,32 @@ if ($username == null) {
         </div>
     </div>
 
-    <!-- Restore Confirmation Modal - Make sure this exists in your HTML -->
+    <!-- Restore -->
     <div class="modal fade" id="restoreModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form
-                    hx-post=""
-                    hx-trigger="submit"
-                    hx-swap="none">
+                <form hx-post="" hx-trigger="submit" hx-swap="none">
                     <input type="hidden" name="path" id="restorePath">
                     <input type="hidden" name="items" id="restoreItems">
                     <input type="hidden" name="action" value="restore">
                     <div class="modal-header">
-                        <h5 class="modal-title fw-bold fs-6">Restore Items</h5>
+                        <h5 class="modal-title"><i class="fas fa-undo me-2"
+                                style="color:var(--accent-success)"></i>Restore Items</h5>
                     </div>
                     <div class="modal-body">
-                        <p>Are you sure you want to restore the following items to their original locations?</p>
-                        <ul id="restoreItems" class="list-group mb-3"></ul>
+                        <p style="font-size:0.82rem;color:var(--text-secondary)">Restore selected items to their
+                            original locations?</p>
+                        <ul id="restoreItemsList" class="list-group mb-3" style="font-size:0.8rem"></ul>
                         <div class="alert alert-info">
-                            <i class="bi bi-info-circle me-2"></i>
-                            Items will be moved back to their original locations if possible. If an item with the same name exists at the destination, the restored item will be renamed.
+                            <i class="fas fa-info-circle me-1"></i> If an item exists at the destination, it will be
+                            renamed automatically.
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary d-flex justify-content-center align-items-center">
-                            <span id="deleteButtonText">Restore</span>
-                            <div class="spinner-container ms-2 my-indicator">
+                        <button type="submit" class="btn btn-primary d-flex align-items-center gap-2">
+                            <span>Restore</span>
+                            <div class="spinner-container my-indicator">
                                 <div class="spinners"></div>
                             </div>
                         </button>
@@ -2638,13 +2570,10 @@ if ($username == null) {
         </div>
     </div>
 
-
-
-
-    <!-- Scripts -->
+    <!-- ── Scripts ───────────────────────────────────────────────── -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <script>
-        var SERVER_ROOT_PATH = "<?php echo $config["root_path"]; ?>";
+        var SERVER_ROOT_PATH = "<?php echo $config['root_path']; ?>";
     </script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -2652,1028 +2581,547 @@ if ($username == null) {
             let currentPath = '';
             let selectedItems = [];
             let fileList = [];
-            let clipboardItems = [];
-            let clipboardAction = '';
             let currentSort = 'name';
             let currentOrder = 'asc';
             let contextTarget = null;
             let clickedBtn = null;
             let hasResponseError = false;
 
+            // ── File list ─────────────────────────────────────────────
             function loadFileList() {
-                const filesList = document.getElementById('files-list');
-                filesList.innerHTML = '<tr><td colspan="7" class="text-center"><div class="spinner-border spinner-border-sm" role="status"></div> Loading files...</td></tr>';
+                const tbody = document.getElementById('files-list');
+                tbody.innerHTML = `<tr><td colspan="7" style="padding:32px;text-align:center;color:var(--text-muted)">
+                <i class="fas fa-spinner fa-spin me-2"></i> Loading files…</td></tr>`;
                 selectedItems = [];
                 updateButtonStates();
-                const formData = new FormData();
-                formData.append('action', 'list');
-                formData.append('path', currentPath);
-                formData.append('sort', currentSort);
-                formData.append('order', currentOrder);
+
+                const fd = new FormData();
+                fd.append('action', 'list');
+                fd.append('path', currentPath);
+                fd.append('sort', currentSort);
+                fd.append('order', currentOrder);
 
                 fetch(window.location.pathname, {
                         method: 'POST',
-                        body: formData
+                        body: fd
                     })
-                    .then(response => response.json())
+                    .then(r => r.json())
                     .then(data => {
                         if (data.status === 'success') {
                             fileList = data.data;
-
                             updateBreadcrumb(data.current_path);
                             showFiles(fileList);
-                            if (data.current_path !== undefined) {
-                                currentPath = data.current_path;
-                            }
+                            if (data.current_path !== undefined) currentPath = data.current_path;
                         } else {
                             showAlert('Error', data.message);
                         }
                     })
-                    .catch(error => {
-                        showAlert('Error', 'Failed to load file list');
-                    });
+                    .catch(() => showAlert('Error', 'Failed to load file list'));
             }
 
             function updateBreadcrumb(path) {
-                const breadcrumb = document.getElementById('breadcrumb');
-                breadcrumb.value = path;
+                document.getElementById('breadcrumb').value = path;
             }
 
             function getMimeType(filename) {
-                const extension = filename.split('.').pop().toLowerCase();
-
-                const mimeTypes = {
-                    // Text files
-                    'txt': 'text/plain',
-                    'html': 'text/html',
-                    'htm': 'text/html',
-                    'css': 'text/css',
-                    'js': 'application/javascript',
-                    'json': 'application/json',
-                    'xml': 'application/xml',
-                    'csv': 'text/csv',
-                    'md': 'text/markdown',
-
-                    // Images
-                    'jpg': 'image/jpeg',
-                    'jpeg': 'image/jpeg',
-                    'png': 'image/png',
-                    'gif': 'image/gif',
-                    'webp': 'image/webp',
-                    'svg': 'image/svg+xml',
-                    'ico': 'image/x-icon',
-                    'bmp': 'image/bmp',
-                    'tiff': 'image/tiff',
-
-                    // Audio/Video
-                    'mp3': 'audio/mpeg',
-                    'wav': 'audio/wav',
-                    'ogg': 'audio/ogg',
-                    'mp4': 'video/mp4',
-                    'mov': 'video/quicktime',
-                    'avi': 'video/x-msvideo',
-                    'webm': 'video/webm',
-
-                    // Documents
-                    'pdf': 'application/pdf',
-                    'doc': 'application/msword',
-                    'docx': 'application/docx',
-                    'xls': 'application/vnd.ms-excel',
-                    'xlsx': 'application/xlsx',
-                    'ppt': 'application/vnd.ms-powerpoint',
-                    'pptx': 'application/pptx',
-
-                    // Archives
-                    'zip': 'application/zip',
-                    'tar': 'application/x-tar',
-                    'gz': 'application/gzip',
-                    'rar': 'application/vnd.rar',
+                const ext = filename.split('.').pop().toLowerCase();
+                const map = {
+                    txt: 'text/plain',
+                    html: 'text/html',
+                    htm: 'text/html',
+                    css: 'text/css',
+                    js: 'application/javascript',
+                    json: 'application/json',
+                    xml: 'application/xml',
+                    csv: 'text/csv',
+                    md: 'text/markdown',
+                    jpg: 'image/jpeg',
+                    jpeg: 'image/jpeg',
+                    png: 'image/png',
+                    gif: 'image/gif',
+                    webp: 'image/webp',
+                    svg: 'image/svg+xml',
+                    ico: 'image/x-icon',
+                    mp3: 'audio/mpeg',
+                    wav: 'audio/wav',
+                    mp4: 'video/mp4',
+                    mov: 'video/quicktime',
+                    avi: 'video/x-msvideo',
+                    webm: 'video/webm',
+                    pdf: 'application/pdf',
+                    doc: 'application/msword',
+                    docx: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                    xls: 'application/vnd.ms-excel',
+                    xlsx: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                    zip: 'application/zip',
+                    tar: 'application/x-tar',
+                    gz: 'application/gzip',
+                    rar: 'application/vnd.rar',
                     '7z': 'application/x-7z-compressed',
-
-                    // Code
-                    'php': 'application/x-httpd-php',
-                    'py': 'text/x-python',
-                    'java': 'text/x-java-source',
-                    'c': 'text/x-c',
-                    'cpp': 'text/x-c++',
-                    'sh': 'application/x-sh',
+                    php: 'application/x-httpd-php',
+                    py: 'text/x-python',
+                    sh: 'application/x-sh',
+                    c: 'text/x-c',
+                    cpp: 'text/x-c++',
+                    java: 'text/x-java-source',
                 };
-
-                return mimeTypes[extension] || 'text/x-generic';
+                return map[ext] || 'application/octet-stream';
             }
 
             function showFiles(files) {
-                const filesList = document.getElementById('files-list');
+                const tbody = document.getElementById('files-list');
 
                 if (files.length === 0) {
-                    filesList.innerHTML = '<tr><td colspan="7" class="p-2">This directory is empty.</td></tr>';
+                    tbody.innerHTML = `<tr><td colspan="7">
+                    <div class="empty-state">
+                        <i class="fas fa-folder-open d-block"></i>
+                        <p>This directory is empty</p>
+                    </div></td></tr>`;
                     return;
                 }
 
-                let html = '';
+                tbody.innerHTML = files.map(file => `
+                <tr class="file-item" data-name="${file.name}" data-type="${file.type}">
+                    <td class="checkbox-col"><input type="checkbox" class="form-check-input item-check"></td>
+                    <td class="icon-col">${file.name === 'public_html' ? "<i class='fas fa-globe' style='color:var(--accent)'></i>" : file.icon}</td>
+                    <td><a href="#" class="file-name">${file.name}</a></td>
+                    <td class="file-size">${file.size}</td>
+                    <td class="file-date">${file.last_modified}</td>
+                    <td class="file-type">${file.type === 'dir' ? 'directory' : getMimeType(file.name)}</td>
+                    <td class="permissions">${file.permissions}</td>
+                </tr>`).join('');
 
-                files.forEach(file => {
-                    html += `
-                    <tr class="file-item" data-name="${file.name}" data-type="${file.type}">
-                        <td><input type="checkbox" class="form-check-input item-check"></td>
-                        <td>${file.name === "public_html" ? "<i class='fas fa-globe text-primary'></i>" : file.icon}   </td>
-                        <td><a href="#" class="file-name">${file.name}</a></td>
-                        <td class="file-size">${file.size}</td>
-                        <td class="file-date">${file.last_modified}</td>
-                        <td>${file.type === 'dir' ? 'httpdunix-directory' : getMimeType(file.name)}</td>
-                        <td class="permissions">${file.permissions}</td>
-                    </tr>`;
-                });
-
-                filesList.innerHTML = html;
-
-                document.querySelectorAll('.file-item').forEach(item => {
-                    // Double click to open
-                    item.addEventListener('dblclick', function() {
-                        const name = this.getAttribute('data-name');
-                        const type = this.getAttribute('data-type');
-
+                document.querySelectorAll('.file-item').forEach(row => {
+                    row.addEventListener('dblclick', function() {
+                        const name = this.dataset.name;
+                        const type = this.dataset.type;
                         if (type === 'dir') {
                             navigateTo(currentPath + '/' + name);
                         } else {
-                            if (isEditable(name)) {
-                                openFileEditor(name);
-                            } else {
-                                // Download the file
-                                window.location.href = `${window.location.pathname}?action=download&path=${encodeURIComponent(currentPath)}&file=${encodeURIComponent(name)}`;
-                            }
+                            openFileEditor(name);
                         }
                     });
 
-                    // Single click to select
-                    item.addEventListener('click', function(e) {
+                    row.addEventListener('click', function(e) {
                         if (e.target.type === 'checkbox') return;
-
-                        const checkbox = this.querySelector('.item-check');
-                        checkbox.checked = !checkbox.checked;
-
-                        // Trigger change event
-                        const event = new Event('change');
-                        checkbox.dispatchEvent(event);
+                        const cb = this.querySelector('.item-check');
+                        cb.checked = !cb.checked;
+                        cb.dispatchEvent(new Event('change'));
                     });
 
-                    // Context menu
-                    item.addEventListener('contextmenu', function(e) {
+                    row.addEventListener('contextmenu', function(e) {
                         e.preventDefault();
-
-                        const name = this.getAttribute('data-name');
-                        const type = this.getAttribute('data-type');
-
-                        // Store the context target
                         contextTarget = {
-                            name: name,
-                            type: type
+                            name: this.dataset.name,
+                            type: this.dataset.type
                         };
-
-                        // Select this item
-                        const checkbox = this.querySelector('.item-check');
-                        if (!checkbox.checked) {
-                            checkbox.checked = true;
-                            const event = new Event('change');
-                            checkbox.dispatchEvent(event);
+                        const cb = this.querySelector('.item-check');
+                        if (!cb.checked) {
+                            cb.checked = true;
+                            cb.dispatchEvent(new Event('change'));
                         }
-
-                        // Show context menu
-                        showContextMenu(e.pageX, e.pageY, type);
+                        showContextMenu(e.clientX, e.clientY, this.dataset.type);
                     });
 
-                    // Checkbox change
-                    const checkbox = item.querySelector('.item-check');
-                    checkbox.addEventListener('change', function() {
-                        const name = item.getAttribute('data-name');
-
+                    const cb = row.querySelector('.item-check');
+                    cb.addEventListener('change', function() {
+                        const name = row.dataset.name;
                         if (this.checked) {
-                            item.classList.add('selected');
-                            if (!selectedItems.includes(name)) {
-                                selectedItems.push(name);
-                            }
+                            row.classList.add('selected');
+                            if (!selectedItems.includes(name)) selectedItems.push(name);
                         } else {
-                            item.classList.remove('selected');
-                            const index = selectedItems.indexOf(name);
-                            if (index !== -1) {
-                                selectedItems.splice(index, 1);
-                            }
+                            row.classList.remove('selected');
+                            const i = selectedItems.indexOf(name);
+                            if (i !== -1) selectedItems.splice(i, 1);
                         }
-
                         updateButtonStates();
                     });
                 });
             }
 
-            function isEditable(fileName) {
-                return true;
-            }
-
             function showContextMenu(x, y, type) {
-                const contextMenu = document.getElementById('context-menu');
+                const menu = document.getElementById('context-menu');
+                menu.style.visibility = 'hidden';
+                menu.style.display = 'block';
+                const mw = menu.offsetWidth,
+                    mh = menu.offsetHeight;
+                const vw = window.innerWidth,
+                    vh = window.innerHeight;
+                if (x + mw > vw) x = vw - mw - 8;
+                if (y + mh > vh) y = Math.max(8, y - mh);
+                menu.style.left = x + 'px';
+                menu.style.top = y + 'px';
+                menu.style.visibility = 'visible';
 
-                contextMenu.style.visibility = 'hidden';
-                contextMenu.style.display = 'block';
+                document.getElementById('ctx-edit').style.display = type === 'file' ? 'flex' : 'none';
+                document.getElementById('ctx-open').style.display = type === 'dir' ? 'flex' : 'none';
 
-                const menuWidth = contextMenu.offsetWidth;
-                const menuHeight = contextMenu.offsetHeight;
-                const viewportWidth = window.innerWidth;
-                const viewportHeight = window.innerHeight;
-
-                if (x + menuWidth > viewportWidth) {
-                    x = viewportWidth - menuWidth - 10;
-                }
-
-                if (y + menuHeight > viewportHeight) {
-                    y = y - menuHeight;
-                    if (y < 0) {
-                        y = 10;
-                    }
-                }
-
-                contextMenu.style.left = `${x}px`;
-                contextMenu.style.top = `${y}px`;
-                contextMenu.style.visibility = 'visible';
-
-                document.getElementById('ctx-edit').style.display = type === 'file' ? 'block' : 'none';
-                document.getElementById('ctx-open').style.display = type === 'dir' ? 'block' : 'none';
-
-
-                document.addEventListener('click', function closeMenu(e) {
-                    if (!contextMenu.contains(e.target)) {
-                        contextMenu.style.display = 'none';
-                        document.removeEventListener('click', closeMenu);
-                    }
-                });
+                setTimeout(() => {
+                    document.addEventListener('click', function close(e) {
+                        if (!menu.contains(e.target)) {
+                            menu.style.display = 'none';
+                            document.removeEventListener('click', close);
+                        }
+                    });
+                }, 0);
             }
 
             function updateButtonStates() {
-                const count = selectedItems.length;
-                const inTrash = currentPath === "/.trash";
+                const n = selectedItems.length;
+                const inTrash = currentPath === '/.trash';
 
-                const isArchive = count === 1 && (() => {
-                    const fileItem = fileList.find(item => item.name === selectedItems[0]);
-                    if (!fileItem || fileItem.type !== "file") return false;
-                    const ext = fileItem.extension?.toLowerCase() || "";
-                    return ["zip", "tar", "gz", "gzip", "bz2", "bzip2", "rar", "7z"].includes(ext);
+                const isArchive = n === 1 && (() => {
+                    const f = fileList.find(i => i.name === selectedItems[0]);
+                    if (!f || f.type !== 'file') return false;
+                    return ['zip', 'tar', 'gz', 'gzip', 'bz2', 'bzip2', 'rar', '7z'].includes((f
+                        .extension || '').toLowerCase());
                 })();
+                const isFile = n === 1 && fileList.find(i => i.name === selectedItems[0])?.type === 'file';
 
-                const isFile = count === 1 && fileList.find(item => item.name === selectedItems[0])?.type === "file";
-
-                const buttonStates = {
-                    'permissions-btn': count === 1 && !inTrash,
-                    'edit-btn': count === 1 && !inTrash,
-                    'rename-btn': count === 1 && !inTrash,
-                    'copy-btn': count > 0 && !inTrash,
-                    'move-btn': count > 0 && !inTrash,
-                    'delete-btn': count > 0 && !inTrash,
-                    'compress-btn': count > 0 && !inTrash,
+                const states = {
+                    'permissions-btn': n === 1 && !inTrash,
+                    'edit-btn': n === 1 && !inTrash,
+                    'rename-btn': n === 1 && !inTrash,
+                    'copy-btn': n > 0 && !inTrash,
+                    'move-btn': n > 0 && !inTrash,
+                    'delete-btn': n > 0 && !inTrash,
+                    'compress-btn': n > 0 && !inTrash,
                     'download-btn': isFile && !inTrash,
                     'extract-btn': isArchive && !inTrash,
-                    'restore-btn': count > 0 && inTrash,
-                    'unselect-all-btn': count > 0
+                    'restore-btn': n > 0 && inTrash,
+                    'unselect-all-btn': n > 0,
                 };
-
-                Object.entries(buttonStates).forEach(([btnId, enabled]) => {
-                    const btn = document.getElementById(btnId);
-                    if (btn) {
-                        btn.classList.toggle('disabled', !enabled);
-                    }
+                Object.entries(states).forEach(([id, on]) => {
+                    document.getElementById(id)?.classList.toggle('disabled', !on);
                 });
             }
 
+            // ── Directory tree ────────────────────────────────────────
             function loadDirectoryTree() {
-                const directoryTree = document.querySelector('#directory-tree .file-tree');
-                directoryTree.innerHTML = '<li><i class="fas fa-spinner fa-spin"></i> Loading...</li>';
+                const tree = document.querySelector('#directory-tree .file-tree');
+                if (!tree) return;
+                tree.innerHTML =
+                    '<li style="padding:8px 14px;font-size:0.78rem;color:var(--text-muted)"><i class="fas fa-spinner fa-spin me-2"></i>Loading…</li>';
 
-                const formData = new FormData();
-                formData.append('action', 'tree');
-
+                const fd = new FormData();
+                fd.append('action', 'tree');
                 fetch(window.location.pathname, {
                         method: 'POST',
-                        body: formData
+                        body: fd
                     })
-                    .then(response => response.json())
+                    .then(r => r.json())
                     .then(data => {
                         if (data.status === 'success') {
-                            directoryTree.innerHTML = buildTreeHTML(data.data);
-
+                            tree.innerHTML = buildTreeHTML(data.data);
                             addTreeEventListeners();
                         } else {
-                            directoryTree.innerHTML = '<li>Failed to load directory tree</li>';
+                            tree.innerHTML =
+                                '<li style="padding:8px 14px;font-size:0.78rem;color:var(--text-muted)">Failed to load tree</li>';
                         }
                     })
-                    .catch(error => {
-                        directoryTree.innerHTML = '<li>Failed to load directory tree</li>';
+                    .catch(() => {
+                        tree.innerHTML =
+                            '<li style="padding:8px 14px;font-size:0.78rem;color:var(--text-muted)">Error loading tree</li>';
                     });
             }
 
-
             function buildTreeHTML(tree) {
-                let html = '';
-
-                tree.forEach(item => {
-                    if (item.type === 'dir') {
-                        let itemPath = item.path;
-                        if (itemPath.startsWith('//')) {
-                            itemPath = itemPath.substring(1);
-                        }
-
-                        html += `
-                        <li>
-                            <span class="folder-item" data-path="${itemPath}">
-                                <i class="fas fa-caret-right caret" data-expanded="false"></i>
-                                <i class="fas fa-folder folder-icon"></i>
-                                ${item.name}
-                            </span>`;
-
-                        if (item.children && item.children.length > 0) {
-                            html += `<ul class="file-tree nested">`;
-                            html += buildTreeHTML(item.children);
-                            html += `</ul>`;
-                        }
-
-                        html += `</li>`;
+                return tree.filter(i => i.type === 'dir').map(item => {
+                    let p = item.path.startsWith('//') ? item.path.substring(1) : item.path;
+                    let html = `<li><span class="folder-item" data-path="${p}">
+                    <i class="fas fa-caret-right caret" data-expanded="false"></i>
+                    <i class="fas fa-folder"></i> ${item.name}
+                </span>`;
+                    if (item.children && item.children.length > 0) {
+                        html += `<ul class="file-tree nested">${buildTreeHTML(item.children)}</ul>`;
                     }
-                });
-
-                return html;
+                    return html + '</li>';
+                }).join('');
             }
-
 
             function addTreeEventListeners() {
                 document.querySelectorAll('.caret').forEach(caret => {
                     caret.addEventListener('click', function(e) {
                         e.stopPropagation();
-
-                        const nested = this.parentElement.parentElement.querySelector('.nested');
-                        const isExpanded = this.getAttribute('data-expanded') === 'true';
-
+                        const nested = this.closest('li').querySelector('.nested');
+                        const expanded = this.dataset.expanded === 'true';
                         if (nested) {
-                            if (isExpanded) {
-                                nested.classList.remove('active');
-                                this.classList.remove('expanded');
-                                this.setAttribute('data-expanded', 'false');
-                            } else {
-                                nested.classList.add('active');
-                                this.classList.add('expanded');
-                                this.setAttribute('data-expanded', 'true');
-                            }
+                            nested.classList.toggle('active', !expanded);
+                            this.classList.toggle('expanded', !expanded);
+                            this.dataset.expanded = String(!expanded);
                         }
                     });
                 });
-
-
-                document.querySelectorAll('.folder-item').forEach(item => {
+                document.querySelectorAll('#directory-tree .folder-item').forEach(item => {
                     item.addEventListener('click', function(e) {
-
-                        if (e.target.classList.contains('caret')) {
-                            return;
-                        }
-
-                        const path = this.getAttribute('data-path');
-                        if (path !== null) {
-                            navigateTo(path);
-                        }
+                        if (e.target.classList.contains('caret')) return;
+                        const path = this.dataset.path;
+                        if (path) navigateTo(path);
                     });
                 });
             }
 
-
             function navigateTo(path) {
-                if (path.startsWith('//')) {
-                    path = path.substring(1);
-                }
-
-                path = path.replace(/\/+/g, '/');
+                path = path.replace(/^\/\//, '/').replace(/\/+/g, '/');
                 currentPath = path;
-
                 loadFileList();
             }
 
-            function showAlert(title, message) {
-                CoolAlert.show({
-                    toast: true,
-                    icon: title === 'Error' ? 'error' : 'success',
-                    title: title,
-                    text: message,
-                });
-
-                document.querySelectorAll('.action-btns').forEach(btn => {
-                    btn.disabled = false;
-                    btn.innerHTML = btn.textContent;
-
-                    const siblingButtons = btn.closest('.modal-footer').querySelectorAll('button');
-                    siblingButtons.forEach(sibling => {
-                        if (sibling !== btn) {
-                            sibling.disabled = false;
+            // ── Alert ─────────────────────────────────────────────────
+            function showAlert(title, message, confirm = null) {
+                if (confirm !== null) {
+                    CoolAlert.show({
+                        title: title,
+                        text: message,
+                        icon: "success",
+                        confirmButtonText: "Ok",
+                        showCancelButton: false,
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.reload();
                         }
                     });
 
+                } else {
+                    CoolAlert.show({
+                        toast: true,
+                        icon: title === 'Error' ? 'error' : 'success',
+                        title,
+                        text: message
+                    });
+                }
+
+
+                document.querySelectorAll('.modal.show').forEach(el => {
+                    const m = bootstrap.Modal.getInstance(el);
+                    if (m) m.hide();
                 });
-
-                document.querySelectorAll('.modal.show').forEach(modalEl => {
-                    const modal = bootstrap.Modal.getInstance(modalEl);
-                    if (modal) {
-                        modal.hide();
-                    }
-                });
-
-
             }
 
+            // ── Permissions init ──────────────────────────────────────
             function initPermissionsModal() {
                 const permValue = document.getElementById('permValue');
-                const permChecks = document.querySelectorAll('.perm-check');
-
-                permChecks.forEach(check => {
-                    check.addEventListener('change', function() {
-                        let value = 0;
-                        permChecks.forEach(c => {
-                            if (c.checked) {
-                                value += parseInt(c.getAttribute('data-value'));
-                            }
-                        });
-                        permValue.value = '0' + value.toString(8).padStart(3, '0');
+                const checks = document.querySelectorAll('.perm-check');
+                checks.forEach(c => c.addEventListener('change', () => {
+                    let v = 0;
+                    checks.forEach(x => {
+                        if (x.checked) v += parseInt(x.dataset.value);
                     });
-                });
-
+                    permValue.value = '0' + v.toString(8).padStart(3, '0');
+                }));
                 permValue.addEventListener('input', function() {
-                    const match = this.value.match(/^0([0-7]{3})$/);
-                    if (match) {
-                        const octal = match[1];
-                        const decimal = parseInt(octal, 8);
-                        permChecks.forEach(check => {
-                            const checkValue = parseInt(check.getAttribute('data-value'));
-                            check.checked = (decimal & checkValue) === checkValue;
+                    const m = this.value.match(/^0([0-7]{3})$/);
+                    if (m) {
+                        const dec = parseInt(m[1], 8);
+                        checks.forEach(c => {
+                            c.checked = (dec & parseInt(c.dataset.value)) === parseInt(c.dataset
+                                .value);
                         });
                     }
                 });
             }
 
-
+            // ── Drag & Drop ───────────────────────────────────────────
             function initDragAndDrop() {
-                const dropzone = document.getElementById('dropzone');
-
-                ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-                    dropzone.addEventListener(eventName, function(e) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                    }, false);
-                });
-
-                ['dragenter', 'dragover'].forEach(eventName => {
-                    dropzone.addEventListener(eventName, function() {
-                        this.classList.add('drag-over');
-                    }, false);
-                });
-
-                ['dragleave', 'drop'].forEach(eventName => {
-                    dropzone.addEventListener(eventName, function() {
-                        this.classList.remove('drag-over');
-                    }, false);
-                });
-
-                dropzone.addEventListener('drop', function(e) {
-                    const files = e.dataTransfer.files;
-                    uploadFiles(files);
-                }, false);
+                const dz = document.getElementById('dropzone');
+                ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(ev => dz.addEventListener(ev, e => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }));
+                ['dragenter', 'dragover'].forEach(ev => dz.addEventListener(ev, () => dz.classList.add(
+                    'drag-over')));
+                ['dragleave', 'drop'].forEach(ev => dz.addEventListener(ev, () => dz.classList.remove(
+                    'drag-over')));
+                dz.addEventListener('drop', e => uploadFiles(e.dataTransfer.files));
             }
 
+            // ── Init ──────────────────────────────────────────────────
             function init() {
-                currentPath = '';
                 initPermissionsModal();
                 initDragAndDrop();
                 loadDirectoryTree();
                 loadFileList();
             }
 
-            let pathHistory = [];
-            let historyIndex = -1;
+            // ── Navigation ────────────────────────────────────────────
+            let pathHistory = [''];
+            let historyIndex = 0;
 
-            function navigateToPath(path, pushToHistory = true) {
+            function navigateToPath(path) {
                 currentPath = path;
                 loadFileList();
-                if (pushToHistory) {
-                    pathHistory = pathHistory.slice(0, historyIndex + 1);
-                    pathHistory.push(path);
-                    historyIndex++;
-                }
             }
-
 
             document.getElementById('home-btn').addEventListener('click', e => {
                 e.preventDefault();
-                navigateToPath('', true);
+                navigateToPath('');
             });
-
             document.getElementById('breadcrumb-home-btn').addEventListener('click', e => {
                 e.preventDefault();
-                navigateToPath('', true);
+                navigateToPath('');
             });
+            document.getElementById('sidebar-home-item').addEventListener('click', () => navigateToPath(''));
 
             document.getElementById('breadcrumb-search-btn').addEventListener('click', e => {
                 e.preventDefault();
-                const breadcrumbvalue = document.getElementById('breadcrumb').value;
-                if (breadcrumbvalue.trim() == '') return;
-                navigateToPath(breadcrumbvalue, true);
+                const v = document.getElementById('breadcrumb').value.trim();
+                if (v) navigateToPath(v);
+            });
+            document.getElementById('breadcrumb').addEventListener('keydown', e => {
+                if (e.key === 'Enter') {
+                    const v = e.target.value.trim();
+                    if (v) navigateToPath(v);
+                }
             });
 
             document.getElementById('up-btn').addEventListener('click', e => {
                 e.preventDefault();
                 if (!currentPath) return;
-                const upPath = currentPath.split('/').slice(0, -1).join('/');
-                navigateToPath(upPath, true);
+                navigateToPath(currentPath.split('/').slice(0, -1).join('/') || '');
             });
-
             document.getElementById('reload-btn').addEventListener('click', e => {
                 e.preventDefault();
                 loadFileList();
             });
-
-
             document.getElementById('view-trash-btn').addEventListener('click', e => {
                 e.preventDefault();
-                navigateToPath('/.trash', true);
+                navigateToPath('/.trash');
             });
-
-
             document.getElementById('sort-btn').addEventListener('click', e => {
                 e.preventDefault();
-                currentOrder = (currentOrder === 'asc') ? 'desc' : 'asc';
+                currentOrder = currentOrder === 'asc' ? 'desc' : 'asc';
                 loadFileList();
             });
 
+            // ── Select all ────────────────────────────────────────────
             document.getElementById('select-all-checkbox').addEventListener('change', function() {
-                document.querySelectorAll('.item-check').forEach(check => {
-                    check.checked = this.checked;
-                    const event = new Event('change');
-                    check.dispatchEvent(event);
+                document.querySelectorAll('.item-check').forEach(c => {
+                    c.checked = this.checked;
+                    c.dispatchEvent(new Event('change'));
                 });
             });
-
-            document.getElementById('select-all-btn').addEventListener('click', function(e) {
+            document.getElementById('select-all-btn').addEventListener('click', e => {
                 e.preventDefault();
-                document.getElementById('select-all-checkbox').checked = true;
-                document.getElementById('select-all-checkbox').dispatchEvent(new Event('change'));
+                const cb = document.getElementById('select-all-checkbox');
+                cb.checked = true;
+                cb.dispatchEvent(new Event('change'));
             });
-
-            document.getElementById('unselect-all-btn').addEventListener('click', function(e) {
+            document.getElementById('unselect-all-btn').addEventListener('click', e => {
                 e.preventDefault();
-                if (!this.classList.contains('disabled')) {
-                    document.getElementById('select-all-checkbox').checked = false;
-                    document.getElementById('select-all-checkbox').dispatchEvent(new Event('change'));
+                if (!e.currentTarget.classList.contains('disabled')) {
+                    const cb = document.getElementById('select-all-checkbox');
+                    cb.checked = false;
+                    cb.dispatchEvent(new Event('change'));
                 }
             });
 
-            document.getElementById('reload-btn').addEventListener('click', function(e) {
-                e.preventDefault();
-                loadFileList();
-            });
-
-            document.getElementById('new-file-btn').addEventListener('click', function(e) {
+            // ── Toolbar actions ───────────────────────────────────────
+            document.getElementById('new-file-btn').addEventListener('click', e => {
                 e.preventDefault();
                 document.getElementById('fileName').value = '';
                 document.getElementById('fileContent').value = '';
                 document.getElementById('filePath').value = currentPath;
-                const newFileModal = new bootstrap.Modal(document.getElementById('newFileModal'));
-                newFileModal.show();
+                new bootstrap.Modal(document.getElementById('newFileModal')).show();
             });
 
-            document.getElementById('new-folder-btn').addEventListener('click', function(e) {
+            document.getElementById('new-folder-btn').addEventListener('click', e => {
                 e.preventDefault();
                 document.getElementById('folderName').value = '';
                 document.getElementById('currenPathValue').value = currentPath;
-                const newFolderModal = new bootstrap.Modal(document.getElementById('newFolderModal'));
-                newFolderModal.show();
+                new bootstrap.Modal(document.getElementById('newFolderModal')).show();
             });
 
-            document.getElementById("extract-btn").addEventListener("click", function(e) {
+            document.getElementById('extract-btn').addEventListener('click', e => {
                 e.preventDefault();
-
-                const fileItem = fileList.find(
-                    (item) => item.name === selectedItems[0]
-                );
-                if (fileItem && fileItem.type === "file") {
-                    const fileName = fileItem.name;
-
-                    document.getElementById('extractFileName').textContent = fileName;
-                    document.getElementById('extractFileNameValue').value = fileName;
+                const f = fileList.find(i => i.name === selectedItems[0]);
+                if (f && f.type === 'file') {
+                    document.getElementById('extractFileName').textContent = f.name;
+                    document.getElementById('extractFileNameValue').value = f.name;
                     document.getElementById('extractPathName').value = currentPath;
-                    const fileNameWithoutExt = fileName.replace(/\.[^/.]+$/, "");
-                    document.getElementById('extractPath').value = currentPath + '/' + fileNameWithoutExt;
-                    const extractModal = new bootstrap.Modal(document.getElementById('extractModal'));
-                    extractModal.show();
+                    document.getElementById('extractPath').value = currentPath + '/' + f.name.replace(
+                        /\.[^/.]+$/, '');
+                    new bootstrap.Modal(document.getElementById('extractModal')).show();
                 } else {
-                    showAlert("Error", "Please select a file to extract");
+                    showAlert('Error', 'Please select a file to extract');
                 }
-
             });
 
-            document.getElementById('rename-btn').addEventListener('click', function(e) {
+            document.getElementById('rename-btn').addEventListener('click', e => {
                 e.preventDefault();
-                if (!this.classList.contains('disabled') && selectedItems.length === 1) {
+                if (!e.currentTarget.classList.contains('disabled') && selectedItems.length === 1) {
                     document.getElementById('oldName').value = selectedItems[0];
                     document.getElementById('newName').value = selectedItems[0];
                     document.getElementById('renamePath').value = currentPath;
-                    const renameModal = new bootstrap.Modal(document.getElementById('renameModal'));
-                    renameModal.show();
+                    new bootstrap.Modal(document.getElementById('renameModal')).show();
                 }
             });
 
-            document.getElementById('ctx-rename').addEventListener('click', function() {
-                if (contextTarget) {
-                    document.getElementById('oldName').value = contextTarget.name;
-                    document.getElementById('newName').value = contextTarget.name;
-                    document.getElementById('renamePath').value = currentPath;
-                    const renameModal = new bootstrap.Modal(document.getElementById('renameModal'));
-                    renameModal.show();
-                }
-                document.getElementById('context-menu').style.display = 'none';
-            });
-
-            document.getElementById('permissions-btn').addEventListener('click', function(e) {
+            document.getElementById('permissions-btn').addEventListener('click', e => {
                 e.preventDefault();
-                if (!this.classList.contains('disabled') && selectedItems.length === 1) {
+                if (!e.currentTarget.classList.contains('disabled') && selectedItems.length === 1) {
                     document.getElementById('permItem').textContent = selectedItems[0];
                     document.getElementById('permItemValue').value = selectedItems[0];
-
-                    const item = fileList.find(item => item.name === selectedItems[0]);
+                    const item = fileList.find(i => i.name === selectedItems[0]);
                     if (item) {
-                        const permString = item.permissions;
-                        let octal = '0755';
-
-                        if (permString.length >= 10) {
-                            let owner = 0,
-                                group = 0,
-                                world = 0;
-
-                            if (permString[1] === 'r') owner += 4;
-                            if (permString[2] === 'w') owner += 2;
-                            if (permString[3] === 'x' || permString[3] === 's') owner += 1;
-
-                            if (permString[4] === 'r') group += 4;
-                            if (permString[5] === 'w') group += 2;
-                            if (permString[6] === 'x' || permString[6] === 's') group += 1;
-
-                            if (permString[7] === 'r') world += 4;
-                            if (permString[8] === 'w') world += 2;
-                            if (permString[9] === 'x' || permString[9] === 't') world += 1;
-
-                            octal = '0' + owner.toString() + group.toString() + world.toString();
+                        const ps = item.permissions;
+                        let o = 0,
+                            g = 0,
+                            w = 0;
+                        if (ps.length >= 10) {
+                            if (ps[1] === 'r') o += 4;
+                            if (ps[2] === 'w') o += 2;
+                            if (ps[3] === 'x' || ps[3] === 's') o += 1;
+                            if (ps[4] === 'r') g += 4;
+                            if (ps[5] === 'w') g += 2;
+                            if (ps[6] === 'x' || ps[6] === 's') g += 1;
+                            if (ps[7] === 'r') w += 4;
+                            if (ps[8] === 'w') w += 2;
+                            if (ps[9] === 'x' || ps[9] === 't') w += 1;
                         }
-
+                        const octal = '0' + o + g + w;
                         document.getElementById('permValue').value = octal;
-
-                        const decimal = parseInt(octal.substring(1), 8);
-                        document.querySelectorAll('.perm-check').forEach(check => {
-                            const checkValue = parseInt(check.getAttribute('data-value'));
-                            check.checked = (decimal & checkValue) === checkValue;
+                        const dec = parseInt(octal.substring(1), 8);
+                        document.querySelectorAll('.perm-check').forEach(c => {
+                            c.checked = (dec & parseInt(c.dataset.value)) === parseInt(c.dataset
+                                .value);
                         });
                     }
-
-                    const permissionsModal = new bootstrap.Modal(document.getElementById('permissionsModal'));
-                    permissionsModal.show();
+                    new bootstrap.Modal(document.getElementById('permissionsModal')).show();
                 }
             });
-            document.getElementById('ctx-permissions').addEventListener('click', function() {
-                if (contextTarget) {
-                    selectedItems = [contextTarget.name];
-                    document.getElementById('permissions-btn').click();
-                }
-                document.getElementById('context-menu').style.display = 'none';
-            });
 
-            document.getElementById('compress-btn').addEventListener('click', function(e) {
+            document.getElementById('compress-btn').addEventListener('click', e => {
                 e.preventDefault();
-                if (!this.classList.contains('disabled') && selectedItems.length > 0) {
-                    document.getElementById('compressName').value = selectedItems.length === 1 ? selectedItems[0] : 'archive_' + Math.floor(Date.now() / 1000);
+                if (!e.currentTarget.classList.contains('disabled') && selectedItems.length > 0) {
+                    document.getElementById('compressName').value = selectedItems.length === 1 ?
+                        selectedItems[0] : 'archive_' + Math.floor(Date.now() / 1000);
                     document.getElementById('compressPath').value = currentPath;
                     document.getElementById('compressItems').value = selectedItems;
-                    const compressModal = new bootstrap.Modal(document.getElementById('compressModal'));
-                    compressModal.show();
+                    new bootstrap.Modal(document.getElementById('compressModal')).show();
                 }
-            });
-            document.getElementById('ctx-compress').addEventListener('click', function() {
-                if (contextTarget) {
-                    selectedItems = [contextTarget.name];
-                    document.getElementById('compress-btn').click();
-                }
-                document.getElementById('context-menu').style.display = 'none';
             });
 
             document.getElementById('delete-btn').addEventListener('click', function(e) {
                 e.preventDefault();
-                if (selectedItems.length === 0) return;
-
-                if (!this.classList.contains('disabled')) {
-                    document.getElementById('deletePath').value = currentPath;
-                    document.getElementById('deleteItems').value = selectedItems;
-
-                    document.getElementById("permanentDeleteCheck").addEventListener('click', function(e) {
-                        const isPermanentDelete = this.checked;
-
-                        document.getElementById('deleteAction').value = isPermanentDelete ? "delete" : "trash";
-
-                        if (document.getElementById("deleteInfoAlert")) {
-                            document.getElementById("deleteInfoAlert").style.display = isPermanentDelete ?
-                                "none" :
-                                "block";
-                        }
-
-                        if (document.getElementById("permanentDeleteAlert")) {
-                            document.getElementById("permanentDeleteAlert").style.display =
-                                isPermanentDelete ? "block" : "none";
-                        }
-
-                        if (document.getElementById("deleteButtonText")) {
-                            document.getElementById("deleteButtonText").textContent = isPermanentDelete ?
-                                "Delete Permanently" :
-                                "Move to Trash";
-                        }
-                    });
-
-
-
-                    const deleteModal = new bootstrap.Modal(
-                        document.getElementById("deleteModal")
-                    );
-                    deleteModal.show();
-
-
-                }
-            });
-            document.getElementById('ctx-delete').addEventListener('click', function() {
-                if (contextTarget) {
-                    selectedItems = [contextTarget.name];
-                    document.getElementById('delete-btn').click();
-                }
-                document.getElementById('context-menu').style.display = 'none';
+                if (this.classList.contains('disabled') || selectedItems.length === 0) return;
+                document.getElementById('deletePath').value = currentPath;
+                document.getElementById('deleteItems').value = selectedItems;
+                document.getElementById('deleteAction').value = 'trash';
+                document.getElementById('deleteButtonText').textContent = 'Move to Trash';
+                document.getElementById('deleteInfoAlert').style.display = 'block';
+                document.getElementById('permanentDeleteAlert').style.display = 'none';
+                document.getElementById('permanentDeleteCheck').checked = false;
+                new bootstrap.Modal(document.getElementById('deleteModal')).show();
             });
 
-            function uploadFiles(files) {
-                if (files.length === 0) return;
-
-                const formData = new FormData();
-                formData.append('path', currentPath);
-
-                for (let i = 0; i < files.length; i++) {
-                    formData.append('files[]', files[i]);
-                }
-
-                // Show progress bar
-                const progressBar = document.getElementById('upload-progress');
-                const progressBarInner = progressBar.querySelector('.progress-bar');
-
-                progressBar.style.display = 'block';
-                progressBarInner.style.width = '0%';
-                progressBarInner.setAttribute('aria-valuenow', 0);
-                progressBarInner.textContent = 'Preparing upload...';
-
-                const xhr = new XMLHttpRequest();
-                xhr.open('POST', window.location.pathname, true);
-
-                xhr.upload.addEventListener('progress', function(e) {
-                    if (e.lengthComputable) {
-                        const percentComplete = Math.round((e.loaded / e.total) * 100);
-                        progressBarInner.style.width = percentComplete + '%';
-                        progressBarInner.setAttribute('aria-valuenow', percentComplete);
-                        progressBarInner.textContent = percentComplete + '% uploaded';
-
-                        if (percentComplete >= 100) {
-                            progressBarInner.classList.remove('progress-bar-animated');
-                            progressBarInner.textContent = 'Processing...';
-                        }
-                    }
-                });
-
-                xhr.addEventListener('load', function() {
-                    setTimeout(() => {
-                        progressBar.style.display = 'none';
-                        progressBarInner.classList.add('progress-bar-animated');
-                    }, 500);
-
-                    if (xhr.status === 200) {
-                        try {
-                            const response = JSON.parse(xhr.responseText);
-                            if (response.status === 'success' || response.status === 'partial') {
-                                loadFileList();
-                                showAlert('Success', response.message);
-                            } else {
-                                showAlert('Error', response.message || 'Unknown error occurred during upload');
-                            }
-                        } catch (error) {
-                            showAlert('Error', 'Failed to parse server response: ' + error.message);
-                        }
-                    } else {
-                        showAlert('Error', 'HTTP Error: ' + xhr.status);
-                    }
-                });
-
-                xhr.addEventListener('error', function(e) {
-                    progressBar.style.display = 'none';
-                    showAlert('Error', 'Network error occurred while uploading files');
-                });
-
-                xhr.send(formData);
-            }
-
-            function searchFiles() {
-                const query = document.getElementById('search-input').value.trim();
-
-                if (!query) {
-                    showAlert('Error', 'Please enter a search query');
-                    return;
-                }
-
-                const searchResults = document.getElementById('search-results');
-                searchResults.innerHTML = '<tr><td colspan="5" class="text-center"><div class="spinner-border spinner-border-sm" role="status"></div> Searching...</td></tr>';
-
-                const formData = new FormData();
-                formData.append('action', 'search');
-                formData.append('path', currentPath);
-                formData.append('query', query);
-
-                fetch(window.location.pathname, {
-                        method: 'POST',
-                        body: formData
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.status === 'success') {
-                            const results = data.data;
-
-                            if (results.length === 0) {
-                                searchResults.innerHTML = '<tr><td colspan="5" class="text-center">No results found</td></tr>';
-                            } else {
-                                let html = '';
-
-                                results.forEach(result => {
-                                    html += `
-                                    <tr class="search-result-item" data-path="${result.path}">
-                                        <td><i class="${result.icon}"></i> ${result.name}</td>
-                                        <td>${result.path}</td>
-                                        <td>${result.type === 'dir' ? 'Folder' : 'File'}</td>
-                                        <td>${result.size || ''}</td>
-                                        <td>${result.last_modified}</td>
-                                    </tr>`;
-                                });
-
-                                searchResults.innerHTML = html;
-
-                                // Add event listeners to search results
-                                document.querySelectorAll('.search-result-item').forEach(item => {
-                                    item.addEventListener('dblclick', function() {
-                                        const path = this.getAttribute('data-path');
-                                        const dirPath = path.substring(0, path.lastIndexOf('/'));
-                                        navigateTo(dirPath);
-                                        bootstrap.Modal.getInstance(document.getElementById('searchModal')).hide();
-                                    });
-                                });
-                            }
-                        } else {
-                            searchResults.innerHTML = '<tr><td colspan="5" class="text-center text-danger">Error: ' + data.message + '</td></tr>';
-                        }
-                    })
-                    .catch(error => {
-                        searchResults.innerHTML = '<tr><td colspan="5" class="text-center text-danger">Error: Failed to perform search</td></tr>';
-                    });
-
-                const searchModal = new bootstrap.Modal(document.getElementById('searchModal'));
-                searchModal.show();
-            }
-
-            function openFileEditor(fileName) {
-                const fullPath = SERVER_ROOT_PATH + (currentPath.startsWith('/') ? currentPath : '/' + currentPath);
-                const completePath = fullPath + (fullPath.endsWith('/') ? '' : '/') + fileName;
-                window.open('codeEditor.php?filename=' + encodeURIComponent(completePath), '_blank');
-            }
-
-            function downloadFiles() {
-                if (selectedItems.length === 1) {
-                    const encodedPath = encodeURIComponent(currentPath);
-                    const encodedFile = encodeURIComponent(selectedItems[0]);
-                    window.location.href = `${window.location.pathname}?action=download&path=${encodedPath}&file=${encodedFile}`;
-                }
-
-                return;
-            }
-
-            document.getElementById('upload-btn').addEventListener('click', function(e) {
-                e.preventDefault();
-                document.getElementById('file-upload').click();
+            document.getElementById('permanentDeleteCheck').addEventListener('change', function() {
+                const perm = this.checked;
+                document.getElementById('deleteAction').value = perm ? 'delete' : 'trash';
+                document.getElementById('deleteInfoAlert').style.display = perm ? 'none' : 'block';
+                document.getElementById('permanentDeleteAlert').style.display = perm ? 'block' : 'none';
+                document.getElementById('deleteButtonText').textContent = perm ? 'Delete Permanently' :
+                    'Move to Trash';
             });
-
-            document.getElementById('file-upload').addEventListener('change', function() {
-                uploadFiles(this.files);
-                this.value = '';
-            });
-
-            document.getElementById('download-btn').addEventListener('click', function(e) {
-                e.preventDefault();
-                if (!this.classList.contains('disabled')) {
-                    downloadFiles();
-                }
-            });
-
-            document.getElementById('search-btn').addEventListener('click', function(e) {
-                e.preventDefault();
-                searchFiles();
-            });
-
-            document.getElementById('search-input').addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    searchFiles();
-                }
-            });
-
-            document.getElementById('edit-btn').addEventListener('click', function(e) {
-                e.preventDefault();
-                if (!this.classList.contains('disabled') && selectedItems.length === 1) {
-                    const fileName = selectedItems[0];
-                    openFileEditor(fileName);
-                }
-            });
-
-            document.getElementById('ctx-edit').addEventListener('click', function() {
-                if (contextTarget && contextTarget.type === 'file') {
-                    openFileEditor(contextTarget.name);
-                }
-                document.getElementById('context-menu').style.display = 'none';
-            });
-
-            document.getElementById('collapse-all-btn').addEventListener('click', function() {
-                document.querySelectorAll('.caret.expanded').forEach(caret => {
-                    caret.click();
-                });
-            });
-
-            document.getElementById('ctx-open').addEventListener('click', function() {
-                if (contextTarget && contextTarget.type === 'dir') {
-                    navigateTo(currentPath + '/' + contextTarget.name);
-                }
-                document.getElementById('context-menu').style.display = 'none';
-            });
-
-            document.getElementById('ctx-download').addEventListener('click', function() {
-                if (contextTarget) {
-                    const encodedPath = encodeURIComponent(currentPath);
-                    const encodedFile = encodeURIComponent(contextTarget.name);
-                    window.location.href = `${window.location.pathname}?action=download&path=${encodedPath}&file=${encodedFile}`;
-                }
-                document.getElementById('context-menu').style.display = 'none';
-            });
-
-
-            function performFileOperation(operation) {
-                if (selectedItems.length === 0) return;
-
-                document.getElementById('fileOpTitle').textContent = operation === 'copy' ? 'Copy Items' : 'Move Items';
-                document.getElementById('fileOpType').value = operation;
-                document.getElementById('destinationPath').value = currentPath;
-                document.getElementById('copyPath').value = currentPath;
-                document.getElementById('copyItems').value = selectedItems;
-
-                const itemsList = document.getElementById('fileOpItems');
-                itemsList.innerHTML = `Selected Items: ${selectedItems.length}`;
-
-                document.getElementById('currentPathDisplay').textContent = currentPath;
-
-                const fileOpModal = new bootstrap.Modal(document.getElementById('fileOperationModal'));
-                fileOpModal.show();
-            }
-
-            document.getElementById('copy-btn').addEventListener('click', function(e) {
-                e.preventDefault();
-                if (!this.classList.contains('disabled')) {
-                    performFileOperation('copy');
-                }
-            });
-
-            document.getElementById('move-btn').addEventListener('click', function(e) {
-                e.preventDefault();
-                if (!this.classList.contains('disabled')) {
-                    performFileOperation('move');
-                }
-            });
-
-
-            document.getElementById('ctx-copy').addEventListener('click', function() {
-                if (contextTarget) {
-                    selectedItems = [contextTarget.name];
-                    performFileOperation('copy');
-                }
-                document.getElementById('context-menu').style.display = 'none';
-            });
-
-            document.getElementById('ctx-cut').addEventListener('click', function() {
-                if (contextTarget) {
-                    selectedItems = [contextTarget.name];
-                    performFileOperation('move');
-                }
-                document.getElementById('context-menu').style.display = 'none';
-            });
-
 
             document.getElementById('restore-btn')?.addEventListener('click', function(e) {
                 e.preventDefault();
@@ -3681,126 +3129,326 @@ if ($username == null) {
                     showAlert('Error', 'Please select items to restore');
                     return;
                 }
-                restoreFromTrash();
+                if (!currentPath.includes('/.trash')) {
+                    showAlert('Error', 'Restore is only available inside the Trash folder');
+                    return;
+                }
+                document.getElementById('restorePath').value = currentPath;
+                document.getElementById('restoreItems').value = selectedItems;
+                new bootstrap.Modal(document.getElementById('restoreModal')).show();
             });
 
-
-            function restoreFromTrash() {
+            // ── Copy / Move ───────────────────────────────────────────
+            function performFileOperation(op) {
                 if (selectedItems.length === 0) return;
+                document.getElementById('fileOpTitle').textContent = op === 'copy' ? '📋 Copy Items' :
+                    '✂️ Move Items';
+                document.getElementById('fileOpType').value = op;
+                document.getElementById('destinationPath').value = currentPath;
+                document.getElementById('copyPath').value = currentPath;
+                document.getElementById('copyItems').value = selectedItems;
+                document.getElementById('fileOpItems').textContent = `Selected: ${selectedItems.length} item(s)`;
+                document.getElementById('currentPathDisplay').textContent = currentPath || '/';
+                new bootstrap.Modal(document.getElementById('fileOperationModal')).show();
+            }
 
-                if (!currentPath.includes('/.trash')) {
-                    showAlert('Error', 'Restore function is only available inside the trash folder');
+            document.getElementById('copy-btn').addEventListener('click', e => {
+                e.preventDefault();
+                if (!e.currentTarget.classList.contains('disabled')) performFileOperation('copy');
+            });
+            document.getElementById('move-btn').addEventListener('click', e => {
+                e.preventDefault();
+                if (!e.currentTarget.classList.contains('disabled')) performFileOperation('move');
+            });
+
+            // ── Upload ────────────────────────────────────────────────
+            document.getElementById('upload-btn').addEventListener('click', e => {
+                e.preventDefault();
+                document.getElementById('file-upload').click();
+            });
+            document.getElementById('file-upload').addEventListener('change', function() {
+                uploadFiles(this.files);
+                this.value = '';
+            });
+
+            function uploadFiles(files) {
+                if (!files.length) return;
+                const fd = new FormData();
+                fd.append('path', currentPath);
+                for (let i = 0; i < files.length; i++) fd.append('files[]', files[i]);
+
+                const bar = document.getElementById('upload-progress');
+                const fill = bar.querySelector('.progress-bar');
+                bar.style.display = 'block';
+                fill.style.width = '0%';
+                fill.textContent = 'Preparing…';
+
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST', window.location.pathname, true);
+                xhr.upload.addEventListener('progress', e => {
+                    if (e.lengthComputable) {
+                        const pct = Math.round(e.loaded / e.total * 100);
+                        fill.style.width = pct + '%';
+                        fill.textContent = pct + '%';
+                        if (pct >= 100) {
+                            fill.classList.remove('progress-bar-animated');
+                            fill.textContent = 'Processing…';
+                        }
+                    }
+                });
+                xhr.addEventListener('load', () => {
+                    setTimeout(() => {
+                        bar.style.display = 'none';
+                        fill.classList.add('progress-bar-animated');
+                    }, 600);
+                    if (xhr.status === 200) {
+                        try {
+                            const resp = JSON.parse(xhr.responseText);
+                            if (resp.status === 'success' || resp.status === 'partial') {
+                                loadFileList();
+                                showAlert('Success', resp.message);
+                            } else {
+                                showAlert('Error', resp.message || 'Upload failed');
+                            }
+                        } catch {
+                            showAlert('Error', 'Failed to parse server response');
+                        }
+                    } else {
+                        showAlert('Error', 'HTTP ' + xhr.status);
+                    }
+                });
+                xhr.addEventListener('error', () => {
+                    bar.style.display = 'none';
+                    showAlert('Error', 'Network error during upload');
+                });
+                xhr.send(fd);
+            }
+
+            // ── Download ──────────────────────────────────────────────
+            document.getElementById('download-btn').addEventListener('click', e => {
+                e.preventDefault();
+                if (!e.currentTarget.classList.contains('disabled') && selectedItems.length === 1) {
+                    window.location.href =
+                        `${window.location.pathname}?action=download&path=${encodeURIComponent(currentPath)}&file=${encodeURIComponent(selectedItems[0])}`;
+                }
+            });
+
+            // ── Search ────────────────────────────────────────────────
+            function searchFiles() {
+                const q = document.getElementById('search-input').value.trim();
+                if (!q) {
+                    showAlert('Error', 'Please enter a search query');
                     return;
                 }
 
-                const restoreList = document.getElementById('restoreItems');
-                restoreList.innerHTML = `Selected Items: ${selectedItems.length}`;
+                const tbody = document.getElementById('search-results');
+                tbody.innerHTML =
+                    `<tr><td colspan="5" style="padding:24px;text-align:center;color:var(--text-muted)"><i class="fas fa-spinner fa-spin me-2"></i>Searching…</td></tr>`;
 
-                document.getElementById('restorePath').value = currentPath;
-                document.getElementById('restoreItems').value = selectedItems;
+                const fd = new FormData();
+                fd.append('action', 'search');
+                fd.append('path', currentPath);
+                fd.append('query', q);
 
+                fetch(window.location.pathname, {
+                        method: 'POST',
+                        body: fd
+                    })
+                    .then(r => r.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            if (!data.data.length) {
+                                tbody.innerHTML =
+                                    `<tr><td colspan="5" style="padding:24px;text-align:center;color:var(--text-muted)">No results found</td></tr>`;
+                            } else {
+                                tbody.innerHTML = data.data.map(r => `
+                                <tr class="search-result-item" data-path="${r.path}" style="cursor:pointer">
+                                    <td>${r.icon} ${r.name}</td>
+                                    <td style="font-size:0.75rem;color:var(--text-muted)">${r.path}</td>
+                                    <td>${r.type === 'dir' ? 'Folder' : 'File'}</td>
+                                    <td>${r.size||''}</td>
+                                    <td>${r.last_modified}</td>
+                                </tr>`).join('');
 
-                const restoreModal = new bootstrap.Modal(document.getElementById('restoreModal'));
-                restoreModal.show();
+                                document.querySelectorAll('.search-result-item').forEach(row => {
+                                    row.addEventListener('dblclick', function() {
+                                        const p = this.dataset.path;
+                                        navigateTo(p.substring(0, p.lastIndexOf('/')));
+                                        bootstrap.Modal.getInstance(document.getElementById(
+                                            'searchModal')).hide();
+                                    });
+                                });
+                            }
+                        } else {
+                            tbody.innerHTML =
+                                `<tr><td colspan="5" style="color:var(--accent-danger)">Error: ${data.message}</td></tr>`;
+                        }
+                    });
+
+                new bootstrap.Modal(document.getElementById('searchModal')).show();
             }
 
-
-            document.addEventListener("click", function(evt) {
-                const btn = evt.target.closest(
-                    "button[hx-get], button[hx-post], button[hx-put], button[hx-delete]"
-                );
-                if (btn) {
-                    clickedBtn = btn;
-                    btn.disabled = true;
-                    btn.style.opacity = 0.6;
-                }
+            document.getElementById('search-btn').addEventListener('click', e => {
+                e.preventDefault();
+                searchFiles();
+            });
+            document.getElementById('search-input').addEventListener('keypress', e => {
+                if (e.key === 'Enter') searchFiles();
             });
 
-            document.addEventListener("submit", function(evt) {
-                const submitButtons = evt.target.querySelectorAll("button[type='submit']");
-                submitButtons.forEach((btn) => {
+            // ── File editor ───────────────────────────────────────────
+            function openFileEditor(name) {
+                const full = SERVER_ROOT_PATH + (currentPath.startsWith('/') ? currentPath : '/' + currentPath);
+                const path = full.replace(/\/+$/, '') + '/' + name;
+                window.open('codeEditor.php?filename=' + encodeURIComponent(path), '_blank');
+            }
+
+            document.getElementById('edit-btn').addEventListener('click', e => {
+                e.preventDefault();
+                if (!e.currentTarget.classList.contains('disabled') && selectedItems.length === 1)
+                    openFileEditor(selectedItems[0]);
+            });
+
+            // ── Collapse tree ─────────────────────────────────────────
+            document.getElementById('collapse-all-btn').addEventListener('click', () => {
+                document.querySelectorAll('.caret.expanded').forEach(c => c.click());
+            });
+
+            // ── Context menu actions ──────────────────────────────────
+            document.getElementById('ctx-open').addEventListener('click', () => {
+                if (contextTarget?.type === 'dir') navigateTo(currentPath + '/' + contextTarget.name);
+                document.getElementById('context-menu').style.display = 'none';
+            });
+            document.getElementById('ctx-download').addEventListener('click', () => {
+                if (contextTarget) window.location.href =
+                    `${window.location.pathname}?action=download&path=${encodeURIComponent(currentPath)}&file=${encodeURIComponent(contextTarget.name)}`;
+                document.getElementById('context-menu').style.display = 'none';
+            });
+            document.getElementById('ctx-edit').addEventListener('click', () => {
+                if (contextTarget?.type === 'file') openFileEditor(contextTarget.name);
+                document.getElementById('context-menu').style.display = 'none';
+            });
+            document.getElementById('ctx-copy').addEventListener('click', () => {
+                if (contextTarget) {
+                    selectedItems = [contextTarget.name];
+                    performFileOperation('copy');
+                }
+                document.getElementById('context-menu').style.display = 'none';
+            });
+            document.getElementById('ctx-cut').addEventListener('click', () => {
+                if (contextTarget) {
+                    selectedItems = [contextTarget.name];
+                    performFileOperation('move');
+                }
+                document.getElementById('context-menu').style.display = 'none';
+            });
+            document.getElementById('ctx-rename').addEventListener('click', () => {
+                if (contextTarget) {
+                    document.getElementById('oldName').value = contextTarget.name;
+                    document.getElementById('newName').value = contextTarget.name;
+                    document.getElementById('renamePath').value = currentPath;
+                    new bootstrap.Modal(document.getElementById('renameModal')).show();
+                }
+                document.getElementById('context-menu').style.display = 'none';
+            });
+            document.getElementById('ctx-permissions').addEventListener('click', () => {
+                if (contextTarget) {
+                    selectedItems = [contextTarget.name];
+                    document.getElementById('permissions-btn').click();
+                }
+                document.getElementById('context-menu').style.display = 'none';
+            });
+            document.getElementById('ctx-compress').addEventListener('click', () => {
+                if (contextTarget) {
+                    selectedItems = [contextTarget.name];
+                    document.getElementById('compress-btn').click();
+                }
+                document.getElementById('context-menu').style.display = 'none';
+            });
+            document.getElementById('ctx-delete').addEventListener('click', () => {
+                if (contextTarget) {
+                    selectedItems = [contextTarget.name];
+                    document.getElementById('delete-btn').click();
+                }
+                document.getElementById('context-menu').style.display = 'none';
+            });
+
+            // ── HTMX hooks ────────────────────────────────────────────
+            document.addEventListener('submit', evt => {
+                evt.target.querySelectorAll("button[type='submit']").forEach(btn => {
                     if (btn.offsetParent !== null) {
                         btn.disabled = true;
-                        btn.style.opacity = 0.4;
+                        btn.style.opacity = '0.5';
                     }
-                    btn.closest('.modal-footer').querySelector('button').disabled = true;
                 });
-
-
             });
 
-            document.addEventListener("htmx:afterRequest", function(evt) {
+            document.addEventListener('htmx:afterRequest', evt => {
                 if (hasResponseError) {
                     hasResponseError = false;
                     return;
                 }
 
-                const submitButtons = document.querySelectorAll("button[type='submit']");
-                submitButtons.forEach((btn) => {
-                    if (btn.offsetParent !== null) {
-                        btn.disabled = false;
-                        btn.style.opacity = 1;
-                    }
-                    btn.closest('.modal-footer').querySelector('button').disabled = false;
+                document.querySelectorAll("button[type='submit']").forEach(btn => {
+                    btn.disabled = false;
+                    btn.style.opacity = '1';
                 });
 
-                const response = evt.detail.xhr.response;
-                let data;
-
-                if (!response || response.trim() === "") {
-                    return;
-                }
+                const raw = evt.detail.xhr.response;
+                if (!raw || !raw.trim()) return;
 
                 try {
-                    data = JSON.parse(response);
+                    const data = JSON.parse(raw);
+                    document.querySelectorAll('.modal.fade.show').forEach(el => {
+                        (bootstrap.Modal.getInstance(el) || new bootstrap.Modal(el)).hide();
+                    });
+                    if (data.status === 'success') {
+                        if (data.type && data.type == 'confirm') {
+                            loadFileList();
+                            loadDirectoryTree();
+                            showAlert('Success', data.message, 'confirm');
+                        } else {
+                            loadFileList();
+                            loadDirectoryTree();
+                            showAlert('Success', data.message);
+                        }
 
 
-                    const openModalEl = document.querySelectorAll(".modal.fade.show");
-                    if (openModalEl.length > 0) {
-                        openModalEl.forEach(el => {
-                            const modal = bootstrap.Modal.getInstance(el) || new bootstrap.Modal(el);
-                            modal.hide();
-                        });
-                    }
-                    if (data.status === "success") {
-                        loadFileList();
-                        loadDirectoryTree();
-                        showAlert("Success", data.message);
                     } else {
-                        showAlert("Error", data.message);
+                        showAlert('Error', data.message);
                     }
                 } catch (e) {
-                    showAlert("Error", e.message);
+                    showAlert('Error', e.message);
                 }
             });
 
-
-            document.body.addEventListener("htmx:responseError", (e) => {
+            document.body.addEventListener('htmx:responseError', e => {
                 hasResponseError = true;
-
-                const submitButtons = document.querySelectorAll("button[type='submit']");
-                submitButtons.forEach((btn) => {
-                    if (btn.offsetParent !== null) {
-                        btn.disabled = false;
-                        btn.style.opacity = 1;
-                    }
-                    btn.closest('.modal-footer').querySelector('button').disabled = false;
+                document.querySelectorAll("button[type='submit']").forEach(btn => {
+                    btn.disabled = false;
+                    btn.style.opacity = '1';
                 });
-
-                const response = e.detail.xhr.response;
-                const data = JSON.parse(response);
-                document.body.dispatchEvent(new Event("updateContent"));
-                return CoolAlert.show({
-                    icon: "error",
-                    title: data.title || "Oops...",
-                    text: data.text || data.message || "Something went wrong!",
-                    toast: true,
-                });
+                try {
+                    const data = JSON.parse(e.detail.xhr.response);
+                    CoolAlert.show({
+                        icon: 'error',
+                        title: data.title || 'Error',
+                        text: data.text || data.message || 'Something went wrong!',
+                        toast: true
+                    });
+                } catch {
+                    CoolAlert.show({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Request failed',
+                        toast: true
+                    });
+                }
             });
-
 
             init();
         });
     </script>
+</body>
 
 </html>

@@ -1,7 +1,7 @@
 <?php
 /*
 CWP Code Editor
-Version: 2.0
+Version: 2.0.1
 Author: @JosephChuks
 GitHub: https://github.com/JosephChuks/cwp-codeEditor
 */
@@ -121,6 +121,9 @@ $lineCount = substr_count(file_get_contents($filename), "\n") + 1;
             --accent-danger: #ef4444;
             --accent-warning: #f59e0b;
 
+            --scrollbar-gold: #c9a227;
+            --scrollbar-gold-hover: #f0c040;
+
             --radius-sm: 4px;
             --radius-md: 6px;
             --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.6);
@@ -157,12 +160,12 @@ $lineCount = substr_count(file_get_contents($filename), "\n") + 1;
         }
 
         ::-webkit-scrollbar-thumb {
-            background: var(--bg-elevated);
+            background: var(--scrollbar-gold);
             border-radius: 10px;
         }
 
         ::-webkit-scrollbar-thumb:hover {
-            background: var(--accent);
+            background: var(--scrollbar-gold-hover);
         }
 
         /* ── Top Bar ─────────────────────────────────────────────── */
